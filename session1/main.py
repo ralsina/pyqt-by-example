@@ -1,35 +1,34 @@
 # -*- coding: utf-8 -*-
 
-"""La interfaz gráfica para la aplicación"""
+"""The user interface for our app"""
 
-# Imports típicos
 import os,sys
 
-# Importamos los módulos Qt
+# Import Qt modules
 from PyQt4 import QtCore,QtGui
 
-# Importamos el módulo generado por pyuic (podríamos cargar 
-# directamente el XML)
+# Import the compiled UI module
 from windowUi import Ui_MainWindow
 
-# Creamos una clase para nuestra ventana principal
+# Create a class for our main window
 class Main(QtGui.QMainWindow):
     def __init__(self):
-        # Si, ya sé que tendría que usar super()
         QtGui.QMainWindow.__init__(self)
         
-        # Esto es siempre EXACTAMENTE igual
+        # This is always the same
         self.ui=Ui_MainWindow()
         self.ui.setupUi(self)
 
 def main():
-    # De nuevo, esto es "boilerplate", es igual en todas las aplicaciones
+    # Again, this is boilerplate, it's going to be the same on 
+    # almost every app you write
     app = QtGui.QApplication(sys.argv)
     window=Main()
     window.show()
-    # Es exec_ porque exec es reservada en python
+    # It's exec_ because exec is a reserved word in Python
     sys.exit(app.exec_())
     
 
 if __name__ == "__main__":
     main()
+    

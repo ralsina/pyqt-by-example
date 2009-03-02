@@ -34,7 +34,9 @@ You must have installed the following programs:
 
 This tutorial doesn't assume knowledge of Elixir, PyQt or databases, but does assume a working knowledge of Python. If you don't know python yet, this is not the right tutorial for you yet.
 
-You can get the full code for this session here: Sources_
+You can get the full code for this session here: Sources_ (click the "Download" button).
+
+Since this tutorial is completely hosted in GitHub_ you are free to contribute improvements, modifications, even whole new sessions or features!
 
 Session 1: The basics
 =====================
@@ -189,13 +191,102 @@ No detailed comments in this one: study it yourself, it's not complicated!
         main()
         
 
-The Window
-----------
+The Main Window
+---------------
 
 Now, let's start with the fun part: PyQt_!
 
 I recommend using designer to create your graphical interfaces. Yes, some people complain about interface designers. I say you should spend your time writing code for the parts where there are no good tools instead.
 
+And here is the Qt Designer file for it: window.ui_. Don't worry about all that XML, just open it on your designer ;-)
+
+This is how it looks in designer:
+    
+.. figure:: window2.png
+    
+   The main window, in designer.
+
+What you see is a "Main Window". This kind of window lets you have a menu, toolbars, status bars, and is the typical window for a standard application.
+
+The "Type Here" at the top is because the menu is still empty, and it's "inviting" you to add something to it.
+
+The big square thing with "Task" "Date" and "Tags" is a widget called QTreeView, which is handy to display items with icons, several columns, and maybe a hierarchical structure (A tree, thus the name). We will use it to display our task list.
+
+You can see how this window looks by using "Form" -> "Preview" in designer. THis is what you'll get:
+    
+.. figure:: window1.png
+   
+   The main window preview, showing the task list.
+   
+You can try resizing the window, and this widget will use all available space and resize alongside the window. That's important: windows that can't handle resizing properly look unprofessional and are not adequate.
+
+In Qt, this is done using layouts. In this particular case, since we have only one widget, what we do is click on the form's background and select "Layout" -> "Layout Horizontally" (Vertically would have had the exact same effect here).
+
+When we do a configuration dialog, we will learn more about layouts.
+
+Now, feel free to play with designer and this form. You could try changing the layout, add new things, change properties of the widgets, experiment at will, learning designer is worth the effort!
+
+Using our Main Window
+---------------------
+
+We are now going to make this window we created part of a real program, so we can then start making it work.
+
+First we need to compile our .ui file into python code. You can do this with this command::
+    
+    pyuic4 window.ui -o windowUi.py
+
+
+Now let's look at main.py_, our application's main file:
+    
+.. code-block:: python
+
+    # -*- coding: utf-8 -*-
+
+    """The user interface for our app"""
+
+    import os,sys
+
+    # Import Qt modules
+    from PyQt4 import QtCore,QtGui
+
+    # Import the compiled UI module
+    from windowUi import Ui_MainWindow
+
+    # Create a class for our main window
+    class Main(QtGui.QMainWindow):
+        def __init__(self):
+            QtGui.QMainWindow.__init__(self)
+            
+            # This is always the same
+            self.ui=Ui_MainWindow()
+            self.ui.setupUi(self)
+
+    def main():
+        # Again, this is boilerplate, it's going to be the same on 
+        # almost every app you write
+        app = QtGui.QApplication(sys.argv)
+        window=Main()
+        window.show()
+        # It's exec_ because exec is a reserved word in Python
+        sys.exit(app.exec_())
+        
+
+    if __name__ == "__main__":
+        main()
+        
+As you can see, this is not at all specific to our TODO application. Whatever was in that .ui file would work just fine with this!
+
+The only interesting part is the Main class. That class uses the compiled ui file and is where we will put our application's user interface logic. You **never** edit the .ui file or the generated python file manually! 
+
+Let me put that in these terms: **IF YOU EDIT THE UI FILE (WITHOUT USING DESIGNER) OR THE GENERATED PYTHON FILE YOU ARE DOING IT WRONG! YOU FAIL! EPIC FAIL!**. I hope that got across, because there is at least one tutorial that tells you to do it. **DON'T DO IT!!!**,
+
+You just put your code in this class and you will be fine.
+
+So, if you run main.py, you will make the application run. It will do nothing interesting, because we need to attach the backend to our user interface, but that's session 2.
+
+.. _main.py: http://github.com/ralsina/pyqt-by-example/blob/master/session1/main.py
+
+.. _window.ui: http://github.com/ralsina/pyqt-by-example/blob/master/session1/window.ui
 
 .. _Elixir: http:/elixir.ematia.de
 
@@ -205,8 +296,10 @@ I recommend using designer to create your graphical interfaces. Yes, some people
 
 .. _pyqt: http://www.riverbankcomputing.co.uk/software/pyqt/intro
 
-.. _todo.py: http://github.com/ralsina/pyqt-by-example/blob/68a659d16be728958f618eb01f5619f8ec26e558/session1/todo.py
+.. _todo.py: http://github.com/ralsina/pyqt-by-example/blob/master/session1/todo.py
 
-.. _sources: http://github.com/ralsina/pyqt-by-example/tree/68a659d16be728958f618eb01f5619f8ec26e558/session1
+.. _sources: http://github.com/ralsina/pyqt-by-example/tree/master/session1
 
 .. _sqlite: http://www.sqlite.org
+
+.. _github: http://www.github.org
