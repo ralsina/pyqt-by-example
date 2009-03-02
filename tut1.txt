@@ -44,6 +44,8 @@ Session 1: The basics
 The backend
 -----------
 
+The most recent version of this session (in RST format) is always available at GitHub's `master tree`_ as tut1.txt_
+
 Since we are developing a TODO application, we need a backend that handles the storage, retrieval and general managing of TODO tasks.
 
 To do that the simplest possible way, I will do it using Elixir_, "A declarative layer over the SQLAlchemy Object-Relational Mapper".
@@ -297,6 +299,10 @@ So, if you run main.py, you will make the application run. It will do nothing in
 .. _pyqt: http://www.riverbankcomputing.co.uk/software/pyqt/intro
 
 .. _todo.py: http://github.com/ralsina/pyqt-by-example/blob/master/session1/todo.py
+
+.. _master tree: http://github.com/ralsina/pyqt-by-example/blob/master
+
+.. _tut1.txt: http://github.com/ralsina/pyqt-by-example/blob/master/tut1.txt
 
 .. _sources: http://github.com/ralsina/pyqt-by-example/tree/master/session1
 
