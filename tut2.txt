@@ -1,0 +1,210 @@
+==========================
+PyQt by Example: Session 2
+==========================
+
+Introduction
+============
+
+This series of tutorials is inspired by two things:
+    
+* LatinoWare 2008, where I presented this very app as an introduction to PyQt development.
+
+* A lack of (in my very humble opinion) PyQt tutorials that show the way I prefer to develop applications.
+
+The second item may sound a bit belligerent, but that's not the case. I am not saying the other tutorials are wrong, or bad, I just say they don't work the way I like to work.
+
+I don't believe in teaching something and later saying "now I will shw you how it's really done". I don't believe in toy examples. I believe that you are smart enough to only learn things once, and learning the true thing the first time.
+
+So, in this series, I will be developing a small TODO application using the tools and procedures I use in my actual development, except for the Eric IDE. That is because IDEs are personal preferences and for a project fo this scope really doesn't add much. 
+
+One other thing I will not add is unit testing. While very important, I think it would distract from actually *doing*. If that's a problem, it can be added in a later version of the tutorial.
+
+Requirements
+============
+
+You must have installed the following programs:
+    
+* Python_: I am using 2.6, I expect 2.5 or even 2.4 will work, but I am not testing them.
+
+* Elixir_: This is needed by the backend. It requires SQLAlchemy_ and we will be using SQLite_ as our database. If you install Elixir_ everything else should be installed automatically.
+
+* PyQt_: I will be using version 4.4
+
+* Your text editor of choice
+
+This tutorial doesn't assume knowledge of Elixir, PyQt or databases, but does assume a working knowledge of python_. If you don't know python_ yet, this is not the right tutorial for you yet.
+
+You can get the full code for this session here: Sources_ (click the "Download" button).
+
+Since this tutorial is completely hosted in GitHub_ you are free to contribute improvements, modifications, even whole new sessions or features!
+
+Session 2: Plugging Things
+==========================
+
+In `Session 1`_ we created our application's main window, a skeleton application that displays said window, and a simple Elixir_ based backend.
+
+We did not, however, connect both things. And connecting things is the important step we are taking in this session.
+
+We will be working first on our main.py_.
+
+
+Loading Data
+~~~~~~~~~~~~
+
+The first thing is that we need to use our backend, so we have to import todo.py.
+
+We do this in `line 13`_
+
+.. _line 13: #F2_13
+
+Then, in `line 25`_ we do the first real new work: we get the list of tasks and put them in our list.
+
+Let's examine that in detail. Here is the code from lines 25_ to 35_:
+    
+.. code-block:: python
+    :linenos:
+    :start-with: 25
+
+    # Let's do something interesting: load the database contents 
+    # into our task list widget
+    for task in todo.Task.query().all():
+        tags=','.join([t.name for t in task.tags])
+        item=QtGui.QTreeWidgetItem([task.text,str(task.date),tags])
+        item.task=task
+        if task.done:
+            item.setCheckState(0,QtCore.Qt.Checked)
+        else:
+            item.setCheckState(0,QtCore.Qt.Unchecked)
+        self.ui.list.addTopLevelItem(item)
+
+Remember our backend, todo.py_? In it we defined Task objects that are stored in a database. If you are not familiar with Elixir_, ``todo.Task.query().all()`` gets a list of all Task objects from the database.
+
+Then we assign the tags separated by commas to ``tags``, which will look something like ``"home,important"``.
+
+And now, we see our first Qt-related code.
+
+First: self.ui.list is a widget. Everything we put on the window using designer is accessible using self.ui.object_name and the object_name is set using designer. If you right-click on the big widget in our window you can see that:
+    
+.. figure:: object_name.png
+
+   The object name is **list**.
+    
+You can also see it (and change it) in the Object Inspector and in the Property Editor.
+
+That is not just a widget. It's a QTreeWidget, useful for showing fancy multi-column lists and trees.
+
+You can read a lot about this widget in its manual_ but let's do the very short version:
+    
+* We create QTreeWidgetItem_ objects. These take a list of strings, which are displayed in the widget's columns. In this case, we are adding the task text ("Buy groceries"), the due date, and the tags.
+
+* We set item.task to task. This is so later on we know what task is described by a specific item. Not the most elegant way, perhaps, but by far the easiest.
+
+* We add each item to the widget using addTopLevelItem_ so they are all at the same level (not hierarchical, as childs and parents)
+
+* It will work as a list
+
+Then, if the task is done (``task.done==True``) we make a checkmark next to the task. If it's not done, we do not.
+
+For many simple programs, this is as much as you need to know about QTreeWidget. It's a rather complex widget, and very powerful, but this will do for our task. Investigate!
+
+So, what does it do? Let's run ``python main.py`` and find out!
+
+.. figure:: window3.png
+   
+   The task list with our sample tasks.
+   
+If your window is empty, try running ``python todo.py`` first, which will create some sample tasks.
+
+You can even check a task to mark it done! That's because we have also implemented (partial) saving of modified tasks...
+
+Saving Data
+~~~~~~~~~~~
+
+So, what we want is that when the user clicks on the checkbox, the task should be modified accordingly, and stored in the database.
+
+In most toolkits you would be looking for callbacks. Here things are a bit different. When a Qt widget wants to make you notice something, like "The user clicked this button" or "The Help menu is activated", or whatever, they *emit signals* (go along for a minute).
+
+In particular, here we are interested in the itemChanged signal of QTreeWidget:
+    
+    QTreeWidget.itemChanged ( item, column )   [signal]
+
+    This signal is emitted when the contents of the column in the specified item changes.
+    
+And, whenever you click on the checkbox, this signal is emitted. Why's that important? Because you can connect your own code to a signal, so that whenever that signal is emitted, your code is executed! Your code is called a *slot* in Qt slang.
+
+It's like a callback, except that:
+    
+a) The signal doesn't know what is connected to it (or if there is anything connected at all)
+
+b) You can connect as many slots to a signal as you want.
+
+This helps keep your code `loosely coupled`_.
+
+We *could* define a method in the Main class, and connect it to the itemChanged signal, but there is no need because we can use AutoConnect. If you add to Main a method with a specific name, it will be connected to that signal. The name is on_objectname_signalname.
+
+Here is the code (lines 37_ to 42_):
+    
+.. code-block:: python
+    :linenos:
+    :start-with: 37
+
+    def on_list_itemChanged(self,item,column):
+        if item.checkState(0):
+            item.task.done=True
+        else:
+            item.task.done=False
+        session.commit()
+
+
+See how we use item.task to reflect the item's checkState (whether it's checked or not) into the task state?
+
+The ``session.commit()`` at the end makes sure all data is saved in the database.
+
+AutoConnect is what you will use 90% of the time to add behaviour to your application. Most of the time, you will just create the window, add the widgets, and hook signals via AutoConnect.
+
+In some occasions that will not be enough. But we are not there yet.
+
+-----------------
+
+Here you can see what changed between the old and new versions:
+    
+.. raw:: html
+   :file: session2/diff1.html
+
+.. _loosely coupled: http://en.wikipedia.org/wiki/Loosely_coupled
+
+.. _QTreeWidgetItem: http://doc.trolltech.com/4.4/qtreewidgetitem.html
+
+.. _addTopLevelItem: http://doc.trolltech.com/4.4/qtreewidget.html#addTopLevelItem
+
+.. _manual: http://doc.trolltech.com/4.4/qtreewidget.html#details
+
+.. _line 25: #F2_25
+
+.. _25: #F2_25
+
+.. _35: #F2_35
+
+.. _37: #F2_37
+
+.. _42: #F2_42
+
+.. _Elixir: http:/elixir.ematia.de
+
+.. _python: http://www.python.org
+
+.. _session 1: http://lateral.netmanagers.com.ar/stories/BBS47.html
+
+.. _main.py: http://github.com/ralsina/pyqt-by-example/blob/master/session2/main.py
+
+.. _sqlalchemy: http://www.sqlalchemy.org
+
+.. _sqlite: http://www.sqlite.org
+
+.. _pyqt: http://www.riverbankcomputing.co.uk/software/pyqt/intro
+
+.. _sources: http://github.com/ralsina/pyqt-by-example/tree/master/session2
+
+.. _github: http://www.github.org
+
+.. _todo.py: http://github.com/ralsina/pyqt-by-example/blob/master/session2/todo.py
