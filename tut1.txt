@@ -52,7 +52,7 @@ To do that the simplest possible way, I will do it using Elixir_, "A declarative
 
 If that sounded very scary, don't worry. What that means is "a way to create objects that are automatically stored in a database". 
 
-Here is the code, with comments, for our backend, called todo.py_. Hopefully, we will not have too look at it again until much later in the tutorial!
+Here is the code, with comments, for our backend, called todo.py_. Hopefully, we will not have to look at it again until much later in the tutorial!
 
 .. code-block:: python
 
