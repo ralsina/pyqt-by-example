@@ -15,7 +15,7 @@ The second item may sound a bit belligerent, but that's not the case. I am not s
 
 I don't believe in teaching something and later saying "now I will shw you how it's really done". I don't believe in toy examples. I believe that you are smart enough to only learn things once, and learning the true thing the first time.
 
-So, in this series, I will be developing a small TODO application using the tools and procedures I use in my actual development, except dfor the Eric IDE. That is because IDEs are personal preferences and for a project fo this scope really doesn't add much. 
+So, in this series, I will be developing a small TODO application using the tools and procedures I use in my actual development, except for the Eric IDE. That is because IDEs are personal preferences and for a project fo this scope really doesn't add much. 
 
 One other thing I will not add is unit testing. While very important, I think it would distract from actually *doing*. If that's a problem, it can be added in a later version of the tutorial.
 
