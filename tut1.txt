@@ -1,0 +1,212 @@
+===============
+PyQt by Example
+===============
+
+Introduction
+============
+
+This series of tutorials is inspired by two things:
+    
+* LatinoWare 2008, where I presented this very app as an introduction to PyQt development.
+
+* A lack of (in my very humble opinion) PyQt tutorials that show the way I prefer to develop applications.
+
+The second item may sound a bit belligerent, but that's not the case. I am not saying the other tutorials are wrong, or bad, I just say they don't work the way I like to work.
+
+I don't believe in teaching something and later saying "now I will shw you how it's really done". I don't believe in toy examples. I believe that you are smart enough to only learn things once, and learning the true thing the first time.
+
+So, in this series, I will be developing a small TODO application using the tools and procedures I use in my actual development, except dfor the Eric IDE. That is because IDEs are personal preferences and for a project fo this scope really doesn't add much. 
+
+One other thing I will not add is unit testing. While very important, I think it would distract from actually *doing*. If that's a problem, it can be added in a later version of the tutorial.
+
+Requirements
+============
+
+You must have installed the following programs:
+    
+* Python_: I am using 2.6, I expect 2.5 or even 2.4 will work, but I am not testing them.
+
+* Elixir_: This is needed by the backend. It requires SQLAlchemy_ and we will be using SQLite_ as our database. If you install Elixir_ everything else should be installed automatically.
+
+* PyQt_: I will be using version 4.4
+
+* Your text editor of choice
+
+This tutorial doesn't assume knowledge of Elixir, PyQt or databases, but does assume a working knowledge of Python. If you don't know python yet, this is not the right tutorial for you yet.
+
+You can get the full code for this session here: Sources_
+
+Session 1: The basics
+=====================
+
+The backend
+-----------
+
+Since we are developing a TODO application, we need a backend that handles the storage, retrieval and general managing of TODO tasks.
+
+To do that the simplest possible way, I will do it using Elixir_, "A declarative layer over the SQLAlchemy Object-Relational Mapper".
+
+If that sounded very scary, don't worry. What that means is "a way to create objects that are automatically stored in a database". 
+
+Here is the code, with comments, for our backend, called todo.py_. Hopefully, we will not have too look at it again until much later in the tutorial!
+
+.. code-block:: python
+
+    # -*- coding: utf-8 -*-
+
+    """A simple backend for a TODO app, using Elixir"""
+
+    import os
+    from elixir import *
+
+    dbdir=os.path.join(os.path.expanduser("~"),".pyqtodo")
+    dbfile=os.path.join(dbdir,"tasks.sqlite")
+
+It's good policy to have your app use a hidden folder in the user's home to store its files. That way, you can always find them, and the user knows where everything is.
+
+.. code-block:: python
+
+    class Task(Entity):
+        """
+        A task for your TODO list.
+        """
+
+By inheriting Entity, we are using Elixir to make this class persistent, Task objects can easily be stored in our database, and you can search for them, change them, delete them, etc.
+
+.. code-block:: python
+
+        using_options(tablename='tasks')
+
+This specifies the table name we will use in the database, I think it's nicer than the automatic names Elixir uses.
+
+.. code-block:: python
+
+        text = Field(Unicode,required=True)
+        date = Field(DateTime,default=None,required=False)
+        done = Field(Boolean,default=False,required=True)
+        tags  = ManyToMany("Tag")
+
+A task has the following:
+    
+* A text ("Buy groceries"). Always try to use unicode in your app. Using anything else is *not worth the trouble*. 
+
+* A date for when it's due.
+
+* A "Done" field. Is it done?
+
+* A list of tags. For example, "Buy groceries" could be tagged "Home" and "Important". It's ManyToMany because a task can have many tags and a tag can have many tasks.
+
+.. code-block:: python
+
+        def __repr__(self):
+            return "Task: "+self.text
+
+It's always nicer if objects know how to turn themselves into strings. That way you can help debug your program just by printing them. Here, our groceries task would print as "Task: Buy groceries".
+
+Since before I mentioned Tags, we need to define them too:
+
+.. code-block:: python
+
+    class Tag(Entity):
+        """
+        A tag we can apply to a task.
+        """
+        
+Again, they go in the database, so they are an Entity.
+        
+.. code-block:: python
+
+        using_options(tablename='tags')
+        name = Field(Unicode,required=True)
+        tasks = ManyToMany("Task")
+        
+        def __repr__(self):
+            return "Tag: "+self.name
+
+They are much simpler objects: they have a name, a list of tagged tasks, and can convert themselves to strings.
+
+Using a database involves a few chores. I put them in the initDB function. Just remember to call it before trying to use Tasks or Tags!
+
+.. code-block:: python
+
+    def initDB():
+
+Make sure ~/.pyqtodo exists
+
+.. code-block:: python
+
+        if not os.path.isdir(dbdir):
+            os.mkdir(dbdir)
+            
+Set up the Elixir internal thingamajigs
+            
+.. code-block:: python
+
+        metadata.bind = "sqlite:///%s"%dbfile
+        setup_all()
+        
+And if the database doesn't exist: create it.
+        
+.. code-block:: python
+
+        if not os.path.exists(dbfile):
+            create_all()
+
+Usually, I add a main() function to all modules that does something, usually run unit tests. In this case, it demonstrates our backend's functionality. You can try it by running it like this::
+    
+    python todo.py
+    
+No detailed comments in this one: study it yourself, it's not complicated!
+
+.. code-block:: python
+
+    def main():
+        
+        # Initialize database
+        initDB()
+        
+        # Create two tags
+        green=Tag(name=u"green")
+        red=Tag(name=u"red")
+        
+        #Create a few tags and tag them
+        tarea1=Task(text=u"Buy tomatos",tags=[red])
+        tarea2=Task(text=u"Buy chili",tags=[red])
+        tarea3=Task(text=u"Buy lettuce",tags=[green])
+        tarea4=Task(text=u"Buy strawberries",tags=[red,green])
+        session.commit()
+        
+        print "Green Tasks:"
+        print green.tasks
+        print
+        print "Red Tasks:"
+        print red.tasks
+        print
+        print "Tasks with l:"
+        print [(t.id,t.text,t.done) for t in Task.query.filter(Task.text.like(ur'%l%')).all()]
+
+    if __name__ == "__main__":
+        main()
+        
+
+The Window
+----------
+
+Now, let's start with the fun part: PyQt_!
+
+I recommend using designer to create your graphical interfaces. Yes, some people complain about interface designers. I say you should spend your time writing code for the parts where there are no good tools instead.
+
+
+.. _Elixir: http:/elixir.ematia.de
+
+.. _python: http://www.python.org
+
+.. _sqlalchemy: http://www.sqlalchemy.org
+
+.. _pyqt: http://www.riverbankcomputing.co.uk/software/pyqt/intro
+
+.. _todo.py: http://github.com/ralsina/pyqt-by-example/blob/68a659d16be728958f618eb01f5619f8ec26e558/session1/todo.py
+
+.. _sources: http://github.com/ralsina/pyqt-by-example/tree/68a659d16be728958f618eb01f5619f8ec26e558/session1
+
+.. _sqlite: http://www.sqlite.org
