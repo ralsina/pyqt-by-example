@@ -2,41 +2,17 @@
 PyQt by Example: Session 2
 ==========================
 
-Introduction
-============
-
-This series of tutorials is inspired by two things:
-    
-* LatinoWare 2008, where I presented this very app as an introduction to PyQt development.
-
-* A lack of (in my very humble opinion) PyQt tutorials that show the way I prefer to develop applications.
-
-The second item may sound a bit belligerent, but that's not the case. I am not saying the other tutorials are wrong, or bad, I just say they don't work the way I like to work.
-
-I don't believe in teaching something and later saying "now I will shw you how it's really done". I don't believe in toy examples. I believe that you are smart enough to only learn things once, and learning the true thing the first time.
-
-So, in this series, I will be developing a small TODO application using the tools and procedures I use in my actual development, except for the Eric IDE. That is because IDEs are personal preferences and for a project fo this scope really doesn't add much. 
-
-One other thing I will not add is unit testing. While very important, I think it would distract from actually *doing*. If that's a problem, it can be added in a later version of the tutorial.
+~~~~~~~~~~~~~~~
+Plugging Things
+~~~~~~~~~~~~~~~
 
 Requirements
 ============
 
-You must have installed the following programs:
-    
-* Python_: I am using 2.6, I expect 2.5 or even 2.4 will work, but I am not testing them.
 
-* Elixir_: This is needed by the backend. It requires SQLAlchemy_ and we will be using SQLite_ as our database. If you install Elixir_ everything else should be installed automatically.
+If you haven't yet, check `Session 1`_ first.
 
-* PyQt_: I will be using version 4.4
-
-* Your text editor of choice
-
-This tutorial doesn't assume knowledge of Elixir, PyQt or databases, but does assume a working knowledge of python_. If you don't know python_ yet, this is not the right tutorial for you yet.
-
-You can get the full code for this session here: Sources_ (click the "Download" button).
-
-Since this tutorial is completely hosted in GitHub_ you are free to contribute improvements, modifications, even whole new sessions or features!
+.. _session 1: http://lateral.netmanagers.com.ar/stories/BBS47.html
 
 Session 2: Plugging Things
 ==========================
@@ -61,10 +37,9 @@ Then, in `line 25`_ we do the first real new work: we get the list of tasks and 
 
 Let's examine that in detail. Here is the code from lines 25_ to 35_:
     
-.. code-block:: python
+.. code-block:: Python
     :linenos:
-    :start-with: 25
-
+        
     # Let's do something interesting: load the database contents 
     # into our task list widget
     for task in todo.Task.query().all():
@@ -146,7 +121,6 @@ Here is the code (lines 37_ to 42_):
     
 .. code-block:: python
     :linenos:
-    :start-with: 37
 
     def on_list_itemChanged(self,item,column):
         if item.checkState(0):
