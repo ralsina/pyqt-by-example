@@ -189,7 +189,7 @@ Here you can see what changed between the old and new versions:
 
 .. _42: #F2_42
 
-.. _Elixir: http:/elixir.ematia.de
+.. _Elixir: http://elixir.ematia.de
 
 .. _python: http://www.python.org
 

@@ -288,7 +288,7 @@ So, if you run main.py, you will make the application run. It will do nothing in
 
 .. _window.ui: http://github.com/ralsina/pyqt-by-example/blob/master/session1/window.ui
 
-.. _Elixir: http:/elixir.ematia.de
+.. _Elixir: http://elixir.ematia.de
 
 .. _python: http://www.python.org
 
