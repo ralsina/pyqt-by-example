@@ -80,7 +80,7 @@ You can read a lot about this widget in its manual_ but let's do the very short 
 
 Then, if the task is done (``task.done==True``) we make a checkmark next to the task. If it's not done, we do not.
 
-For many simple programs, this is as much as you need to know about QTreeWidget. It's a rather complex widget, and very powerful, but this will do for our task. Investigate!
+For many simple programs, this is all you need to know about QTreeWidget. It's a rather complex widget, and very powerful, but this will do for our task. Investigate!
 
 So, what does it do? Let's run ``python main.py`` and find out!
 
