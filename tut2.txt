@@ -58,7 +58,7 @@ Then we assign the tags separated by commas to ``tags``, which will look somethi
 
 And now, we see our first Qt-related code.
 
-First: self.ui.list is a widget. Everything we put on the window using designer is accessible using self.ui.object_name and the object_name is set using designer. If you right-click on the big widget in our window you can see that:
+First: self.ui.list is a widget. Everything we put on the window using designer is accessible using self.ui.object_name and the object_name is set using designer. If you right-click on the big widget in our window you can see that the widget's object name is **list**:
     
 .. figure:: object_name.png
 
