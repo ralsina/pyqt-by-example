@@ -39,7 +39,7 @@ class Main(QtGui.QMainWindow):
             item.task.done=True
         else:
             item.task.done=False
-        session.commit()
+        todo.session.commit()
 
 
 def main():
