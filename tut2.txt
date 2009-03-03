@@ -166,6 +166,16 @@ In some occasions that will not be enough. But we are not there yet.
 
 This was a rather short session, but be prepared for the next one: we will be doing **Important Stuff with Designer** (TM)!
 
+In the meantime, you may want to check these pages:
+    
+* Learn about widgets_ available in Qt
+
+* Learn about `signals and slots`_
+
+.. _widgets: http://doc.trolltech.com/4.4/gallery.html 
+
+.. _signals and slots: http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/pyqt4ref.html#signal-and-slot-support
+
 -----------------
 
 Here you can see what changed between the old and new versions:
