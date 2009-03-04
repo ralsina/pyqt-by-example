@@ -158,7 +158,7 @@ First compile the UI. Remember we need to do this whenever we change something u
     
     $ pyuic4 window.ui -o windowUi.py
     
-Then run ``python main.py``::
+Then run the program::
     
     $ python main.py
     Traceback (most recent call last):
@@ -178,7 +178,11 @@ And the icon works now :-)
 
    The longest explanation ever on how to change an icon, but it worked!
    
+Since it's boring having to remember to run ``pyuic4`` and ``pyrcc4``, I wrote a trivial script to handle it, build.sh_
+
+.. _build.sh: http://github.com/ralsina/pyqt-by-example/tree/master/session3/build.sh
    
+.. _icons.qrc: http://github.com/ralsina/pyqt-by-example/tree/master/session3/icons.qrc   
    
 .. _Inkscape: http://www.inkscape.org/ 
 
