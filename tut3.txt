@@ -50,7 +50,7 @@ In our case it's the windowTitle property.
 
 .. figure:: windowtitle.png
 
-I will not be writing this detailed explanations and pictures for each property. I trust you can find them if I tell you "The windowTitle property of the MainWindow Object".
+I will not be writing these detailed explanations and pictures for each property. I trust you can find them if I tell you "The windowTitle property of the MainWindow Object".
 
 Let's change that to "Todo".
 
@@ -201,12 +201,6 @@ I think the default margins here (4 pixels) look old fashioned. I prefer 0 pixel
    Personal taste: too wide.
 
 You can change them in the layout[something]Margin properties of centralWidget.
-
-So, after running build.sh, this is how the app looks now:
-    
-.. figure:: window5.png
-
-   A cleaner look.
    
 Extra Fixes
 ~~~~~~~~~~~
@@ -219,12 +213,22 @@ I also prefer to set these in our QTreeWidget:
    
 * sortingEnabled True
 
-* 
+* alternatingRowColors True
 
 See the docs_ to see what they do!
 
 .. _docs: http://doc.trolltech.com/4.4/qtreewidget.html
-   
+
+Finished!
+~~~~~~~~~
+
+So, after running build.sh, this is how the app looks now:
+    
+.. figure:: window5.png
+
+   A cleaner look.
+
+
 Coming Soon
 ===========
 
