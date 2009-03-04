@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.5: http://docutils.sourceforge.net/" />
+<title>PyQt By Example: Session 3</title>
+<style type="text/css">
+
+/*
+:Author: David Goodger
+:Contact: goodger@users.sourceforge.net
+:Date: $Date: 2008/01/29 22:14:02 $
+:Revision: $Revision: 1.1.1.1 $
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+
+See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin-left: 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left {
+  clear: left }
+
+img.align-right {
+  clear: right }
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font-family: serif ;
+  font-size: 100% }
+
+pre.literal-block, pre.doctest-block {
+  margin-left: 2em ;
+  margin-right: 2em ;
+  background-color: #eeeeee }
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+/*
+tt.docutils {
+  background-color: #eeeeee }
+*/
+
+ul.auto-toc {
+  list-style-type: none }
+
+
+/* diff2html style */
+TD.linenum { color: #909090; 
+             text-align: right;
+             vertical-align: top;
+             font-weight: bold;
+             border-right: 1px solid black;
+             border-left: 1px solid black; }
+TD.added { background-color: #DDDDFF; }
+TD.modified { background-color: #BBFFBB; }
+TD.removed { background-color: #FFCCCC; }
+TD.normal { background-color: #FFFFE1; }
+
+
+</style>
+</head>
+<body>
+<div class="document" id="pyqt-by-example-session-3">
+<h1 class="title">PyQt By Example: Session 3</h1>
+<h2 class="subtitle" id="designer-is-your-friend">Designer is Your Friend</h2>
+
+<div class="section" id="requirements">
+<h1>Requirements</h1>
+<p>If you have not done it yet, please check the previous sessions:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://lateral.netmanagers.com.ar/stories/BBS47.html">Session 1</a></li>
+<li><a class="reference external" href="http://lateral.netmanagers.com.ar/stories/BBS48.html">Session 2</a></li>
+</ul>
+</div>
+<div class="section" id="id1">
+<h1>Designer is Your Friend</h1>
+<p>Today we are going to make our application look better, and introduce some new things, like resource files.</p>
+<p>When we finished Session 2, our main window looked like this:</p>
+<div class="figure">
+<img alt="window3.png" src="window3.png" />
+<p class="caption">Not a good looking application.</p>
+</div>
+<p>There are several things wrong with that picture. Let's tackle them one at a time, using Qt Designer.</p>
+<div class="section" id="window-title">
+<h2>Window Title</h2>
+<div class="figure">
+<img alt="wrong1.png" src="wrong1.png" />
+<p class="caption">It is a MainWindow, but it's not called MainWindow!</p>
+</div>
+<p>That's just wrong. While I have not yet chosen a name for this example application, it's silly to have the window title (and taskbar entry!) say &quot;MainWindow&quot;!</p>
+<p>Here's how you change objet properties in Designer.</p>
+<p>First, you select the object you want to modify. You can do that by clicking on it, or by selecting it
+from the Object Inspector. For some widgets one or the other is easier. For example, it may be hard to find empty space in a window to click and select the window itself, or click in a very small widget, like  a separator. In those cases, just use the Inspector.</p>
+<p>Once you have the right object selected, look at the Property Editor.</p>
+<p>There is a list of properties (obvious ;-) separated by titles like &quot;QObject&quot; or &quot;QWidget&quot;. Don't worry about those titles much, just look for what you need, (it often is pretty obvious!).</p>
+<p>In our case it's the windowTitle property.</p>
+<div class="figure">
+<img alt="windowtitle.png" src="windowtitle.png" />
+</div>
+<p>I will not be writing this detailed explanations and pictures for each property. I trust you can find them if I tell you &quot;The windowTitle property of the MainWindow Object&quot;.</p>
+<p>Let's change that to &quot;Todo&quot;.</p>
+</div>
+<div class="section" id="application-icon">
+<h2>Application Icon</h2>
+<div class="figure">
+<img alt="wrong2.png" src="wrong2.png" />
+<p class="caption">Generic icon.</p>
+</div>
+<p>The window icon is the default generic icon. This is important because it appears in the taskbar along the window title, and if you are using it in some operating systems or configurations, the user may <strong>only</strong> see the icon!</p>
+<p>Finding icons to use in your applications is a big problem. There are several things you can do:</p>
+<ol class="arabic">
+<li><p class="first">Hire a graphics designer to do icons for you.</p>
+<p>This, of course, is rather expensive, speially if you are a hobbyist.</p>
+</li>
+<li><p class="first">Search the web and see what you can find.</p>
+<p>For example, if I look for &quot;todo icon&quot; in google, I find many, some really nice. However, many of those are subject to copyright, so it's a better idea to look for them in places like <a class="reference external" href="http://commons.wikimedia.org">wikimedia commons</a>:</p>
+<img alt="http://upload.wikimedia.org/wikipedia/commons/b/bb/ToDo.jpg" src="http://upload.wikimedia.org/wikipedia/commons/b/bb/ToDo.jpg" />
+<p>Or maybe <a class="reference external" href="http://www.openclipart.org/">Open Clipart</a>:</p>
+<img alt="http://openclipart.org/people/CoD_fsfe/CoD_fsfe_calendar.png" src="http://openclipart.org/people/CoD_fsfe/CoD_fsfe_calendar.png" />
+<p>But my point is: those two icons are not all that awesome, and searching for a nice one is going to take a while. If you will need 10 or 15 icons in your application, the problem is even worse, because you want the icons to be consistant!</p>
+</li>
+<li><p class="first">Find a set of KDE (or maybe GNOME) icons you like, and steal consistently. This is my preferred solution.</p>
+<p>I prefer KDE icons because I use a KDE desktop but there's no reason to avoid GNOME icon themes.
+You can find KDE icons in <a class="reference external" href="http://kde-look.org/index.php?xcontentmode=27">kde-look.org</a> and GNOME icons at <a class="reference external" href="http://gnome-look.org/index.php?xcontentmode=121">gnome-look.org</a></p>
+<p>An added perk is that all KDE (or GNOME) icon themes have consistent internal names. That way you can later on switch to another theme very easy.</p>
+</li>
+</ol>
+<p>Then there is the icons file format. If the icon theme you like is available in SVG format, that's good. SVG is scalable, which means the icons will look good at all sizes without the need to include multiple copies in different sizes.</p>
+<p>In this tutorial I will use icons from the <a class="reference external" href="http://kde-look.org/content/show.php/The+Reinhardt+Icon+Set?content=6153">Reinhardt</a> set. Why? I like them, and the style is simple enough that I feel I can hack a fitting icon using <a class="reference external" href="http://www.inkscape.org/">Inkscape</a> if needed (as I did in this case, see below).</p>
+<p>This is how the folder icon from <a class="reference external" href="http://kde-look.org/content/show.php/The+Reinhardt+Icon+Set?content=6153">Reinhardt</a> looks at different sizes, compared with <a class="reference external" href="http://kde-look.org/content/show.php/SnowIsh?content=42905">Snowish</a>, a PNG icon theme:</p>
+<div class="figure">
+<img alt="reinhardt.png" src="reinhardt.png" />
+<p class="caption">The Reinhardt SVG folder icon: nice at all sizes.</p>
+</div>
+<div class="figure">
+<img alt="snowish.png" src="snowish.png" />
+<p class="caption">The Snowish PNG folder icon: from lovely to blobly.</p>
+</div>
+<p>So, in short: choose an icon theme you like, and use only icons from that theme, if possible.</p>
+<p>For this app's icon, I made this out of a piece of &quot;mark_as_ham.svg&quot; and some green colour:</p>
+<div class="figure">
+<img alt="todo_icon.png" src="todo_icon.png" />
+<p class="caption">todo.svg: Not the prettiest icon ever, but will do for a tutorial example!</p>
+</div>
+<p>So, after all this icon talk, how do we use it? Well... that needs yet more talk, because there are two ways: use icon files and use a resource file.</p>
+<ul>
+<li><p class="first">Icon files:</p>
+<p>In Designer, go to the windowIcon property of MainWindow. Click on the down arrow. Select &quot;Choose File&quot;.
+The bad news: doing this makes packaging and distribution a bit harder later on.
+The worse news: this will not work with a SVG icon. So forget about it.</p>
+</li>
+<li><p class="first">Resource file:</p>
+<p>In Designer, go to the windowIcon property of MainWindow. Click on the down arrow. Select &quot;Choose Resource&quot;. You will see a rather empty window.</p>
+</li>
+</ul>
+<div class="figure">
+<img alt="resource1.png" src="resource1.png" />
+<p class="caption">The empty resource window</p>
+</div>
+<p>A resource file is a XML file that contains references to all the icons you want to use. Later, this is compiled to a python module, which you can use from your application. As long as that python module is distributed along with the others, you will be fine, so there is never a problem of not finding an icon, or worrying about where they are installed. Things will <em>just work</em>. So it's worth a bit of effort getting this right.</p>
+<p>Here's how I do it:</p>
+<ol class="arabic">
+<li><p class="first">Click on the pencil button in the top right to get to the &quot;Edit Resources&quot; window.</p>
+<div class="figure">
+<img alt="resource2.png" src="resource2.png" />
+<p class="caption">The empty resource editor window</p>
+</div>
+</li>
+<li><p class="first">Click on the &quot;New Resource File&quot; button in the bottom-left. Call it &quot;icons&quot; (or whatever you want)</p>
+</li>
+<li><p class="first">Click in the &quot;Add prefix&quot; button (fourth from the left). I called my prefix &quot;/&quot;</p>
+</li>
+<li><p class="first">Click in the &quot;Add files&quot; button (fifth from the left). Add todo.svg (finally!), click OK.</p>
+</li>
+</ol>
+<p>Steps 1, 2 and 3 are only needed the first time you use an icon. To add the icons we will use later it's just step 4.</p>
+<p>So now your resource window looks like this:</p>
+<div class="figure">
+<img alt="resource3.png" src="resource3.png" />
+<p class="caption">There is an icon here!</p>
+</div>
+<p>Choose it, and that's it, the window has the right icon! Well ... not really.</p>
+<p>First compile the UI. Remember we need to do this whenever we change something using designer!</p>
+<pre class="literal-block">
+$ pyuic4 window.ui -o windowUi.py
+</pre>
+<p>Then run the program:</p>
+<pre class="literal-block">
+$ python main.py
+Traceback (most recent call last):
+File &quot;main.py&quot;, line 11, in &lt;module&gt;
+    from windowUi import Ui_MainWindow
+File &quot;/home/ralsina/Desktop/proyectos/pytut/session3/windowUi.py&quot;, line 41, in &lt;module&gt;
+    import icons_rc
+ImportError: No module named icons_rc
+</pre>
+<p>This is because you also need to compile the <a class="reference external" href="http://github.com/ralsina/pyqt-by-example/tree/master/session3/icons.qrc">icons.qrc</a> file we created. This is done using <tt class="docutils literal"><span class="pre">pyrcc4</span></tt>:</p>
+<pre class="literal-block">
+$ pyrcc4 icons.qrc -o icons_rc.py
+</pre>
+<p>And the icon works now :-)</p>
+<div class="figure">
+<img alt="window4.png" src="window4.png" />
+<p class="caption">The longest explanation ever on how to change an icon, but it worked!</p>
+</div>
+<p>Since it's boring having to remember to run <tt class="docutils literal"><span class="pre">pyuic4</span></tt> and <tt class="docutils literal"><span class="pre">pyrcc4</span></tt>, I wrote a trivial script to handle it, <a class="reference external" href="http://github.com/ralsina/pyqt-by-example/tree/master/session3/build.sh">build.sh</a>. If you are in windows, a similar BAT file is trivial.</p>
+<p>Luckily, the next two UI fixes are much simpler!</p>
+</div>
+<div class="section" id="tree-decorations">
+<h2>Tree Decorations</h2>
+<p>At the left of our task list there is a tree decoration. Since this is not meant to be a tree, they are just a waste of space. They can be removed with the rootIsDecorated property of the list widget.</p>
+<div class="figure">
+<img alt="wrong3.png" src="wrong3.png" />
+<p class="caption">This is really a list, not a tree.</p>
+</div>
+</div>
+<div class="section" id="wide-margins">
+<h2>Wide Margins</h2>
+<p>I think the default margins here (4 pixels) look old fashioned. I prefer 0 pixels. YMMV.</p>
+<div class="figure">
+<img alt="wrong4.png" src="wrong4.png" />
+<p class="caption">Personal taste: too wide.</p>
+</div>
+<p>You can change them in the layout[something]Margin properties of centralWidget.</p>
+<p>So, after running build.sh, this is how the app looks now:</p>
+<div class="figure">
+<img alt="window5.png" src="window5.png" />
+<p class="caption">A cleaner look.</p>
+</div>
+</div>
+</div>
+<div class="section" id="coming-soon">
+<h1>Coming Soon</h1>
+<p>In this session, we did no coding at all, we just worked on designer and graphical details. This may not seem too important to you, if you are a hardcode coder, but trust me: it is. Making apps as pleasant to
+use and look at as you can within your possibilities is very important if you want the first release to make any kind of impact. I learned it the hard way by releasing ugly apps ;-)</p>
+<p>It doesn't matter if your graphical design skills are limited, like mine, try not to overreach and do your best.</p>
+<p>In session 4 we will dive into coding, and make this app functional for the first time, introducing one of the neatest features in Qt: Actions.</p>
+</div>
+<div class="section" id="further-reading">
+<h1>Further Reading</h1>
+<ul class="simple">
+<li><a class="reference external" href="http://www.asktog.com/basics/firstPrinciples.html">First Principles of Interaction Design</a></li>
+<li><a class="reference external" href="http://en.wikipedia.org/wiki/User_interface">User Interface</a> in Wikipedia</li>
+<li><a class="reference external" href="http://www.usabilitypost.com/2008/10/13/experience-vs-function-beautiful-ui-not-always-best-ui/">Beautiful versus functional</a></li>
+</ul>
+</div>
+</div>
+</body>
+</html>
