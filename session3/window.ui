@@ -23,8 +23,20 @@
     </property>
     <item>
      <widget class="QTreeWidget" name="list" >
+      <property name="alternatingRowColors" >
+       <bool>true</bool>
+      </property>
       <property name="rootIsDecorated" >
        <bool>false</bool>
+      </property>
+      <property name="uniformRowHeights" >
+       <bool>true</bool>
+      </property>
+      <property name="sortingEnabled" >
+       <bool>true</bool>
+      </property>
+      <property name="allColumnsShowFocus" >
+       <bool>true</bool>
       </property>
       <column>
        <property name="text" >

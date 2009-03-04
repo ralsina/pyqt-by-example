@@ -2,9 +2,9 @@
 PyQt By Example: Session 3
 ==========================
 
-~~~~~~~~~~~~~~~~~~~~~~~
-Designer is Your Friend
-~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Designer is a Good Resource
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Requirements
 ============
@@ -15,8 +15,8 @@ If you have not done it yet, please check the previous sessions:
 
 * `Session 2`_
 
-Designer is Your Friend
-=======================
+Designer is a Good Resource
+===========================
 
 Today we are going to make our application look better, and introduce some new things, like resource files.
 
@@ -208,6 +208,22 @@ So, after running build.sh, this is how the app looks now:
 
    A cleaner look.
    
+Extra Fixes
+~~~~~~~~~~~
+
+I also prefer to set these in our QTreeWidget:
+    
+* allColumnsShowFocus True
+
+* uniformRowHeights True (better performance for long lists)
+   
+* sortingEnabled True
+
+* 
+
+See the docs_ to see what they do!
+
+.. _docs: http://doc.trolltech.com/4.4/qtreewidget.html
    
 Coming Soon
 ===========
