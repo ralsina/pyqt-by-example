@@ -94,12 +94,9 @@ In this tutorial I will use icons from the Reinhardt_ set. Why? I like them, and
     
 This is how the folder icon from Reinhardt_ looks at different sizes, compared with Snowish_, a PNG icon theme: 
 
-.. figure:: reinhardt.png
+.. figure:: compsize.png
 
     The Reinhardt SVG folder icon: nice at all sizes.
-    
-.. figure:: snowish.png
-
     The Snowish PNG folder icon: from lovely to blobly.
 
 So, in short: choose an icon theme you like, and use only icons from that theme, if possible.
