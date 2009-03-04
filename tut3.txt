@@ -18,7 +18,7 @@ If you have not done it yet, please check the previous sessions:
 Designer is Your Friend
 =======================
 
-Today we are going to make our application look better, and introduce some new things, like resource files and actions.
+Today we are going to make our application look better, and introduce some new things, like resource files.
 
 When we finished Session 2, our main window looked like this:
     
@@ -90,7 +90,7 @@ Finding icons to use in your applications is a big problem. There are several th
    
 Then there is the icons file format. If the icon theme you like is available in SVG format, that's good. SVG is scalable, which means the icons will look good at all sizes without the need to include multiple copies in different sizes. 
 
-In this tutorial I will use icons from the Reinhardt_ set. Why? I like them, and the style is simple enough that I feel I can hack a fitting icon using Inkscape_ if needed.
+In this tutorial I will use icons from the Reinhardt_ set. Why? I like them, and the style is simple enough that I feel I can hack a fitting icon using Inkscape_ if needed (as I did in this case, see below).
     
 This is how the folder icon from Reinhardt_ looks at different sizes, compared with Snowish_, a PNG icon theme: 
 
@@ -178,7 +178,64 @@ And the icon works now :-)
 
    The longest explanation ever on how to change an icon, but it worked!
    
-Since it's boring having to remember to run ``pyuic4`` and ``pyrcc4``, I wrote a trivial script to handle it, build.sh_
+Since it's boring having to remember to run ``pyuic4`` and ``pyrcc4``, I wrote a trivial script to handle it, build.sh_. If you are in windows, a similar BAT file is trivial.
+
+Luckily, the next two UI fixes are much simpler!
+
+Tree Decorations
+~~~~~~~~~~~~~~~~
+
+At the left of our task list there is a tree decoration. Since this is not meant to be a tree, they are just a waste of space. They can be removed with the rootIsDecorated property of the list widget.
+
+.. figure:: wrong3.png
+
+   This is really a list, not a tree.
+
+Wide Margins
+~~~~~~~~~~~~
+
+I think the default margins here (4 pixels) look old fashioned. I prefer 0 pixels. YMMV.
+
+.. figure:: wrong4.png
+
+   Personal taste: too wide.
+
+You can change them in the layout[something]Margin properties of centralWidget.
+
+So, after running build.sh, this is how the app looks now:
+    
+.. figure:: window5.png
+
+   A cleaner look.
+   
+   
+Coming Soon
+===========
+
+In this session, we did no coding at all, we just worked on designer and graphical details. This may not seem too important to you, if you are a hardcode coder, but trust me: it is. Making apps as pleasant to
+use and look at as you can within your possibilities is very important if you want the first release to make any kind of impact. I learned it the hard way by releasing ugly apps ;-)
+
+It doesn't matter if your graphical design skills are limited, like mine, try not to overreach and do your best.
+
+In session 4 we will dive into coding, and make this app functional for the first time, introducing one of the neatest features in Qt: Actions.
+
+Further Reading
+===============
+
+* `First Principles of Interaction Design`_
+
+* `User Interface`_ in Wikipedia
+
+* `Beautiful versus functional`_
+
+.. _First Principles of Interaction Design: http://www.asktog.com/basics/firstPrinciples.html
+
+.. _User interface: http://en.wikipedia.org/wiki/User_interface
+
+.. _The Apple HIG: http://developer.apple.com/documentation/userexperience/Conceptual/AppleHIGuidelines/XHIGIntro/chapter_1_section_1.html
+
+.. _Beautiful versus functional: http://www.usabilitypost.com/2008/10/13/experience-vs-function-beautiful-ui-not-always-best-ui/
+
 
 .. _build.sh: http://github.com/ralsina/pyqt-by-example/tree/master/session3/build.sh
    
@@ -193,10 +250,6 @@ Since it's boring having to remember to run ``pyuic4`` and ``pyrcc4``, I wrote a
 .. _gnome-look.org: http://gnome-look.org/index.php?xcontentmode=121
    
 .. _snowish: http://kde-look.org/content/show.php/SnowIsh?content=42905
-
-.. figure:: wrong3.png
-
-.. figure:: wrong4.png
 
 .. _Session 1: http://lateral.netmanagers.com.ar/stories/BBS47.html
 

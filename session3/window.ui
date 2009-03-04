@@ -18,8 +18,14 @@
   </property>
   <widget class="QWidget" name="centralwidget" >
    <layout class="QHBoxLayout" name="horizontalLayout" >
+    <property name="margin" >
+     <number>0</number>
+    </property>
     <item>
      <widget class="QTreeWidget" name="list" >
+      <property name="rootIsDecorated" >
+       <bool>false</bool>
+      </property>
       <column>
        <property name="text" >
         <string>Task</string>
