@@ -71,7 +71,7 @@ Finding icons to use in your applications is a big problem. There are several th
     
 1. Hire a graphics designer to do icons for you.
 
-   This, of course, is rather expensive, speially if you are a hobbyist.
+   This, of course, is rather expensive, specially if you are a hobbyist.
    
 2. Search the web and see what you can find. 
 
@@ -233,7 +233,7 @@ So, after running build.sh, this is how the app looks now:
 Coming Soon
 ===========
 
-In this session, we did no coding at all, we just worked on designer and graphical details. This may not seem too important to you, if you are a hardcode coder, but trust me: it is. Making apps as pleasant to
+In this session, we did no coding at all, we just worked on designer and graphical details. This may not seem too important to you, if you are a hardcore coder, but trust me: it is. Making apps as pleasant to
 use and look at as you can within your possibilities is very important if you want the first release to make any kind of impact. I learned it the hard way by releasing ugly apps ;-)
 
 It doesn't matter if your graphical design skills are limited, like mine, try not to overreach and do your best.
