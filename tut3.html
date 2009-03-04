@@ -308,7 +308,7 @@ TD.normal { background-color: #FFFFE1; }
 <body>
 <div class="document" id="pyqt-by-example-session-3">
 <h1 class="title">PyQt By Example: Session 3</h1>
-<h2 class="subtitle" id="designer-is-your-friend">Designer is Your Friend</h2>
+<h2 class="subtitle" id="designer-is-a-good-resource">Designer is a Good Resource</h2>
 
 <div class="section" id="requirements">
 <h1>Requirements</h1>
@@ -319,7 +319,7 @@ TD.normal { background-color: #FFFFE1; }
 </ul>
 </div>
 <div class="section" id="id1">
-<h1>Designer is Your Friend</h1>
+<h1>Designer is a Good Resource</h1>
 <p>Today we are going to make our application look better, and introduce some new things, like resource files.</p>
 <p>When we finished Session 2, our main window looked like this:</p>
 <div class="figure">
@@ -473,6 +473,17 @@ $ pyrcc4 icons.qrc -o icons_rc.py
 <img alt="window5.png" src="window5.png" />
 <p class="caption">A cleaner look.</p>
 </div>
+</div>
+<div class="section" id="extra-fixes">
+<h2>Extra Fixes</h2>
+<p>I also prefer to set these in our QTreeWidget:</p>
+<ul class="simple">
+<li>allColumnsShowFocus True</li>
+<li>uniformRowHeights True (better performance for long lists)</li>
+<li>sortingEnabled True</li>
+<li></li>
+</ul>
+<p>See the <a class="reference external" href="http://doc.trolltech.com/4.4/qtreewidget.html">docs</a> to see what they do!</p>
 </div>
 </div>
 <div class="section" id="coming-soon">
