@@ -1,0 +1,203 @@
+==========================
+PyQt By Example: Session 3
+==========================
+
+~~~~~~~~~~~~~~~~~~~~~~~
+Designer is Your Friend
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Requirements
+============
+
+If you have not done it yet, please check the previous sessions:
+    
+* `Session 1`_
+
+* `Session 2`_
+
+Designer is Your Friend
+=======================
+
+Today we are going to make our application look better, and introduce some new things, like resource files and actions.
+
+When we finished Session 2, our main window looked like this:
+    
+.. figure:: window3.png
+
+   Not a good looking application.
+   
+There are several things wrong with that picture. Let's tackle them one at a time, using Qt Designer.
+
+Window Title
+~~~~~~~~~~~~
+
+.. figure:: wrong1.png
+
+   It is a MainWindow, but it's not called MainWindow!
+   
+That's just wrong. While I have not yet chosen a name for this example application, it's silly to have the window title (and taskbar entry!) say "MainWindow"!
+
+Here's how you change objet properties in Designer.
+
+First, you select the object you want to modify. You can do that by clicking on it, or by selecting it
+from the Object Inspector. For some widgets one or the other is easier. For example, it may be hard to find empty space in a window to click and select the window itself, or click in a very small widget, like  a separator. In those cases, just use the Inspector.
+
+Once you have the right object selected, look at the Property Editor.
+
+There is a list of properties (obvious ;-) separated by titles like "QObject" or "QWidget". Don't worry about those titles much, just look for what you need, (it often is pretty obvious!). 
+
+In our case it's the windowTitle property.
+
+.. figure:: windowtitle.png
+
+I will not be writing this detailed explanations and pictures for each property. I trust you can find them if I tell you "The windowTitle property of the MainWindow Object".
+
+Let's change that to "Todo".
+
+Application Icon
+~~~~~~~~~~~~~~~~
+
+.. figure:: wrong2.png
+
+   Generic icon.
+   
+The window icon is the default generic icon. This is important because it appears in the taskbar along the window title, and if you are using it in some operating systems or configurations, the user may **only** see the icon!
+
+Finding icons to use in your applications is a big problem. There are several things you can do:
+    
+1. Hire a graphics designer to do icons for you.
+
+   This, of course, is rather expensive, speially if you are a hobbyist.
+   
+2. Search the web and see what you can find. 
+
+   For example, if I look for "todo icon" in google, I find many, some really nice. However, many of those are subject to copyright, so it's a better idea to look for them in places like `wikimedia commons`_:
+       
+   .. image:: http://upload.wikimedia.org/wikipedia/commons/b/bb/ToDo.jpg
+   
+   Or maybe `Open Clipart`_:
+       
+   .. image:: http://openclipart.org/people/CoD_fsfe/CoD_fsfe_calendar.png
+   
+   But my point is: those two icons are not all that awesome, and searching for a nice one is going to take a while. If you will need 10 or 15 icons in your application, the problem is even worse, because you want the icons to be consistant!
+   
+3. Find a set of KDE (or maybe GNOME) icons you like, and steal consistently. This is my preferred solution.
+
+   I prefer KDE icons because I use a KDE desktop but there's no reason to avoid GNOME icon themes.
+   You can find KDE icons in kde-look.org_ and GNOME icons at gnome-look.org_
+   
+   An added perk is that all KDE (or GNOME) icon themes have consistent internal names. That way you can later on switch to another theme very easy.
+   
+Then there is the icons file format. If the icon theme you like is available in SVG format, that's good. SVG is scalable, which means the icons will look good at all sizes without the need to include multiple copies in different sizes. 
+
+In this tutorial I will use icons from the Reinhardt_ set. Why? I like them, and the style is simple enough that I feel I can hack a fitting icon using Inkscape_ if needed.
+    
+This is how the folder icon from Reinhardt_ looks at different sizes, compared with Snowish_, a PNG icon theme: 
+
+.. figure:: reinhardt.png
+
+    The Reinhardt SVG folder icon: nice at all sizes.
+    
+.. figure:: snowish.png
+
+    The Snowish PNG folder icon: from lovely to blobly.
+
+So, in short: choose an icon theme you like, and use only icons from that theme, if possible.
+
+For this app's icon, I made this out of a piece of "mark_as_ham.svg" and some green colour:
+    
+.. figure:: todo_icon.png
+   
+   todo.svg: Not the prettiest icon ever, but will do for a tutorial example!
+   
+So, after all this icon talk, how do we use it? Well... that needs yet more talk, because there are two ways: use icon files and use a resource file.
+
+* Icon files:
+    
+  In Designer, go to the windowIcon property of MainWindow. Click on the down arrow. Select "Choose File".
+  The bad news: doing this makes packaging and distribution a bit harder later on.
+  The worse news: this will not work with a SVG icon. So forget about it.
+  
+* Resource file:
+    
+  In Designer, go to the windowIcon property of MainWindow. Click on the down arrow. Select "Choose Resource". You will see a rather empty window.
+  
+.. figure:: resource1.png
+
+   The empty resource window
+   
+A resource file is a XML file that contains references to all the icons you want to use. Later, this is compiled to a python module, which you can use from your application. As long as that python module is distributed along with the others, you will be fine, so there is never a problem of not finding an icon, or worrying about where they are installed. Things will *just work*. So it's worth a bit of effort getting this right.
+
+Here's how I do it:
+    
+1. Click on the pencil button in the top right to get to the "Edit Resources" window.
+
+   .. figure:: resource2.png
+
+      The empty resource editor window
+
+2. Click on the "New Resource File" button in the bottom-left. Call it "icons" (or whatever you want)
+
+3. Click in the "Add prefix" button (fourth from the left). I called my prefix "/"
+
+4. Click in the "Add files" button (fifth from the left). Add todo.svg (finally!), click OK.
+
+Steps 1, 2 and 3 are only needed the first time you use an icon. To add the icons we will use later it's just step 4.
+
+So now your resource window looks like this:
+    
+.. figure:: resource3.png
+
+   There is an icon here!
+
+Choose it, and that's it, the window has the right icon! Well ... not really.
+
+First compile the UI. Remember we need to do this whenever we change something using designer!
+
+::
+    
+    $ pyuic4 window.ui -o windowUi.py
+    
+Then run ``python main.py``::
+    
+    $ python main.py
+    Traceback (most recent call last):
+    File "main.py", line 11, in <module>
+        from windowUi import Ui_MainWindow
+    File "/home/ralsina/Desktop/proyectos/pytut/session3/windowUi.py", line 41, in <module>
+        import icons_rc
+    ImportError: No module named icons_rc
+   
+This is because you also need to compile the `icons.qrc`_ file we created. This is done using ``pyrcc4``::
+    
+    $ pyrcc4 icons.qrc -o icons_rc.py
+    
+And the icon works now :-)
+
+.. figure:: window4.png
+
+   The longest explanation ever on how to change an icon, but it worked!
+   
+   
+   
+.. _Inkscape: http://www.inkscape.org/ 
+
+.. _Reinhardt: http://kde-look.org/content/show.php/The+Reinhardt+Icon+Set?content=6153
+   
+.. _kde-look.org: http://kde-look.org/index.php?xcontentmode=27
+
+.. _gnome-look.org: http://gnome-look.org/index.php?xcontentmode=121
+   
+.. _snowish: http://kde-look.org/content/show.php/SnowIsh?content=42905
+
+.. figure:: wrong3.png
+
+.. figure:: wrong4.png
+
+.. _Session 1: http://lateral.netmanagers.com.ar/stories/BBS47.html
+
+.. _Session 2: http://lateral.netmanagers.com.ar/stories/BBS48.html
+
+.. _wikimedia commons: http://commons.wikimedia.org
+
+.. _Open Clipart: http://www.openclipart.org/

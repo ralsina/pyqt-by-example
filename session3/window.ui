@@ -10,7 +10,11 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>MainWindow</string>
+   <string>Todo</string>
+  </property>
+  <property name="windowIcon" >
+   <iconset resource="icons.qrc" >
+    <normaloff>:/todo.svg</normaloff>:/todo.svg</iconset>
   </property>
   <widget class="QWidget" name="centralwidget" >
    <layout class="QHBoxLayout" name="horizontalLayout" >
@@ -46,6 +50,8 @@
    </property>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="icons.qrc" />
+ </resources>
  <connections/>
 </ui>
