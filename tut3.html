@@ -343,7 +343,7 @@ from the Object Inspector. For some widgets one or the other is easier. For exam
 <div class="figure">
 <img alt="windowtitle.png" src="windowtitle.png" />
 </div>
-<p>I will not be writing this detailed explanations and pictures for each property. I trust you can find them if I tell you &quot;The windowTitle property of the MainWindow Object&quot;.</p>
+<p>I will not be writing these detailed explanations and pictures for each property. I trust you can find them if I tell you &quot;The windowTitle property of the MainWindow Object&quot;.</p>
 <p>Let's change that to &quot;Todo&quot;.</p>
 </div>
 <div class="section" id="application-icon">
@@ -468,11 +468,6 @@ $ pyrcc4 icons.qrc -o icons_rc.py
 <p class="caption">Personal taste: too wide.</p>
 </div>
 <p>You can change them in the layout[something]Margin properties of centralWidget.</p>
-<p>So, after running build.sh, this is how the app looks now:</p>
-<div class="figure">
-<img alt="window5.png" src="window5.png" />
-<p class="caption">A cleaner look.</p>
-</div>
 </div>
 <div class="section" id="extra-fixes">
 <h2>Extra Fixes</h2>
@@ -481,9 +476,17 @@ $ pyrcc4 icons.qrc -o icons_rc.py
 <li>allColumnsShowFocus True</li>
 <li>uniformRowHeights True (better performance for long lists)</li>
 <li>sortingEnabled True</li>
-<li></li>
+<li>alternatingRowColors True</li>
 </ul>
 <p>See the <a class="reference external" href="http://doc.trolltech.com/4.4/qtreewidget.html">docs</a> to see what they do!</p>
+</div>
+<div class="section" id="finished">
+<h2>Finished!</h2>
+<p>So, after running build.sh, this is how the app looks now:</p>
+<div class="figure">
+<img alt="window5.png" src="window5.png" />
+<p class="caption">A cleaner look.</p>
+</div>
 </div>
 </div>
 <div class="section" id="coming-soon">
