@@ -1,0 +1,51 @@
+<ui version="4.0" >
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>340</width>
+    <height>460</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget" >
+   <layout class="QHBoxLayout" name="horizontalLayout" >
+    <item>
+     <widget class="QTreeWidget" name="list" >
+      <column>
+       <property name="text" >
+        <string>Task</string>
+       </property>
+      </column>
+      <column>
+       <property name="text" >
+        <string>Date</string>
+       </property>
+      </column>
+      <column>
+       <property name="text" >
+        <string>Tags</string>
+       </property>
+      </column>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>340</width>
+     <height>27</height>
+    </rect>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
