@@ -14,6 +14,11 @@ If you haven't yet, check `Session 1`_ first.
 
 .. _session 1: http://lateral.netmanagers.com.ar/stories/BBS47.html
 
+All files for this session are here: `Session 2 at GitHub`_
+
+.. _Session 2 at GitHub: http://github.com/ralsina/pyqt-by-example/tree/master/session2 
+
+
 Session 2: Plugging Things
 ==========================
 
@@ -146,9 +151,14 @@ In the meantime, you may want to check these pages:
 
 * Learn about `signals and slots`_
 
+* `Session 3`_
+
+.. _Session 3: http://lateral.netmanagers.com.ar/stories/BBS49.html
+
 .. _widgets: http://doc.trolltech.com/4.4/gallery.html 
 
 .. _signals and slots: http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/pyqt4ref.html#signal-and-slot-support
+
 
 -----------------
 

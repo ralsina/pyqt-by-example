@@ -15,6 +15,10 @@ If you have not done it yet, please check the previous sessions:
 
 * `Session 2`_
 
+All files for this session are here: `Session 3 at GitHub`_
+
+.. _Session 3 at GitHub: http://github.com/ralsina/pyqt-by-example/tree/master/session3 
+
 Designer is a Good Resource
 ===========================
 
