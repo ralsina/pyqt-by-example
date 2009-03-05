@@ -71,7 +71,7 @@ def main():
     tarea2=Task(text=u"Buy chili",tags=[red])
     tarea3=Task(text=u"Buy lettuce",tags=[green])
     tarea4=Task(text=u"Buy strawberries",tags=[red,green])
-    session.commit()
+    saveData()
     
     print "Green Tasks:"
     print green.tasks
