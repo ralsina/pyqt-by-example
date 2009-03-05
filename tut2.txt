@@ -132,12 +132,12 @@ Here is the code (lines 37_ to 42_):
             item.task.done=True
         else:
             item.task.done=False
-        todo.session.commit()
+        todo.saveData()
 
 
 See how we use item.task to reflect the item's checkState (whether it's checked or not) into the task state?
 
-The ``todo.session.commit()`` at the end makes sure all data is saved in the database via Elixir.
+The ``todo.saveData()`` at the end makes sure all data is saved in the database via Elixir. That function is a bit gnarly because I wanted it to work with two different versions of Elixir.
 
 AutoConnect is what you will use 90% of the time to add behaviour to your application. Most of the time, you will just create the window, add the widgets, and hook signals via AutoConnect.
 

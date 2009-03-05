@@ -353,61 +353,24 @@ TD.normal { background-color: #FFFFE1; }
 dbdir<span style="color: #666666">=</span>os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>join(os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>expanduser(<span style="color: #BA2121">&quot;~&quot;</span>),<span style="color: #BA2121">&quot;.pyqtodo&quot;</span>)
 dbfile<span style="color: #666666">=</span>os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>join(dbdir,<span style="color: #BA2121">&quot;tasks.sqlite&quot;</span>)
 
-<span style="color: #408080; font-style: italic"># It&#39;s good policy to have your app use a hidden folder in</span>
-<span style="color: #408080; font-style: italic"># the user&#39;s home to store its files. That way, you can</span>
-<span style="color: #408080; font-style: italic"># always find them, and the user knows where everything is.</span>
-
 <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Task</span>(Entity):
     <span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
 <span style="color: #BA2121; font-style: italic">    A task for your TODO list.</span>
 <span style="color: #BA2121; font-style: italic">    &quot;&quot;&quot;</span>
-
-    <span style="color: #408080; font-style: italic"># By inheriting Entity, we are using Elixir to make this</span>
-    <span style="color: #408080; font-style: italic"># class persistent, Task objects can easily be stored in</span>
-    <span style="color: #408080; font-style: italic"># our database, and you can search for them, change them,</span>
-    <span style="color: #408080; font-style: italic"># delete them, etc.</span>
-
     using_options(tablename<span style="color: #666666">=</span><span style="color: #BA2121">&#39;tasks&#39;</span>)
-
-    <span style="color: #408080; font-style: italic"># This specifies the table name we will use in the database,</span>
-    <span style="color: #408080; font-style: italic"># I think it&#39;s nicer than the automatic names Elixir uses.</span>
-
     text <span style="color: #666666">=</span> Field(Unicode,required<span style="color: #666666">=</span><span style="color: #008000">True</span>)
     date <span style="color: #666666">=</span> Field(DateTime,default<span style="color: #666666">=</span><span style="color: #008000">None</span>,required<span style="color: #666666">=</span><span style="color: #008000">False</span>)
     done <span style="color: #666666">=</span> Field(Boolean,default<span style="color: #666666">=</span><span style="color: #008000">False</span>,required<span style="color: #666666">=</span><span style="color: #008000">True</span>)
     tags  <span style="color: #666666">=</span> ManyToMany(<span style="color: #BA2121">&quot;Tag&quot;</span>)
 
-    <span style="color: #408080; font-style: italic"># A task has the following:</span>
-    <span style="color: #408080; font-style: italic">#</span>
-    <span style="color: #408080; font-style: italic"># * A text (&quot;Buy groceries&quot;). Always try to use unicode</span>
-    <span style="color: #408080; font-style: italic">#    in your app. Using anything else is *not worth</span>
-    <span style="color: #408080; font-style: italic">#    the trouble*.</span>
-    <span style="color: #408080; font-style: italic">#</span>
-    <span style="color: #408080; font-style: italic"># * A date for when it&#39;s due.</span>
-    <span style="color: #408080; font-style: italic">#</span>
-    <span style="color: #408080; font-style: italic"># * A &quot;Done&quot; field. Is it done?</span>
-    <span style="color: #408080; font-style: italic">#</span>
-    <span style="color: #408080; font-style: italic"># * A list of tags. For example, &quot;Buy groceries&quot; could be</span>
-    <span style="color: #408080; font-style: italic"># tagged &quot;Home&quot; and &quot;Important&quot;. It&#39;s ManyToMany because</span>
-    <span style="color: #408080; font-style: italic"># a task can have many tags and a tag can have many tasks.</span>
-
     <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__repr__</span>(<span style="color: #008000">self</span>):
         <span style="color: #008000; font-weight: bold">return</span> <span style="color: #BA2121">&quot;Task: &quot;</span><span style="color: #666666">+</span><span style="color: #008000">self</span><span style="color: #666666">.</span>text
 
-    <span style="color: #408080; font-style: italic"># It&#39;s always nicer if objects know how to turn themselves</span>
-    <span style="color: #408080; font-style: italic"># into strings. That way you can help debug your program</span>
-    <span style="color: #408080; font-style: italic"># just by printing them. Here, our groceries task would</span>
-    <span style="color: #408080; font-style: italic"># print as &quot;Task: Buy groceries&quot;.</span>
-
-<span style="color: #408080; font-style: italic"># Since earlier I mentioned Tags, we need to define them too:</span>
 
 <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Tag</span>(Entity):
     <span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
 <span style="color: #BA2121; font-style: italic">    A tag we can apply to a task.</span>
 <span style="color: #BA2121; font-style: italic">    &quot;&quot;&quot;</span>
-
-    <span style="color: #408080; font-style: italic"># Again, they go in the database, so they are an Entity.</span>
-
     using_options(tablename<span style="color: #666666">=</span><span style="color: #BA2121">&#39;tags&#39;</span>)
     name <span style="color: #666666">=</span> Field(Unicode,required<span style="color: #666666">=</span><span style="color: #008000">True</span>)
     tasks <span style="color: #666666">=</span> ManyToMany(<span style="color: #BA2121">&quot;Task&quot;</span>)
@@ -415,38 +378,29 @@ dbfile<span style="color: #666666">=</span>os<span style="color: #666666">.</spa
     <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__repr__</span>(<span style="color: #008000">self</span>):
         <span style="color: #008000; font-weight: bold">return</span> <span style="color: #BA2121">&quot;Tag: &quot;</span><span style="color: #666666">+</span><span style="color: #008000">self</span><span style="color: #666666">.</span>name
 
-    <span style="color: #408080; font-style: italic"># They are much simpler objects: they have a name,</span>
-    <span style="color: #408080; font-style: italic"># a list of tagged tasks, and can convert themselves</span>
-    <span style="color: #408080; font-style: italic"># to strings.</span>
 
-<span style="color: #408080; font-style: italic"># Using a database involves a few chores. I put them</span>
-<span style="color: #408080; font-style: italic"># in the initDB function. Just remember to call it before</span>
-<span style="color: #408080; font-style: italic"># trying to use Tasks or Tags!</span>
+saveData<span style="color: #666666">=</span><span style="color: #008000">None</span>
 
 <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">initDB</span>():
-    <span style="color: #408080; font-style: italic"># Make sure ~/.pyqtodo exists</span>
-
     <span style="color: #008000; font-weight: bold">if</span> <span style="color: #AA22FF; font-weight: bold">not</span> os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>isdir(dbdir):
         os<span style="color: #666666">.</span>mkdir(dbdir)
-
-    <span style="color: #408080; font-style: italic"># Set up the Elixir internal thingamajigs</span>
-
     metadata<span style="color: #666666">.</span>bind <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;sqlite:///</span><span style="color: #BB6688; font-weight: bold">%s</span><span style="color: #BA2121">&quot;</span><span style="color: #666666">%</span>dbfile
     setup_all()
-
-    <span style="color: #408080; font-style: italic"># And if the database doesn&#39;t exist: create it.</span>
-
     <span style="color: #008000; font-weight: bold">if</span> <span style="color: #AA22FF; font-weight: bold">not</span> os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>exists(dbfile):
         create_all()
 
-<span style="color: #408080; font-style: italic"># Usually, I add a main() function to all modules that</span>
-<span style="color: #408080; font-style: italic"># does something useful, perhaps run unit tests. In this</span>
-<span style="color: #408080; font-style: italic"># case, it demonstrates our backend&#39;s functionality.</span>
-<span style="color: #408080; font-style: italic"># You can try it by running it like this::</span>
-<span style="color: #408080; font-style: italic">#</span>
-<span style="color: #408080; font-style: italic">#   python todo.py</span>
+    <span style="color: #408080; font-style: italic"># This is so Elixir 0.5.x and 0.6.x work</span>
+    <span style="color: #408080; font-style: italic"># Yes, it&#39;s kinda ugly, but needed for Debian</span>
+    <span style="color: #408080; font-style: italic"># and Ubuntu and other distros.</span>
 
-<span style="color: #408080; font-style: italic"># No detailed comments in this one: study it yourself, it&#39;s not complicated!</span>
+    <span style="color: #008000; font-weight: bold">global</span> saveData
+    <span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">elixir</span>
+    <span style="color: #008000; font-weight: bold">if</span> elixir<span style="color: #666666">.</span>__version__ <span style="color: #666666">&lt;</span> <span style="color: #BA2121">&quot;0.6&quot;</span>:
+        saveData<span style="color: #666666">=</span>session<span style="color: #666666">.</span>flush
+    <span style="color: #008000; font-weight: bold">else</span>:
+        saveData<span style="color: #666666">=</span>session<span style="color: #666666">.</span>commit
+
+
 
 <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">main</span>():
 
@@ -462,7 +416,7 @@ dbfile<span style="color: #666666">=</span>os<span style="color: #666666">.</spa
     tarea2<span style="color: #666666">=</span>Task(text<span style="color: #666666">=</span><span style="color: #BA2121">u&quot;Buy chili&quot;</span>,tags<span style="color: #666666">=</span>[red])
     tarea3<span style="color: #666666">=</span>Task(text<span style="color: #666666">=</span><span style="color: #BA2121">u&quot;Buy lettuce&quot;</span>,tags<span style="color: #666666">=</span>[green])
     tarea4<span style="color: #666666">=</span>Task(text<span style="color: #666666">=</span><span style="color: #BA2121">u&quot;Buy strawberries&quot;</span>,tags<span style="color: #666666">=</span>[red,green])
-    session<span style="color: #666666">.</span>commit()
+    saveData()
 
     <span style="color: #008000; font-weight: bold">print</span> <span style="color: #BA2121">&quot;Green Tasks:&quot;</span>
     <span style="color: #008000; font-weight: bold">print</span> green<span style="color: #666666">.</span>tasks
