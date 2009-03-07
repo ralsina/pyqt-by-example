@@ -1,0 +1,78 @@
+==========================
+PyQt By Example: Session 4
+==========================
+
+~~~~~~~
+Action!
+~~~~~~~
+
+Requirements
+============
+
+If you have not done it yet, please check the previous sessions:
+    
+* `Session 1`_
+
+* `Session 2`_
+
+* `Session 3`_
+
+
+All files for this session are here: `Session 4 at GitHub`_
+
+Action!
+=======
+
+What's an Action?
+~~~~~~~~~~~~~~~~~
+
+When we finished `session 3`_ we had a basic todo application, with very limited functionality: you can mark  tasks as done, but you can't edit them, you can't create new ones, and you can't remove them, much less do things like filtering them.
+
+Today we will start writing code and designing UI to do those things.
+
+The key concept here is Actions. 
+
+* Help? That's an action
+
+* Open File? That's an action 
+
+* Cut / Copy / Paste? Those are actions too.
+
+Let's quote The Fine Manual:
+    
+    The QAction class provides an abstract user interface action that can be inserted into widgets.
+
+    In applications many common commands can be invoked via menus, toolbar buttons, and keyboard shortcuts. Since the user expects each command to be performed in the same way, regardless of the user interface used, it is useful to represent each command as an action.
+
+    Actions can be added to menus and toolbars, and will automatically keep them in sync. For example, in a word processor, if the user presses a Bold toolbar button, the Bold menu item will automatically be checked.    
+
+    A QAction may contain an icon, menu text, a shortcut, status text, "What's This?" text, and a tooltip. 
+    
+The beauty of actions is that you don't have to code things twice. Why add a "Copy" button to a toolbar, then a "Copy" menu entry, then write two handlers?
+
+Create actions for *everything the user can do* then plug them in your UI in the right places. If you put them in a menu, it's a menu entry. If you put it in a toolbar, it's a button. Then write a handler *for the action*, connect it to the right signal, and you are done.
+
+Let's start with a simple action: **Remove Task**. We will be doing the first half of the job, creating the action itself and the UI, using designer.
+
+Creating Actions in Designer
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+    
+
+Further Reading
+===============
+
+* PyQt's Actions: 1_ 2_
+
+.. _1: http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/html/qaction.html
+    
+.. _2: http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/html/qactiongroup.html#details
+    
+.. _Session 4 at GitHub: http://github.com/ralsina/pyqt-by-example/tree/master/session4 
+
+.. _Session 1: http://lateral.netmanagers.com.ar/stories/BBS47.html
+
+.. _Session 2: http://lateral.netmanagers.com.ar/stories/BBS48.html
+
+.. _Session 3: http://lateral.netmanagers.com.ar/stories/BBS49.html
