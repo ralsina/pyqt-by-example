@@ -28,6 +28,11 @@ What's an Action?
 
 When we finished `session 3`_ we had a basic todo application, with very limited functionality: you can mark  tasks as done, but you can't edit them, you can't create new ones, and you can't remove them, much less do things like filtering them.
 
+.. figure:: window5.png
+
+   A very limited application
+
+
 Today we will start writing code and designing UI to do those things.
 
 The key concept here is Actions. 
@@ -195,6 +200,7 @@ sure it's even *right* but it works.
 
 You can now test the feature. Remember that if you run out of tasks, you can execute ``python todo.py`` and get new ones.
 
+
 Fine Tuning Your Actions
 ------------------------
 
@@ -223,6 +229,12 @@ There are some interface problems with our work so far:
    Also, we need to make Delete Task start *disabled* because we start the app with no task selected. That's done from designer using its "enabled" property.
 
    Since there is only one Delete Task action, this code affects the task bar and also the menu bar. That helps keep your UI consistent and well-behaved.
+
+.. figure:: window6.png
+
+   A very limited application
+
+
 
 Coming Soon
 ===========
