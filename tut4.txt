@@ -18,7 +18,7 @@ If you have not done it yet, please check the previous sessions:
 * `Session 3`_
 
 
-All files for this session are here: `Session 4 at GitHub`_
+All files for this session are here: `Session 4 at GitHub`_. You can use them, or you can follow these instructions starting with the files from `Session 3`_ and see how well you worked!
 
 Action!
 =======
@@ -42,28 +42,218 @@ Let's quote The Fine Manual:
     
     The QAction class provides an abstract user interface action that can be inserted into widgets.
 
-    In applications many common commands can be invoked via menus, toolbar buttons, and keyboard shortcuts. Since the user expects each command to be performed in the same way, regardless of the user interface used, it is useful to represent each command as an action.
+    In applications many common commands can be invoked via menus, tool bar buttons, and keyboard shortcuts. Since the user expects each command to be performed in the same way, regardless of the user interface used, it is useful to represent each command as an action.
 
-    Actions can be added to menus and toolbars, and will automatically keep them in sync. For example, in a word processor, if the user presses a Bold toolbar button, the Bold menu item will automatically be checked.    
+    Actions can be added to menus and tool bars, and will automatically keep them in sync. For example, in a word processor, if the user presses a Bold tool bar button, the Bold menu item will automatically be checked.    
 
     A QAction may contain an icon, menu text, a shortcut, status text, "What's This?" text, and a tooltip. 
     
-The beauty of actions is that you don't have to code things twice. Why add a "Copy" button to a toolbar, then a "Copy" menu entry, then write two handlers?
+The beauty of actions is that you don't have to code things twice. Why add a "Copy" button to a tool bar, then a "Copy" menu entry, then write two handlers?
 
-Create actions for *everything the user can do* then plug them in your UI in the right places. If you put them in a menu, it's a menu entry. If you put it in a toolbar, it's a button. Then write a handler *for the action*, connect it to the right signal, and you are done.
+Create actions for *everything the user can do* then plug them in your UI in the right places. If you put them in a menu, it's a menu entry. If you put it in a tool bar, it's a button. Then write a handler *for the action*, connect it to the right signal, and you are done.
 
 Let's start with a simple action: **Remove Task**. We will be doing the first half of the job, creating the action itself and the UI, using designer.
 
 Creating Actions in Designer
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
+First, let's go to the *Action Editor* and obviously click on the "New Action" button and start creating it:
     
+.. figure:: action1.png
+
+   Creating a New Action
+    
+A few remarks: 
+
+* If you don't know where the "X" icon came from, you have not read `session 3`_ ;-)
+   
+* The ``actionDelete_Task`` object name is automatically generated from the text field. In some cases that can lead to awful names. If that's the case, you can just change the object name.
+
+* The same text is used for the iconText and toolTip properties. If that's not correct, you can change it later. 
+
+Once you create the action, it will not be marked as "Used" in the action editor. That's because it exists, but has not been made available to the user anywhere in the window we are creating.
+
+There are two obvious places for this action: a tool bar, and a menu bar.
+
+Adding Actions to a Tool Bar
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To add an action to a tool bar, first make sure there is one. If you don't have one in your "Object Inspector", then right click on MainWindow (either the actual window, or its entry in the inspector), and choose "Add Tool Bar".
+
+You can add as many tool bars as you want, but try to want only one, unless you have a **very** good reason (we will have one in session 5 ;-)
+
+After you create the tool bar, you will see empty space between the menu bar (that says "Type Here") and the task list widget. That space is the tool bar.
+
+Drag your action's icon from the action editor to the tool bar.
+
+That's it!
+
+.. figure:: action2.png
+
+   The Delete Task action is now in the tool bar.
+   
+Adding Actions to a Menu Bar
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Again, our menu bar is empty, it has only a sign saying "Type Here". While we could just drag our action to the menu bar, that would place "Delete Task" as a top level menu, which is really an unusual choice.
+
+So, let's create a "Task" menu first:
+    
+* Click on the "Type Here". 
+
+* Type "Task" (without the quotes)
+
+.. figure:: action3.png
+
+   Creating a menu
+
+If you see the last image, by doing that we created a QMenu object called menuTask (again, the object name is based on what we typed).
+
+We want to add the delete task action to that menu. To do that, drag the action to the "Task" in the menu bar, then to the menu that appears when you do that.
+
+.. figure:: action4.png
+
+   The Delete Task action is now in the menu bar
+   
+   
+Now we have our action in the tool bar and in the menu bar. But of course, it does nothing. So, let's work on that next.
+
+Save it, run ``build.sh``, let's move forward.
+
+Deleting a Task
+---------------
+
+From `session 2`_ you should remember AutoConnect. If you don't, refresh that session, because that's what we will use now. We want to do something when the ``actionDelete_Task`` object emits its triggered_ signal.
+
+Therefore, we want to implement ``Main.on_actionDelete_Task_triggered`` (see why action's object names are important? I could have called it ``delete`` instead).
+
+.. admonition:: An Important Issue
+
+    Here we take a small detour because there is a problem with PyQt which is mildly annoying.
+
+    Consider this trivial version of our method:
+        
+    .. code-block:: python
+
+        def on_actionDelete_Task_triggered(self,checked=None):
+            print "adtt",checked
+
+    What's printed if I click on the toolbar button?
+
+    ::
+        
+        [ralsina@hp session4]$ python main.py
+        adtt False
+        adtt None
+        
+
+    The same thing happens if you select "Delete Task" from the menu: our slot gets called **twice**.
+    This problem is there when you use AutoConnect for signals with arguments that can also be emitted without arguments. 
+    
+    How can you tell if that's the case? In the Qt docs they will be listed with default arguments.
+    
+    For example, this signal has the problem::
+        
+        void triggered ( bool checked = false )
+        
+    This one doesn't::
+        
+        void toggled ( bool checked )
+
+    The technical explanation for this is ... involved_ but the *practical* solution is trivial:
+        
+    Make sure checked is not None in your slot:
+        
+    .. code-block:: python
+
+        def on_actionDelete_Task_triggered(self,checked=None):
+            if checked is None: return
+
+    This way, you will ignore the slot called with no arguments, and run the real code only once.
+
+
+And here is the real code, which is quite short:
+
+.. code-block:: python
+    
+    def on_actionDelete_Task_triggered(self,checked=None):
+        if checked is None: return
+        # First see what task is "current".
+        item=self.ui.list.currentItem()
+        
+        if not item: # None selected, so we don't know what to delete!
+            return
+        # Actually delete the task
+        item.task.delete()
+        todo.saveData()
+        
+        # And remove the item. I think that's not pretty. Is it the only way?
+        self.ui.list.takeTopLevelItem(self.ui.list.indexOfTopLevelItem(item))
+
+Except for the last line, that code should be obvious. The last line? I am not really
+sure it's even *right* but it works.
+
+You can now test the feature. Remember that if you run out of tasks, you can execute ``python todo.py`` and get new ones.
+
+Fine Tuning Your Actions
+------------------------
+
+There are some interface problems with our work so far:
+    
+1) The Task menu and the Delete Task action lack keyboard shortcuts.
+
+   This is very important. It makes the app work better for the regular user. Besides, often they will *expect* the shortcuts to be there and there is no reason to frustrate your user!
+   
+   Luckily, this is trivial to fix, just set the shortcut property for action_Delete_Task, and change menuTask's text property to "&Task".
+   
+2) The Delete Task action is enabled even when it doesn't apply. If you have no task selected, the user can trigger it, but it does *nothing*. That's a bit surprising, and surprising your users is not very nice, IMHO.
+
+   There is some argument about this, notably from `Joel Spolsky`_ so maybe I am just old fashioned!
+
+   To selectively enable or disable your actions when there is/isn't a selected item in our task list, we need to react to our list's ``currentItemChanged`` signal. Here's the code:
+       
+   .. code-block:: python
+       
+        def on_list_currentItemChanged(self,current=None,previous=None):
+            if current:
+                self.ui.actionDelete_Task.setEnabled(True)
+            else:
+                self.ui.actionDelete_Task.setEnabled(False)
+
+   Also, we need to make Delete Task start *disabled* because we start the app with no task selected. That's done from designer using its "enabled" property.
+
+   Since there is only one Delete Task action, this code affects the task bar and also the menu bar. That helps keep your UI consistent and well-behaved.
+
+Coming Soon
+===========
+
+Well, that was a rather long explanation for a small feature, wasn't it? Don't worry, the next actions will be much easier to add, because I expect you to read "I added an action called *New Task*" and know what I am talking about.
+
+And in the next session, we will do just that. And we will create our first dialog.
+
+.. _Joel Spolsky: http://www.joelonsoftware.com/items/2008/07/01.html
+
+.. _checkable: http://doc.trolltech.com/4.4/qaction.html#checkable-prop
+
+.. _involved: http://docs.huihoo.com/pyqt/pyqt4.html#the-qtcore-pyqtsignature-decorator
+
+.. _triggered: http://doc.trolltech.com/4.4/qaction.html#triggered
+
 
 Further Reading
 ===============
 
 * PyQt's Actions: 1_ 2_
+
+* `Toolbar Design`_
+
+* `More Toolbar Design`_
+
+
+
+.. _More Toolbar Design : http://developer.apple.com/documentation/userexperience/conceptual/applehiguidelines/XHIGIcons/chapter_15_section_9.html
+
+.. _Toolbar Design: http://msdn.microsoft.com/en-us/library/aa511500.aspx
 
 .. _1: http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/html/qaction.html
     
@@ -76,3 +266,11 @@ Further Reading
 .. _Session 2: http://lateral.netmanagers.com.ar/stories/BBS48.html
 
 .. _Session 3: http://lateral.netmanagers.com.ar/stories/BBS49.html
+
+-----------------
+
+Here you can see what changed between the old and new versions:
+
+.. raw:: html
+   :file: session4/diff1.html
+

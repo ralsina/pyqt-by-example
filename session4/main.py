@@ -41,6 +41,25 @@ class Main(QtGui.QMainWindow):
             item.task.done=False
         todo.saveData()
 
+    def on_actionDelete_Task_triggered(self,checked=None):
+        if checked is None: return
+        # First see what task is "current".
+        item=self.ui.list.currentItem()
+        
+        if not item: # None selected, so we don't know what to delete!
+            return
+        # Actually delete the task
+        item.task.delete()
+        todo.saveData()
+        
+        # And remove the item. I think that's not pretty. Is it the only way?
+        self.ui.list.takeTopLevelItem(self.ui.list.indexOfTopLevelItem(item))
+
+    def on_list_currentItemChanged(self,current=None,previous=None):
+        if current:
+            self.ui.actionDelete_Task.setEnabled(True)
+        else:
+            self.ui.actionDelete_Task.setEnabled(False)
 
 def main():
     # Init the database before doing anything else
