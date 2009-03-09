@@ -65,25 +65,60 @@ Here is the code, with comments, for our backend, called todo.py_. Hopefully, we
 
     dbdir=os.path.join(os.path.expanduser("~"),".pyqtodo")
     dbfile=os.path.join(dbdir,"tasks.sqlite")
+    
+    # It's good policy to have your app use a hidden folder in 
+    # the user's home to store its files. That way, you can 
+    # always find them, and the user knows where everything is.
 
     class Task(Entity):
         """
         A task for your TODO list.
         """
+        
+        # By inheriting Entity, we are using Elixir to make this 
+        # class persistent, Task objects can easily be stored in 
+        # our database, and you can search for them, change them, 
+        # delete them, etc.        
+        
         using_options(tablename='tasks')
+        # This specifies the table name we will use in the database, 
+        # I think it's nicer than the automatic names Elixir uses.
+        
         text = Field(Unicode,required=True)
         date = Field(DateTime,default=None,required=False)
         done = Field(Boolean,default=False,required=True)
         tags  = ManyToMany("Tag")
         
+        # A task has the following:
+        #
+        # * A text ("Buy groceries"). Always try to use unicode 
+        #    in your app. Using anything else is *not worth 
+        #    the trouble*. 
+        #
+        # * A date for when it's due.
+        #
+        # * A "Done" field. Is it done?
+        #
+        # * A list of tags. For example, "Buy groceries" could be 
+        # tagged "Home" and "Important". It's ManyToMany because 
+        # a task can have many tags and a tag can have many tasks.        
+        
         def __repr__(self):
             return "Task: "+self.text
-
+            
+        # It's always nicer if objects know how to turn themselves 
+        # into strings. That way you can help debug your program 
+        # just by printing them. Here, our groceries task would 
+        # print as "Task: Buy groceries".
+        
+    # Since earlier I mentioned Tags, we need to define them too:
 
     class Tag(Entity):
         """
         A tag we can apply to a task.
         """
+        # Again, they go in the database, so they are an Entity.
+        
         using_options(tablename='tags')
         name = Field(Unicode,required=True)
         tasks = ManyToMany("Task")
@@ -91,14 +126,20 @@ Here is the code, with comments, for our backend, called todo.py_. Hopefully, we
         def __repr__(self):
             return "Tag: "+self.name
 
-
+        # They are much simpler objects: they have a name, 
+        # a list of tagged tasks, and can convert themselves 
+        # to strings.
+        
     saveData=None
 
     def initDB():
+        # Make sure ~/.pyqtodo exists
         if not os.path.isdir(dbdir):
             os.mkdir(dbdir)
+        # Set up the Elixir internal thingamajigs
         metadata.bind = "sqlite:///%s"%dbfile
         setup_all()
+        # And if the database doesn't exist: create it.
         if not os.path.exists(dbfile):
             create_all()
             
@@ -114,7 +155,15 @@ Here is the code, with comments, for our backend, called todo.py_. Hopefully, we
             saveData=session.commit
             
         
-
+    # Usually, I add a main() function to all modules that 
+    # does something useful, perhaps run unit tests. In this 
+    # case, it demonstrates our backend's functionality. 
+    # You can try it by running it like this::
+    #
+    #   python todo.py
+   
+    # No detailed comments in this one: study it yourself, it's not complicated!
+    
     def main():
         
         # Initialize database
