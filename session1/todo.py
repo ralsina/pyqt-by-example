@@ -74,6 +74,10 @@ class Tag(Entity):
     
 saveData=None
 
+# Using a database involves a few chores. I put them 
+# in the initDB function. Just remember to call it before 
+# trying to use Tasks or Tags!
+
 def initDB():
     # Make sure ~/.pyqtodo exists
     if not os.path.isdir(dbdir):
