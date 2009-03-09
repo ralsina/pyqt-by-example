@@ -1,0 +1,315 @@
+================
+PyQt en ejemplos
+================
+
+:Autor: Roberto Alsina
+:Traducción al castellano: Sebastián Bassi
+
+Introducción
+============
+
+Esta serie de tutoriales está inspirada por dos hechos:
+        
+* LatinoWare 2008, donde presenté esta misma aplicación como introducción al desarrollo con PyQt.
+
+* La falta (según mi humilde opinión) de tutoriales de PyQt que muestren la manera en la que prefiero desarrollar aplicaciones.
+
+El segundo item puede sonar un poco agresivo, pero no es el caso. No digo que los demas tutoriales estén equivocados o con algun problema, solo digo que no funcionan de la manera que me gusta trabajar.
+
+No creo en enseñar algo para luego decir "y ahora te mostraré como se hace de verdad". No creo en ejemplos de juguete. Creo que sos lo suficientemente inteligente como para aprender las cosas de una vez, y aprender la mejor manera desde la primera vez.
+
+Por lo tanto, en esta serie, desarollaré una pequeña aplicación del tipo TODO (tareas pendientes) usando las herramientas y procedimientos que realmente uso en mi trabajo de desarrollo, con la salvedad de la IDE Eric. Esto es porque las IDEs son preferencias personales y para proyectos de esta envergadura no aporta mucho.
+
+Otra cosa que no voy a agregar es "unit testing". Si bien es muy importante, creo que puede distraer de *hacer* realmente algo. Si eso es un problema, puedo agregarlo en otra versión posterior del tutorial.
+
+Requisitos
+==========
+
+Debes tener instalado los siguientes programas:
+    
+* Python_: Estoy usando 2.6, pero espero que 2.5 o incluso 2.4 funcionen, aunque no estoy probando esas versiones.
+
+* Elixir_: Esto hace falta para el "backend". Requiere SQLAlchemy_ y usaremos SQLite_ como base de datos. Si instalas Elixir_ el resto se instalará automaticamente.
+
+* PyQt_: Usaré la versión 4.4, pero 4.5 también sirve.
+
+* Tu editor de texto preferido.
+
+Este tutorial no asume conocimientos previos de Elixir, PyQt o base de datos, pero si asume que sabes manejar algo de Python. Si aun no sabes Python, este aún no es el tutorial adecuado.
+
+Podes obtener el código de esta sesión aqui: Sources_ (click the "Download" button).
+
+Como este tutorial esta alojado en GitHub_ estas invitado a contribuir con mejoras, modificaciones e incluso nuevas secciones o nuevas caracteristicas!
+
+Sesión 1: Lo básico
+===================
+
+El backend
+----------
+
+La versión mas nueva de esta sesión (en formato RST) está disponible en el `master tree`_ de GitHub como tut1.txt_
+
+Como estamos desarrollando una aplicación TODO, necesitamos un backend que gestione el almacenamiento y busquedas de las tareas TODO (para hacer).
+
+Para hacerlo de la manera mas simple posible, lo haré con Elixir_, "Una capa declarativa sobre SQLAlchemy Object-Relational Mapper"
+
+Puede dar miedo el nombre, no te preocupes. Lo que significa es que "es una manera de crear objetos que se almacenan automaticamente en una base de datos". 
+
+Aqui está el código, con comentarios, para nuestro backend, llamado todo.py_. Por suerte no tenemos que mirarlo nuevamente hasta muchas mas tarde en el tutorial!
+
+.. code-block:: python
+
+    # -*- coding: utf-8 -*-
+
+    """Un simple backend para nuestra aplicacion TODO, usando Elixir"""
+
+    import os
+    from elixir import *
+
+    dbdir=os.path.join(os.path.expanduser("~"),".pyqtodo")
+    dbfile=os.path.join(dbdir,"tasks.sqlite")
+
+    # Es una buena práctica que tu aplicación use una carpeta 
+    # oculta en el directorio home del usuario para guardar sus
+    # archivos. De esta manera siempre podrás encontrarlos, y 
+    # el usuario sabe donde está todo.
+
+    class Task(Entity):
+        """
+        Una tarea para tu lista TODO.
+        """
+
+        # Heredando Entity, usamos Elixir para hacer persistente 
+        # a esta clase, los objetos de Tareas (Task) pueden ser 
+        # guardadas facilmente en nuestra base de datos. Y pueden
+        # ser buscadas, cambiadas, borradas, etcetera.
+
+        using_options(tablename='tasks')
+
+        # Esto especifica el nombre de la tabla que se usara en la DB, 
+        # Creo que es mejor que los nombres automaticos que usa Elixir.
+
+        text = Field(Unicode,required=True)
+        date = Field(DateTime,default=None,required=False)
+        done = Field(Boolean,default=False,required=True)
+        tags  = ManyToMany("Tag")
+
+        # Una tarea contiene:
+        #
+        # * Un texto (text) ("Comprar suministros"). Tratá de usar siempre Unicode 
+        #    en tu app. Usar otra cosa no *no vale la pena*. 
+        #    
+        #
+        # * Una fecha en la que se vence (date).
+        #
+        # * Un campo de "Listo" (done). Esta listo?
+        #
+        # * Una lista de etiquetas. Por ejemplo "Comprar suministros" puede 
+        # ser etiquetado como "Hogar" e "importante". Es del tipo "ManyToMany" 
+        # porque una tarea puede tener varias etiquetas y una etiqueta puede
+        # tener varias tareas.
+
+        def __repr__(self):
+            return "Task: "+self.text
+
+        # Siempre es mejor que los objetos sepan como convertirse 
+        # en "strings". De esta manera te puede ayudar a debuguear tu 
+        # programa usando print. Por ejemplo, nuestra tarea de comprar 
+        # provisiones se imprimiría "Tarea: comprar provisiones"
+
+    # Como mencioné antes los tags, hay que definirlos:
+
+    class Tag(Entity):
+        """
+        Una etiqueta (tag) que podemos aplicar a la tarea.
+        """
+        
+        # Nuevamente, van a un base de datos, por lo que 
+        # heredan Entity.
+        
+        using_options(tablename='tags')
+        name = Field(Unicode,required=True)
+        tasks = ManyToMany("Task")
+        
+        def __repr__(self):
+            return "Tag: "+self.name
+
+        # Son objetos simples: Tienen un nombre, una lista de 
+        # tareas etiquetadas, y pueden convertirse en strings.
+
+    # Usar una DB involucra algunas tareas, las pondré en la 
+    # función initDB. Recordá llamarlo antes de intentar usar 
+    # Tareas o Etiquetas!
+
+    def initDB():
+        # Asegurarse que existe ~/.pyqtodo
+
+        if not os.path.isdir(dbdir):
+            os.mkdir(dbdir)
+            
+        # Acomodar cosas internas de Elixir
+            
+        metadata.bind = "sqlite:///%s"%dbfile
+        setup_all()
+        
+        # Si la base no existe, crearla.
+        
+        if not os.path.exists(dbfile):
+            create_all()
+
+    # Normalmente agrego a todos los modulos una función main()
+    # que haga algo útil, como correr unit tests. En este
+    # caso, demuestra la funcionalidad de nuestro backend. 
+    # Podés probarlo ejecutandolo asi::
+    #
+    #   python todo.py
+   
+    # Sin comentario detallados para esto: Estudialo por tu cuenta
+    # no es complicado!
+
+    def main():
+        
+        # Inicializar la DB
+        initDB()
+        
+        # Crear 2 etiquetas
+        verde=Tag(name=u"verde")
+        rojo=Tag(name=u"rojo")
+        
+        #Crear algunas tareas y etiquetarlas
+        tarea1=Task(text=u"Comprar tomate",tags=[rojo])
+        tarea2=Task(text=u"Comprar pimiento",tags=[rojo])
+        tarea3=Task(text=u"Comprar lechuga",tags=[verde])
+        tarea4=Task(text=u"Comprar frutillas",tags=[roja,verde])
+        session.commit()
+        
+        print "Tareas verdes:"
+        print green.tasks
+        print
+        print "Tareas rojas:"
+        print red.tasks
+        print
+        print "Tareas con l:"
+        print [(t.id,t.text,t.done) for t in Task.query.filter(Task.text.like(ur'%l%')).all()]
+
+    if __name__ == "__main__":
+        main()
+
+
+
+La ventana principal
+--------------------
+
+Empecemos con la parte divertida: PyQt_!
+
+Recomiendo el uso de "designer" para crear las interfaces gráficas. Sí, algunas personas se quejan de los diseñadores de interfaces. Creo que es mejor usar tu tiempo escribiendo código para las partes donde no haya buenas herramientas.
+
+Aqui está el archivo de Qt Designer para esta ventana: window.ui_. No te preocupes del XML, simplemente abrilo en tu "designer" ;-)
+
+Asi es como se ve en "designer":
+    
+.. figure:: window2.png
+    
+   La ventana principal, en designer.
+
+Lo que estas viendo es una "Ventana principal". Este tipo de ventanas te permite tener un menú, barra de herramientas, barra de estado y es la típica ventana de una aplicación estándar.
+
+El mensaje de "Escriba aquí" en la parte superior se debe a que el menú está vacio y te está "invitando" a que le agregues algo.
+
+Ese cuadrado grande con "Tarea" "Fecha" y "Etiquetas" es un "widget" llamado QTreeView, que es útil para mostrar items con iconos, varias volumnas y hasta estructuras jerárquicas (árboles). Lo usaremos para mostrar nuestra lista de tareas.
+
+Puedes probar como se ve esta ventana usando "Form" -> "Preview" en designer. Esto es lo que obtendrás:
+    
+.. figure:: window1.png
+   
+   Previsualización de la ventana principal, mostrando la lista de tareas.
+   
+Puedes probar redimensionar la ventana, y este "widget" usará todo el espacio disponible y se redimensionará con la ventana. Esto es importante: Las ventanas que no pueden redimensionarse no parecen profesionales y no son adecuadas.
+
+En Qt, esto se hace con "layouts". En este caso particular, como tenemos un solo "widget", lo que hacemos es cliquear en el fondo del formulario y seleccionar "Layout" -> "Layout Horizontally" ("Vertically" tendría el mismo efecto en este caso).
+
+Cuando hagamos un diálogo de configuración, aprenderemos más sobre los layouts.
+
+Ahora puedes jugar con "designer" y este formulario. Prueba cambiar el "layout", agrega nuevas cosas, cambia las propiedades de los "widgets", experiment todo lo que quieras, el esfuerzo en aprender a usar "designer" vale la pena!
+
+Usando la ventana principal
+---------------------------
+
+Vamos a hacer que esta ventana que creamos sea parte de un programa real, asi podemos hacerla andar:
+
+Primero tenemos que compilar nuestro archivo .ui en código Python. Podés hacerlo con este comando::
+    
+    pyuic4 window.ui -o windowUi.py
+
+
+Veamos ahora main.py_, el archivo principal de nuestra aplicación:
+    
+.. code-block:: python
+
+    # -*- coding: utf-8 -*-
+
+    """The user interface for our app"""
+
+    import os,sys
+
+    # Importar modulo Qt
+    from PyQt4 import QtCore,QtGui
+
+    # Importar el código del modulo compilado UI
+    from windowUi import Ui_MainWindow
+
+    # Crear una clase para nuestra ventana principal
+    class Main(QtGui.QMainWindow):
+        def __init__(self):
+            QtGui.QMainWindow.__init__(self)
+            
+            # Esto es siempre igual.
+            self.ui=Ui_MainWindow()
+            self.ui.setupUi(self)
+
+    def main():
+        # Nuevamente, esto es estándar, será igual en cada 
+        # aplicación que escribas
+        app = QtGui.QApplication(sys.argv)
+        window=Main()
+        window.show()
+        # Es exec_ porque exec es una palabra reservada en Python
+        sys.exit(app.exec_())
+        
+
+    if __name__ == "__main__":
+        main()
+        
+Como puedes ver, esto no es para nada especifico de nuestra aplicación TODO. Cualquier cosa que hubiera habido en el archivo .ui funciona con esto!
+
+La única parte interesante es la clase Main (Principal). Esa clase usa el archivo ui compilado y es donde va la lógica de la interfaz del usuario. **Nunca** edites manualmente el archivo .ui o el generado por Python! 
+
+Pongámoslo en estos términos: **SI EDITAS EL ARCHIVO UI (SIN USAR EL DESIGNER) O EL ARCHIVO GENERADO POR PYTHON TE ESTAS EQUIVOCANDO MAL! MUY MAL! ESTREPITOSAMENTE MAL!**. Espero haber sido claro, porque hay al menos un tutorial que te dice que lo hagas. **NO LO HAGAS!!!**,
+
+Solo pon tu código en esta clase y listo.
+
+Asi que si ejecutas main.py, ejecutarás la aplicación. No hará nada interesante, porque necesitamos conectar el "backend" a nuestra interface de usuario, pero eso es para la sesión 2.
+
+.. _main.py: http://github.com/ralsina/pyqt-by-example/blob/master/session1/main.py
+
+.. _window.ui: http://github.com/ralsina/pyqt-by-example/blob/master/session1/window.ui
+
+.. _Elixir: http://elixir.ematia.de
+
+.. _python: http://www.python.org
+
+.. _sqlalchemy: http://www.sqlalchemy.org
+
+.. _pyqt: http://www.riverbankcomputing.co.uk/software/pyqt/intro
+
+.. _todo.py: http://github.com/ralsina/pyqt-by-example/blob/master/session1/todo.py
+
+.. _master tree: http://github.com/ralsina/pyqt-by-example/blob/master
+
+.. _tut1.txt: http://github.com/ralsina/pyqt-by-example/blob/master/tut1.txt
+
+.. _sources: http://github.com/ralsina/pyqt-by-example/tree/master/session1
+
+.. _sqlite: http://www.sqlite.org
+
+.. _github: http://www.github.org
