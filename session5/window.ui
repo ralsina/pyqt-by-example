@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>340</width>
-    <height>460</height>
+    <height>464</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -17,42 +17,45 @@
     <normaloff>:/todo.svg</normaloff>:/todo.svg</iconset>
   </property>
   <widget class="QWidget" name="centralwidget" >
-   <layout class="QHBoxLayout" name="horizontalLayout" >
-    <property name="margin" >
-     <number>0</number>
-    </property>
+   <layout class="QVBoxLayout" name="verticalLayout" >
     <item>
-     <widget class="QTreeWidget" name="list" >
-      <property name="alternatingRowColors" >
-       <bool>true</bool>
+     <widget class="QSplitter" name="splitter" >
+      <property name="orientation" >
+       <enum>Qt::Vertical</enum>
       </property>
-      <property name="rootIsDecorated" >
-       <bool>false</bool>
-      </property>
-      <property name="uniformRowHeights" >
-       <bool>true</bool>
-      </property>
-      <property name="sortingEnabled" >
-       <bool>true</bool>
-      </property>
-      <property name="allColumnsShowFocus" >
-       <bool>true</bool>
-      </property>
-      <column>
-       <property name="text" >
-        <string>Task</string>
+      <widget class="QTreeWidget" name="list" >
+       <property name="alternatingRowColors" >
+        <bool>true</bool>
        </property>
-      </column>
-      <column>
-       <property name="text" >
-        <string>Date</string>
+       <property name="rootIsDecorated" >
+        <bool>false</bool>
        </property>
-      </column>
-      <column>
-       <property name="text" >
-        <string>Tags</string>
+       <property name="uniformRowHeights" >
+        <bool>true</bool>
        </property>
-      </column>
+       <property name="sortingEnabled" >
+        <bool>true</bool>
+       </property>
+       <property name="allColumnsShowFocus" >
+        <bool>true</bool>
+       </property>
+       <column>
+        <property name="text" >
+         <string>Task</string>
+        </property>
+       </column>
+       <column>
+        <property name="text" >
+         <string>Date</string>
+        </property>
+       </column>
+       <column>
+        <property name="text" >
+         <string>Tags</string>
+        </property>
+       </column>
+      </widget>
+      <widget class="editor" native="1" name="editor" />
      </widget>
     </item>
    </layout>
@@ -70,6 +73,9 @@
     <property name="title" >
      <string>&amp;Task</string>
     </property>
+    <addaction name="actionNew_Task" />
+    <addaction name="actionEdit_Task" />
+    <addaction name="separator" />
     <addaction name="actionDelete_Task" />
    </widget>
    <addaction name="menuTask" />
@@ -84,6 +90,9 @@
    <attribute name="toolBarBreak" >
     <bool>false</bool>
    </attribute>
+   <addaction name="actionNew_Task" />
+   <addaction name="actionEdit_Task" />
+   <addaction name="separator" />
    <addaction name="actionDelete_Task" />
   </widget>
   <action name="actionDelete_Task" >
@@ -101,7 +110,33 @@
     <string>Del</string>
    </property>
   </action>
+  <action name="actionNew_Task" >
+   <property name="icon" >
+    <iconset resource="icons.qrc" >
+     <normaloff>:/filenew.svg</normaloff>:/filenew.svg</iconset>
+   </property>
+   <property name="text" >
+    <string>New Task</string>
+   </property>
+  </action>
+  <action name="actionEdit_Task" >
+   <property name="icon" >
+    <iconset resource="icons.qrc" >
+     <normaloff>:/edit.svg</normaloff>:/edit.svg</iconset>
+   </property>
+   <property name="text" >
+    <string>Edit Task</string>
+   </property>
+  </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>editor</class>
+   <extends>QWidget</extends>
+   <header>editor</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="icons.qrc" />
  </resources>

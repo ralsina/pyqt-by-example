@@ -121,6 +121,8 @@ The bad:
     * Could be confusing?
 
     * Could not work great in small screens (needs testing!)
+
+      In my screen the widget is only 300px tall, so it should fit even a small form factor screen (A 800x480 netbook?, a QVGA phone?) nicely, although in those cases it will obscure the window app completely. In such small screens "paginated" interfaces are a good idea.
     
     * If the main window's form factor is small (as it is for this app), a large panel will obscure most or all the window.
     
@@ -203,8 +205,91 @@ Some chores:
 
 3. Test it in different styles, see if aything bad happens
 
-4. Add compiling editor.ui_ to our build.sh_
+4. Rename 
 
+5. Add compiling editor.ui_ to our build.sh_
+
+Let's consider our task editing/creating widget done. Now, we need to integrate it in our main window.
+
+Working on the Main Window
+==========================
+
+Actions
+~~~~~~~
+
+The user interaction is done via actions. We want to enable the user to:
+
+* Create a new task: action "actionNew_Task".
+
+* Modify an existing task: action "actionEdit_Task".
+
+For details on why and how to do this, check `session 4`_, but some UI notes: I placed a separator in the Task menu before "Delete Task" to give it some space, since it's a destructive action. Same thing in the tool bar.
+
+
+Editor Widget
+~~~~~~~~~~~~~
+
+Since the logic form factor for our app's window is "tall and skinny", it makes sense that the editor will slide in from the bottom. 
+
+We will use our editor widget as a "promoted widget" in the main window. That means we do all our designer work using a plain widget as a `stand-in`_ and tell designer that it should "promote" it to the real thing later.
+
+If you create a widget that can be reused by others, it's probably a better idea to make it work as a `custom widget`_ instead, but for us that will not be necessary.
+
+First, we need to create a class that inherits QWidget, which will be our task editor widget.
+
+The simplest version of such a class would look like this (suppose this is in a file called editor.py):
+    
+.. code-block:: python
+   :linenos:
+
+    """A custom widget that edits a task's properties"""
+
+    # Import the compiled UI module
+    from editorUi import Ui_Form
+
+    class editor(QtGui.QWidget):
+        def __init__(self,parent,task=None):
+            QtGui.QWidget.__init__(self,parent)
+
+            self.ui=Ui_Form()
+            self.ui.setupUi(self)
+
+How can we use it in designer?
+    
+1. Right-click the task list and break its layout.
+
+2. Leave some room below the task list, and put a QWidget there.
+
+3. Select the task list and the placeholder and lay them out in a vertical splitter (it's in the tool bar)
+
+4. Right-click on the form's background and lay it out vertically.
+
+   .. figure:: window7.png
+
+      A placeholder in place.
+   
+5. Right click on the placeholder and select "Promote to..."
+
+   * Base class: QWidget
+
+   * Promoted class name: editor
+   
+   * Header file: editor
+   
+   * Click "Add"
+   
+   * Click "Promote"
+
+You will not notice any changes. But if you recompile the window and try running ``python main.py`` you will see this:
+    
+.. figure:: window8.png
+
+   Yes, the editor is there
+
+.. _custom widget: http://doc.trolltech.com/qq/qq26-pyqtdesigner.html
+
+
+.. _stand-in: http://en.wikipedia.org/wiki/Stand-in
 
 .. _editor.ui: http://github.com/ralsina/pyqt-by-example/blob/master/session5/editor.ui
 
