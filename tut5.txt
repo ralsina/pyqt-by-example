@@ -157,7 +157,7 @@ Layouts
 ~~~~~~~
 
 1. You can think of this form as a a 2x3 grid. 
-   Group things that go in a single cell using a layout. In our case, the calendar and the time editor should be in a vertical layout (Just click one, shift-click the other, and then click on "Lay Out Vertically" in the tool bar)
+   Group things that go in a single cell using a layout. In our case, we don't have a multi-widget cell.
     
 2. Select the contents of each "cell" and put them in a form layout. 
 
@@ -313,7 +313,9 @@ Adding a New Task
 Since we now have a task editing widget, we can start using it!
 First, let's use it to add new tasks.
 
-As seen in `session 2`_ in order to react to the "actionAdd_Task" we ned to implement 
+As seen in `session 2`_ in order to react to the "actionAdd_Task" we ned to implement Main.on_actionNew_Task_triggered:
+    
+
 
 .. _custom widget: http://doc.trolltech.com/qq/qq26-pyqtdesigner.html
 

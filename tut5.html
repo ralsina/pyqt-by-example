@@ -439,7 +439,7 @@ TD.normal { background-color: #FFFFE1; }
 <h2>Layouts</h2>
 <ol class="arabic">
 <li><p class="first">You can think of this form as a a 2x3 grid.
-Group things that go in a single cell using a layout. In our case, the calendar and the time editor should be in a vertical layout (Just click one, shift-click the other, and then click on &quot;Lay Out Vertically&quot; in the tool bar)</p>
+Group things that go in a single cell using a layout. In our case, we don't have a multi-widget cell.</p>
 </li>
 <li><p class="first">Select the contents of each &quot;cell&quot; and put them in a form layout.</p>
 <p>There are other ways to do this, like using a grid layout. Use a form layout instead, because it will look correct (or at least <em>more</em> correct) on other platforms which have rules like &quot;align the labels left&quot; or &quot;align the labels right&quot;.</p>
@@ -563,13 +563,8 @@ Group things that go in a single cell using a layout. In our case, the calendar 
 </ol>
 <p>Cool, isn't it? It's not difficult to reuse these widget aggregates in other applications, or in different contexts in the same app, for example, if I later decide to create a editor <em>dialog</em> I can just reuse this widget for both places.</p>
 <p>However, this is not how we want our app to appear when first started! We only want the editor to be visible when the user is actually editing a task.</p>
-<p>There are several ways to achieve this, here is one, which requires almost no code:</p>
-<ol class="arabic">
-<li><p class="first">Set actionEdit_Task as checkable.</p>
-</li>
-<li><p class="first">Using the &quot;Signal/Slot Editor&quot; tool in designer, connect actionEdit_Task's toggled(bool) signal to editor's setShown(bool) slot.</p>
-</li>
-<li><p class="first">In Main.__init__ we make sure actionEdit_Task is unchecked. Since it is checked in designer, this causes a toggle(False) and the editor is hidden (not a pinnacle of elegance, but it works):</p>
+<p>There are several ways to achieve this, but let's go with the simplest one, hide the editor in Main.__init__:</p>
+<blockquote>
 <table class="highlighttable"><tr><td class="linenos"><pre> 1
  2
  3
@@ -590,14 +585,15 @@ Group things that go in a single cell using a layout. In our case, the calendar 
         <span style="color: #008000">self</span><span style="color: #666666">.</span>ui<span style="color: #666666">.</span>setupUi(<span style="color: #008000">self</span>)
 
         <span style="color: #408080; font-style: italic"># Start with the editor hidden</span>
-        <span style="color: #008000">self</span><span style="color: #666666">.</span>ui<span style="color: #666666">.</span>actionEdit_Task<span style="color: #666666">.</span>setChecked(<span style="color: #008000">False</span>)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>ui<span style="color: #666666">.</span>editor<span style="color: #666666">.</span>hide()
 </pre></div>
-</td></tr></table></li>
-</ol>
-<p>We can also make other events trigger the editor. For example, we could connect list.itemDoubleClicked() to actionEdit_Task.toggle(), so when the user double clicks a task the editor appears.</p>
-<p>Some would be bad ideas. For example, connecting list.itemDoubleClicked() to editor.showNormal(). While it seems to work, actionEdit_Task will not be marked &quot;checked&quot; when the editor is shown, and things will be out of sync.</p>
-<p>Once you connect an action to a slot, think before connecting anything else there. It's usually a better idea to connect it to the action if it's possible.</p>
-<p>Try it out :-)</p>
+</td></tr></table></blockquote>
+<div class="section" id="adding-a-new-task">
+<h3>Adding a New Task</h3>
+<p>Since we now have a task editing widget, we can start using it!
+First, let's use it to add new tasks.</p>
+<p>As seen in <a class="reference external" href="http://lateral.netmanagers.com.ar/stories/BBS48.html">session 2</a> in order to react to the &quot;actionAdd_Task&quot; we ned to implement Main.on_actionNew_Task_triggered:</p>
+</div>
 </div>
 </div>
 </div>

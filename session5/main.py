@@ -71,7 +71,7 @@ class Main(QtGui.QMainWindow):
 
     def on_actionNew_Task_triggered(self,checked=None):
         if checked is None: return
-        print  "XXX"
+        
         self.ui.editor.show()
 
 def main():
