@@ -1,0 +1,146 @@
+==========================
+PyQt By Example: Session 5
+==========================
+
+~~~~~~
+Dialog
+~~~~~~
+
+Requirements
+============
+
+If you have not done it yet, please check the previous sessions:
+    
+* `Session 1`_
+
+* `Session 2`_
+
+* `Session 3`_
+
+* `Session 4`_
+
+All files for this session are here: `Session 5 at GitHub`_. You can use them, or you can follow these instructions starting with the files from `Session 4`_ and see how well you worked!
+
+Dialog
+======
+
+When we finished `session 4`_ we had a TODO application that was able of displaying your task list, and deleting a task, and had the proper UI for that.
+
+.. figure:: window6.png
+
+   A very limited application
+
+The obvious missing pieces are creating and modifying tasks, and that's what we will be implementing today.
+
+But first, let's consider a course of action, because there are several different ways to do this, and trying to implement something you have not thought about sucks.
+
+Inline Editing
+~~~~~~~~~~~~~~
+
+When the user clicks (or double-clicks?) on a task, he could start editing the task properties in the task item itself.
+
+Examples of this model of interaction include:
+    
+* Spreadsheets
+
+* File renaming in some file managers
+
+* Todo lists in some websites
+
+The good: 
+
+    * Minimal user interface.
+    
+    * Obvious if the user knows about it.
+    
+    * Direct manipulation of the task item is a good metaphor.
+    
+    * Works well in small screens (netbooks, phones)
+    
+The bad:
+    
+    * It's not trivial to implement, for example, a due date/time editor this way (feel free to prove me wrong ;-)
+    
+    * I don't like it much for task addition. Using this paradigm usually means you create   a task using placeholders like "New Task" and then need to edit it. I prefer if the user creates the tasks "fully fledged".
+    
+
+So, maybe it's a good idea to implement this, but I am fully convinced.
+
+Editor Dialog
+~~~~~~~~~~~~~
+
+When the user triggers the "edit task" action, a dialog pops up where he can set the task's properties.
+
+Examples of this model of interaction:
+    
+* File properties in most file managers.
+
+* Configuration dialogs in most applications.
+
+The good:
+    
+    * A separate dialog allows use of a richer UI, because you are not limited by the small space used for inline editing.
+    
+    * The same dialog can be used for task creating with minimal changes.
+    
+    * It would let me show you how to create a proper dialog ;-)
+
+The bad:
+    
+    * Breaks the metaphor. Only do that `when it makes sense`_
+    
+    * Popup dialogs often obscure the main window. Then if you need to check a date from another task, you need to move the dialog aside.
+    
+    * Old fashioned?
+    
+All in all, not a fan of this option as the main mechanism for task editing.
+
+Sliding Panels
+~~~~~~~~~~~~~~
+    
+This is a more modern interaction model: when a task editing action is triggered, a gadget slides into view from one of the window edges, containing the editing widgets.
+
+Examples of this interaction:
+    
+* Firefox's search dialog (Thankfully many apps are using this now, popup search dialogs suck)
+
+* Boxee's menu
+
+* Some phone interfaces
+
+The good:
+    
+    * Rich UI like in a dialog
+    
+    * Doesn't obscure the main window
+   
+    * Modern
+    
+    * Works for adding tasks as well
+    
+The bad:
+    
+    * Could be confusing?
+
+    * Could not work great in small screens (needs testing!)
+
+I think I like this option better. It should also work well as a teaching aid, since we will need to learn to do many things to make it work correctly!
+
+Creating the Form
+-----------------
+
+As usual when we do UI work, we start with designer. This time, we will not create a Main Window, but a Widget.
+
+.. _digg: http://www.digg.com
+    
+.. _when it makes sense: http://dot.kde.org/2004/09/27/kcalc-modest-usability-improvement
+
+.. _Session 5 at GitHub: http://github.com/ralsina/pyqt-by-example/tree/master/session4 
+
+.. _Session 1: http://lateral.netmanagers.com.ar/stories/BBS47.html
+
+.. _Session 2: http://lateral.netmanagers.com.ar/stories/BBS48.html
+
+.. _Session 3: http://lateral.netmanagers.com.ar/stories/BBS49.html
+
+.. _Session 4: http://lateral.netmanagers.com.ar/stories/BBS50.html
