@@ -1,0 +1,568 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.5: http://docutils.sourceforge.net/" />
+<title>PyQt By Example: Session 5</title>
+<style type="text/css">
+
+/*
+:Author: David Goodger
+:Contact: goodger@users.sourceforge.net
+:Date: $Date: 2008/01/29 22:14:02 $
+:Revision: $Revision: 1.1.1.1 $
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+
+See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em ;
+  text-align: center;
+  max-width: 90%;
+  }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin-left: 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left {
+  clear: left }
+
+img.align-right {
+  clear: right }
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font-family: serif ;
+  font-size: 100% }
+
+pre.literal-block, pre.doctest-block {
+  margin-left: 2em ;
+  margin-right: 2em ;
+  background-color: #eeeeee }
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+/*
+tt.docutils {
+  background-color: #eeeeee }
+*/
+
+ul.auto-toc {
+  list-style-type: none }
+
+
+/* diff2html style */
+TD.linenum { color: #909090; 
+             text-align: right;
+             vertical-align: top;
+             font-weight: bold;
+             border-right: 1px solid black;
+             border-left: 1px solid black; }
+TD.added { background-color: #DDDDFF; }
+TD.modified { background-color: #BBFFBB; }
+TD.removed { background-color: #FFCCCC; }
+TD.normal { background-color: #FFFFE1; }
+
+
+</style>
+</head>
+<body>
+<div class="document" id="pyqt-by-example-session-5">
+<h1 class="title">PyQt By Example: Session 5</h1>
+<h2 class="subtitle" id="dialog">Dialog</h2>
+
+<div class="section" id="requirements">
+<h1>Requirements</h1>
+<p>If you have not done it yet, please check the previous sessions:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://lateral.netmanagers.com.ar/stories/BBS47.html">Session 1</a></li>
+<li><a class="reference external" href="http://lateral.netmanagers.com.ar/stories/BBS48.html">Session 2</a></li>
+<li><a class="reference external" href="http://lateral.netmanagers.com.ar/stories/BBS49.html">Session 3</a></li>
+<li><a class="reference external" href="http://lateral.netmanagers.com.ar/stories/BBS50.html">Session 4</a></li>
+</ul>
+<p>All files for this session are here: <a class="reference external" href="http://github.com/ralsina/pyqt-by-example/tree/master/session4">Session 5 at GitHub</a>. You can use them, or you can follow these instructions starting with the files from <a class="reference external" href="http://lateral.netmanagers.com.ar/stories/BBS50.html">Session 4</a> and see how well you worked!</p>
+</div>
+<div class="section" id="id1">
+<h1>Dialog</h1>
+<p>When we finished <a class="reference external" href="http://lateral.netmanagers.com.ar/stories/BBS50.html">session 4</a> we had a TODO application that was able of displaying your task list, and deleting a task, and had the proper UI for that.</p>
+<div class="figure">
+<img alt="window6.png" src="window6.png" />
+<p class="caption">A very limited application</p>
+</div>
+<p>The obvious missing pieces are creating and modifying tasks, and that's what we will be implementing today.</p>
+<p>But first, let's consider a course of action, because there are several different ways to do this, and trying to implement something you have not thought about sucks.</p>
+<div class="section" id="inline-editing">
+<h2>Inline Editing</h2>
+<p>When the user clicks (or double-clicks?) on a task, he could start editing the task properties in the task item itself.</p>
+<p>Examples of this model of interaction include:</p>
+<ul class="simple">
+<li>Spreadsheets</li>
+<li>File renaming in some file managers</li>
+<li>Todo lists in some websites</li>
+</ul>
+<p>The good:</p>
+<blockquote>
+<ul class="simple">
+<li>Minimal user interface.</li>
+<li>Obvious if the user knows about it.</li>
+<li>Direct manipulation of the task item is a good metaphor.</li>
+<li>Works well in small screens (netbooks, phones)</li>
+</ul>
+</blockquote>
+<p>The bad:</p>
+<blockquote>
+<ul class="simple">
+<li>It's not trivial to implement, for example, a due date/time editor this way (feel free to prove me wrong ;-)</li>
+<li>I don't like it much for task addition. Using this paradigm usually means you create   a task using placeholders like &quot;New Task&quot; and then need to edit it. I prefer if the user creates the tasks &quot;fully fledged&quot;.</li>
+</ul>
+</blockquote>
+<p>So, maybe it's a good idea to implement this, but I am fully convinced.</p>
+</div>
+<div class="section" id="editor-dialog">
+<h2>Editor Dialog</h2>
+<p>When the user triggers the &quot;edit task&quot; action, a dialog pops up where he can set the task's properties.</p>
+<p>Examples of this model of interaction:</p>
+<ul class="simple">
+<li>File properties in most file managers.</li>
+<li>Configuration dialogs in most applications.</li>
+</ul>
+<p>The good:</p>
+<blockquote>
+<ul class="simple">
+<li>A separate dialog allows use of a richer UI, because you are not limited by the small space used for inline editing.</li>
+<li>The same dialog can be used for task creating with minimal changes.</li>
+<li>It would let me show you how to create a proper dialog ;-)</li>
+</ul>
+</blockquote>
+<p>The bad:</p>
+<blockquote>
+<ul class="simple">
+<li>Breaks the metaphor. Only do that <a class="reference external" href="http://dot.kde.org/2004/09/27/kcalc-modest-usability-improvement">when it makes sense</a></li>
+<li>Popup dialogs often obscure the main window. Then if you need to check a date from another task, you need to move the dialog aside.</li>
+<li>Old fashioned?</li>
+</ul>
+</blockquote>
+<p>All in all, not a fan of this option as the main mechanism for task editing.</p>
+</div>
+<div class="section" id="sliding-panels">
+<h2>Sliding Panels</h2>
+<p>This is a more modern interaction model: when a task editing action is triggered, a gadget slides into view from one of the window edges, containing the editing widgets.</p>
+<p>Examples of this interaction:</p>
+<ul class="simple">
+<li>Firefox's search dialog (Thankfully many apps are using this now, popup search dialogs suck)</li>
+<li>Boxee's menu</li>
+<li>Some phone interfaces</li>
+</ul>
+<p>The good:</p>
+<blockquote>
+<ul class="simple">
+<li>Rich UI like in a dialog</li>
+<li>No popups (Modern?)</li>
+<li>Works for adding tasks as well.</li>
+</ul>
+</blockquote>
+<p>The bad:</p>
+<blockquote>
+<ul>
+<li><p class="first">Could be confusing?</p>
+</li>
+<li><p class="first">Could not work great in small screens (needs testing!)</p>
+<p>In my screen the widget is only 300px tall, so it should fit even a small form factor screen (A 800x480 netbook?, a QVGA phone?) nicely, although in those cases it will obscure the window app completely. In such small screens &quot;paginated&quot; interfaces are a good idea.</p>
+</li>
+<li><p class="first">If the main window's form factor is small (as it is for this app), a large panel will obscure most or all the window.</p>
+</li>
+</ul>
+</blockquote>
+<p>I think I like this option best, but I am not exactly overcome with enthusiasm. It should also work well as a teaching aid, since we will need to learn to do many things to make it work correctly!</p>
+<p>Anyway: if you prefer another approach for this task, you can probably reuse some of the code, and I will be happy to present your alternative implementations here, so go ahead and code them!</p>
+<div class="section" id="creating-the-form">
+<h3>Creating the Form</h3>
+<p>As usual when we do UI work, we start with designer. This time, we will not create a Main Window, but a Widget, and laying out the necessary widgetry. Just put them roughly where you think they should go, here is how I started:</p>
+<div class="figure">
+<img alt="editor1.png" src="editor1.png" />
+<p class="caption">Just a draft</p>
+</div>
+<p>What we are creating here is a classical two-column form: labels on the left, widgets on the right. Almost every program has one of these!</p>
+<p>The main goals are (in no particular order):</p>
+<ol class="arabic simple">
+<li>It should react nicely to resizing.</li>
+<li>It should not look weird. On any platform, if you can do it.</li>
+<li>The purpose of each thing in the screen should be obvious.</li>
+<li>It should be usable by keyboard and mouse.</li>
+</ol>
+<p>And here's some steps towards those goals:</p>
+</div>
+</div>
+<div class="section" id="layouts">
+<h2>Layouts</h2>
+<ol class="arabic">
+<li><p class="first">You can think of this form as a a 2x3 grid.
+Group things that go in a single cell using a layout. In our case, the calendar and the time editor should be in a vertical layout (Just click one, shift-click the other, and then click on &quot;Lay Out Vertically&quot; in the tool bar)</p>
+</li>
+<li><p class="first">Select the contents of each &quot;cell&quot; and put them in a form layout.</p>
+<p>There are other ways to do this, like using a grid layout. Use a form layout instead, because it will look correct (or at least <em>more</em> correct) on other platforms which have rules like &quot;align the labels left&quot; or &quot;align the labels right&quot;.</p>
+<div class="figure">
+<img alt="editor6.png" src="editor6.png" />
+<p class="caption">No form layout is <strong>always</strong> right...</p>
+</div>
+</li>
+<li><p class="first">Right-click on the background and lay out the contents of the widget vertically.</p>
+</li>
+</ol>
+<div class="figure">
+<img alt="editor2.png" src="editor2.png" />
+<p class="caption">You can see the layouts outlined in red</p>
+</div>
+</div>
+<div class="section" id="keyboard-handling">
+<h2>Keyboard Handling</h2>
+<ol class="arabic">
+<li><p class="first">Configure <a class="reference external" href="http://doc.trolltech.com/4.4/designer-buddy-mode.html">buddies</a>. This associates a label to a widget. It's very important, because then you can do the next item ;-)</p>
+<div class="figure">
+<img alt="editor3.png" src="editor3.png" />
+<p class="caption">Buddies.</p>
+</div>
+</li>
+<li><p class="first">Add shortcuts to the labels. If you change &quot;Due Date&quot; for &quot;&amp;Due Date&quot;, the &quot;D&quot; will be underlined and Alt-D will jump to the date editor. If a label is not a buddy for a widget, this does not work!</p>
+<div class="figure">
+<img alt="editor4.png" src="editor4.png" />
+<p class="caption">Shortcuts.</p>
+</div>
+</li>
+<li><p class="first"><a class="reference external" href="http://doc.trolltech.com/4.4/designer-tab-order.html">Tab order</a>. Usually, you want the tab order to just be the top-to-bottom order of your widgets. That is usually the <a class="reference external" href="http://en.wikipedia.org/wiki/Principle_of_least_astonishment">least surprising</a> option.</p>
+<div class="figure">
+<img alt="editor5.png" src="editor5.png" />
+<p class="caption">Tab order.</p>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="miscelaneous">
+<h2>Miscelaneous</h2>
+<p>Some chores:</p>
+<ol class="arabic simple">
+<li>Change the object names for the important widgets (that is, not for the labels).</li>
+<li>Tweak attributes (if you have a good reason!)</li>
+<li>Test it in different styles, see if aything bad happens</li>
+<li>Rename</li>
+<li>Add compiling <a class="reference external" href="http://github.com/ralsina/pyqt-by-example/blob/master/session5/editor.ui">editor.ui</a> to our <a class="reference external" href="http://github.com/ralsina/pyqt-by-example/blob/master/session5/build.sh">build.sh</a></li>
+</ol>
+<p>Let's consider our task editing/creating widget done. Now, we need to integrate it in our main window.</p>
+</div>
+</div>
+<div class="section" id="working-on-the-main-window">
+<h1>Working on the Main Window</h1>
+<div class="section" id="actions">
+<h2>Actions</h2>
+<p>The user interaction is done via actions. We want to enable the user to:</p>
+<ul class="simple">
+<li>Create a new task: action &quot;actionNew_Task&quot;.</li>
+<li>Modify an existing task: action &quot;actionEdit_Task&quot;.</li>
+</ul>
+<p>For details on why and how to do this, check <a class="reference external" href="http://lateral.netmanagers.com.ar/stories/BBS50.html">session 4</a>, but some UI notes: I placed a separator in the Task menu before &quot;Delete Task&quot; to give it some space, since it's a destructive action. Same thing in the tool bar.</p>
+</div>
+<div class="section" id="editor-widget">
+<h2>Editor Widget</h2>
+<p>Since the logic form factor for our app's window is &quot;tall and skinny&quot;, it makes sense that the editor will slide in from the bottom.</p>
+<p>We will use our editor widget as a &quot;promoted widget&quot; in the main window. That means we do all our designer work using a plain widget as a <a class="reference external" href="http://en.wikipedia.org/wiki/Stand-in">stand-in</a> and tell designer that it should &quot;promote&quot; it to the real thing later.</p>
+<p>If you create a widget that can be reused by others, it's probably a better idea to make it work as a <a class="reference external" href="http://doc.trolltech.com/qq/qq26-pyqtdesigner.html">custom widget</a> instead, but for us that will not be necessary.</p>
+<p>First, we need to create a class that inherits QWidget, which will be our task editor widget.</p>
+<p>The simplest version of such a class would look like this (suppose this is in a file called editor.py):</p>
+<table class="highlighttable"><tr><td class="linenos"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></td><td class="code"><div class="highlight"><pre> <span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;A custom widget that edits a task&#39;s properties&quot;&quot;&quot;</span>
+
+ <span style="color: #408080; font-style: italic"># Import the compiled UI module</span>
+ <span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">editorUi</span> <span style="color: #008000; font-weight: bold">import</span> Ui_Form
+
+ <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">editor</span>(QtGui<span style="color: #666666">.</span>QWidget):
+     <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>,parent,task<span style="color: #666666">=</span><span style="color: #008000">None</span>):
+         QtGui<span style="color: #666666">.</span>QWidget<span style="color: #666666">.</span>__init__(<span style="color: #008000">self</span>,parent)
+
+         <span style="color: #008000">self</span><span style="color: #666666">.</span>ui<span style="color: #666666">=</span>Ui_Form()
+         <span style="color: #008000">self</span><span style="color: #666666">.</span>ui<span style="color: #666666">.</span>setupUi(<span style="color: #008000">self</span>)
+</pre></div>
+</td></tr></table><p>How can we use it in designer?</p>
+<ol class="arabic">
+<li><p class="first">Right-click the task list and break its layout.</p>
+</li>
+<li><p class="first">Leave some room below the task list, and put a QWidget there.</p>
+</li>
+<li><p class="first">Select the task list and the placeholder and lay them out in a vertical splitter (it's in the tool bar)</p>
+</li>
+<li><p class="first">Right-click on the form's background and lay it out vertically.</p>
+<div class="figure">
+<img alt="window7.png" src="window7.png" />
+<p class="caption">A placeholder in place.</p>
+</div>
+</li>
+<li><p class="first">Right click on the placeholder and select &quot;Promote to...&quot;</p>
+<ul class="simple">
+<li>Base class: QWidget</li>
+<li>Promoted class name: editor</li>
+<li>Header file: editor</li>
+<li>Click &quot;Add&quot;</li>
+<li>Click &quot;Promote&quot;</li>
+</ul>
+</li>
+</ol>
+<p>You will not notice any changes. But if you recompile the window and try running <tt class="docutils literal"><span class="pre">python</span> <span class="pre">main.py</span></tt> you will see this:</p>
+<div class="figure">
+<img alt="window8.png" src="window8.png" />
+<p class="caption">Yes, the editor is there</p>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

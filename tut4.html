@@ -100,7 +100,10 @@ div.dedication p.topic-title {
 
 div.figure {
   margin-left: 2em ;
-  margin-right: 2em }
+  margin-right: 2em ;
+  text-align: center;
+  max-width: 90%;
+  }
 
 div.footer, div.header {
   clear: both;
@@ -325,6 +328,10 @@ TD.normal { background-color: #FFFFE1; }
 <div class="section" id="what-s-an-action">
 <h2>What's an Action?</h2>
 <p>When we finished <a class="reference external" href="http://lateral.netmanagers.com.ar/stories/BBS49.html">session 3</a> we had a basic todo application, with very limited functionality: you can mark  tasks as done, but you can't edit them, you can't create new ones, and you can't remove them, much less do things like filtering them.</p>
+<div class="figure">
+<img alt="window5.png" src="window5.png" />
+<p class="caption">A very limited application</p>
+</div>
 <p>Today we will start writing code and designing UI to do those things.</p>
 <p>The key concept here is Actions.</p>
 <ul class="simple">
@@ -443,6 +450,7 @@ void toggled ( bool checked )
 </pre></div>
 <p>Except for the last line, that code should be obvious. The last line? I am not really
 sure it's even <em>right</em> but it works.</p>
+<p>You can now test the feature. Remember that if you run out of tasks, you can execute <tt class="docutils literal"><span class="pre">python</span> <span class="pre">todo.py</span></tt> and get new ones.</p>
 </div>
 <div class="section" id="fine-tuning-your-actions">
 <h3>Fine Tuning Your Actions</h3>
@@ -462,16 +470,27 @@ sure it's even <em>right</em> but it works.</p>
         <span style="color: #008000">self</span><span style="color: #666666">.</span>ui<span style="color: #666666">.</span>actionDelete_Task<span style="color: #666666">.</span>setEnabled(<span style="color: #008000">False</span>)
 </pre></div>
 <p>Also, we need to make Delete Task start <em>disabled</em> because we start the app with no task selected. That's done from designer using its &quot;enabled&quot; property.</p>
-<p>Since there is only one Delete Task action, this code affects the task bar and also the menu bar. THat helps keep your UI consistent and well-behaved.</p>
+<p>Since there is only one Delete Task action, this code affects the task bar and also the menu bar. That helps keep your UI consistent and well-behaved.</p>
 </li>
 </ol>
+<div class="figure">
+<img alt="window6.png" src="window6.png" />
+<p class="caption">A very limited application</p>
 </div>
 </div>
+</div>
+</div>
+<div class="section" id="coming-soon">
+<h1>Coming Soon</h1>
+<p>Well, that was a rather long explanation for a small feature, wasn't it? Don't worry, the next actions will be much easier to add, because I expect you to read &quot;I added an action called <em>New Task</em>&quot; and know what I am talking about.</p>
+<p>And in the next session, we will do just that. And we will create our first dialog.</p>
 </div>
 <div class="section" id="further-reading">
 <h1>Further Reading</h1>
 <ul class="simple">
 <li>PyQt's Actions: <a class="reference external" href="http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/html/qaction.html">1</a> <a class="reference external" href="http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/html/qactiongroup.html#details">2</a></li>
+<li><a class="reference external" href="http://msdn.microsoft.com/en-us/library/aa511500.aspx">Toolbar Design</a></li>
+<li><a class="reference external" href="http://developer.apple.com/documentation/userexperience/conceptual/applehiguidelines/XHIGIcons/chapter_15_section_9.html">More Toolbar Design</a></li>
 </ul>
 <hr class="docutils" />
 <p>Here you can see what changed between the old and new versions:</p>

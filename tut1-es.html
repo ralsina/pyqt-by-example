@@ -1,0 +1,570 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.5: http://docutils.sourceforge.net/" />
+<title>PyQt en ejemplos</title>
+<style type="text/css">
+
+/*
+:Author: David Goodger
+:Contact: goodger@users.sourceforge.net
+:Date: $Date: 2008/01/29 22:14:02 $
+:Revision: $Revision: 1.1.1.1 $
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+
+See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em ;
+  text-align: center;
+  max-width: 90%;
+  }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin-left: 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left {
+  clear: left }
+
+img.align-right {
+  clear: right }
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font-family: serif ;
+  font-size: 100% }
+
+pre.literal-block, pre.doctest-block {
+  margin-left: 2em ;
+  margin-right: 2em ;
+  background-color: #eeeeee }
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+/*
+tt.docutils {
+  background-color: #eeeeee }
+*/
+
+ul.auto-toc {
+  list-style-type: none }
+
+
+/* diff2html style */
+TD.linenum { color: #909090; 
+             text-align: right;
+             vertical-align: top;
+             font-weight: bold;
+             border-right: 1px solid black;
+             border-left: 1px solid black; }
+TD.added { background-color: #DDDDFF; }
+TD.modified { background-color: #BBFFBB; }
+TD.removed { background-color: #FFCCCC; }
+TD.normal { background-color: #FFFFE1; }
+
+
+</style>
+</head>
+<body>
+<div class="document" id="pyqt-en-ejemplos">
+<h1 class="title">PyQt en ejemplos</h1>
+<table class="docinfo" frame="void" rules="none">
+<col class="docinfo-name" />
+<col class="docinfo-content" />
+<tbody valign="top">
+<tr class="field"><th class="docinfo-name">Autor:</th><td class="field-body">Roberto Alsina</td>
+</tr>
+<tr class="field"><th class="docinfo-name" colspan="2">Traducción al castellano:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body">Sebastián Bassi</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="introducci-n">
+<h1>Introducción</h1>
+<p>Esta serie de tutoriales está inspirada por dos hechos:</p>
+<ul class="simple">
+<li>LatinoWare 2008, donde presenté esta misma aplicación como introducción al desarrollo con PyQt.</li>
+<li>La falta (según mi humilde opinión) de tutoriales de PyQt que muestren la manera en la que prefiero desarrollar aplicaciones.</li>
+</ul>
+<p>El segundo item puede sonar un poco agresivo, pero no es el caso. No digo que los demas tutoriales estén equivocados o con algun problema, solo digo que no funcionan de la manera que me gusta trabajar.</p>
+<p>No creo en enseñar algo para luego decir &quot;y ahora te mostraré como se hace de verdad&quot;. No creo en ejemplos de juguete. Creo que sos lo suficientemente inteligente como para aprender las cosas de una vez, y aprender la mejor manera desde la primera vez.</p>
+<p>Por lo tanto, en esta serie, desarollaré una pequeña aplicación del tipo TODO (tareas pendientes) usando las herramientas y procedimientos que realmente uso en mi trabajo de desarrollo, con la salvedad de la IDE Eric. Esto es porque las IDEs son preferencias personales y para proyectos de esta envergadura no aporta mucho.</p>
+<p>Otra cosa que no voy a agregar es &quot;unit testing&quot;. Si bien es muy importante, creo que puede distraer de <em>hacer</em> realmente algo. Si eso es un problema, puedo agregarlo en otra versión posterior del tutorial.</p>
+</div>
+<div class="section" id="requisitos">
+<h1>Requisitos</h1>
+<p>Debes tener instalado los siguientes programas:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.python.org">Python</a>: Estoy usando 2.6, pero espero que 2.5 o incluso 2.4 funcionen, aunque no estoy probando esas versiones.</li>
+<li><a class="reference external" href="http://elixir.ematia.de">Elixir</a>: Esto hace falta para el &quot;backend&quot;. Requiere <a class="reference external" href="http://www.sqlalchemy.org">SQLAlchemy</a> y usaremos <a class="reference external" href="http://www.sqlite.org">SQLite</a> como base de datos. Si instalas <a class="reference external" href="http://elixir.ematia.de">Elixir</a> el resto se instalará automaticamente.</li>
+<li><a class="reference external" href="http://www.riverbankcomputing.co.uk/software/pyqt/intro">PyQt</a>: Usaré la versión 4.4, pero 4.5 también sirve.</li>
+<li>Tu editor de texto preferido.</li>
+</ul>
+<p>Este tutorial no asume conocimientos previos de Elixir, PyQt o base de datos, pero si asume que sabes manejar algo de Python. Si aun no sabes Python, este aún no es el tutorial adecuado.</p>
+<p>Podes obtener el código de esta sesión aqui: <a class="reference external" href="http://github.com/ralsina/pyqt-by-example/tree/master/session1">Sources</a> (click the &quot;Download&quot; button).</p>
+<p>Como este tutorial esta alojado en <a class="reference external" href="http://www.github.org">GitHub</a> estas invitado a contribuir con mejoras, modificaciones e incluso nuevas secciones o nuevas caracteristicas!</p>
+</div>
+<div class="section" id="sesi-n-1-lo-b-sico">
+<h1>Sesión 1: Lo básico</h1>
+<div class="section" id="el-backend">
+<h2>El backend</h2>
+<p>La versión mas nueva de esta sesión (en formato RST) está disponible en el <a class="reference external" href="http://github.com/ralsina/pyqt-by-example/blob/master">master tree</a> de GitHub como <a class="reference external" href="http://github.com/ralsina/pyqt-by-example/blob/master/tut1.txt">tut1.txt</a></p>
+<p>Como estamos desarrollando una aplicación TODO, necesitamos un backend que gestione el almacenamiento y busquedas de las tareas TODO (para hacer).</p>
+<p>Para hacerlo de la manera mas simple posible, lo haré con <a class="reference external" href="http://elixir.ematia.de">Elixir</a>, &quot;Una capa declarativa sobre SQLAlchemy Object-Relational Mapper&quot;</p>
+<p>Puede dar miedo el nombre, no te preocupes. Lo que significa es que &quot;es una manera de crear objetos que se almacenan automaticamente en una base de datos&quot;.</p>
+<p>Aqui está el código, con comentarios, para nuestro backend, llamado <a class="reference external" href="http://github.com/ralsina/pyqt-by-example/blob/master/session1/todo.py">todo.py</a>. Por suerte no tenemos que mirarlo nuevamente hasta muchas mas tarde en el tutorial!</p>
+<div class="highlight"><pre><span style="color: #408080; font-style: italic"># -*- coding: utf-8 -*-</span>
+
+<span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;Un simple backend para nuestra aplicacion TODO, usando Elixir&quot;&quot;&quot;</span>
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">os</span>
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">elixir</span> <span style="color: #008000; font-weight: bold">import</span> <span style="color: #666666">*</span>
+
+dbdir<span style="color: #666666">=</span>os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>join(os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>expanduser(<span style="color: #BA2121">&quot;~&quot;</span>),<span style="color: #BA2121">&quot;.pyqtodo&quot;</span>)
+dbfile<span style="color: #666666">=</span>os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>join(dbdir,<span style="color: #BA2121">&quot;tasks.sqlite&quot;</span>)
+
+<span style="color: #408080; font-style: italic"># Es una buena práctica que tu aplicación use una carpeta</span>
+<span style="color: #408080; font-style: italic"># oculta en el directorio home del usuario para guardar sus</span>
+<span style="color: #408080; font-style: italic"># archivos. De esta manera siempre podrás encontrarlos, y</span>
+<span style="color: #408080; font-style: italic"># el usuario sabe donde está todo.</span>
+
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Task</span>(Entity):
+    <span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
+<span style="color: #BA2121; font-style: italic">    Una tarea para tu lista TODO.</span>
+<span style="color: #BA2121; font-style: italic">    &quot;&quot;&quot;</span>
+
+    <span style="color: #408080; font-style: italic"># Heredando Entity, usamos Elixir para hacer persistente</span>
+    <span style="color: #408080; font-style: italic"># a esta clase, los objetos de Tareas (Task) pueden ser</span>
+    <span style="color: #408080; font-style: italic"># guardadas facilmente en nuestra base de datos. Y pueden</span>
+    <span style="color: #408080; font-style: italic"># ser buscadas, cambiadas, borradas, etcetera.</span>
+
+    using_options(tablename<span style="color: #666666">=</span><span style="color: #BA2121">&#39;tasks&#39;</span>)
+
+    <span style="color: #408080; font-style: italic"># Esto especifica el nombre de la tabla que se usara en la DB,</span>
+    <span style="color: #408080; font-style: italic"># Creo que es mejor que los nombres automaticos que usa Elixir.</span>
+
+    text <span style="color: #666666">=</span> Field(Unicode,required<span style="color: #666666">=</span><span style="color: #008000">True</span>)
+    date <span style="color: #666666">=</span> Field(DateTime,default<span style="color: #666666">=</span><span style="color: #008000">None</span>,required<span style="color: #666666">=</span><span style="color: #008000">False</span>)
+    done <span style="color: #666666">=</span> Field(Boolean,default<span style="color: #666666">=</span><span style="color: #008000">False</span>,required<span style="color: #666666">=</span><span style="color: #008000">True</span>)
+    tags  <span style="color: #666666">=</span> ManyToMany(<span style="color: #BA2121">&quot;Tag&quot;</span>)
+
+    <span style="color: #408080; font-style: italic"># Una tarea contiene:</span>
+    <span style="color: #408080; font-style: italic">#</span>
+    <span style="color: #408080; font-style: italic"># * Un texto (text) (&quot;Comprar suministros&quot;). Tratá de usar siempre Unicode</span>
+    <span style="color: #408080; font-style: italic">#    en tu app. Usar otra cosa no *no vale la pena*.</span>
+    <span style="color: #408080; font-style: italic">#</span>
+    <span style="color: #408080; font-style: italic">#</span>
+    <span style="color: #408080; font-style: italic"># * Una fecha en la que se vence (date).</span>
+    <span style="color: #408080; font-style: italic">#</span>
+    <span style="color: #408080; font-style: italic"># * Un campo de &quot;Listo&quot; (done). Esta listo?</span>
+    <span style="color: #408080; font-style: italic">#</span>
+    <span style="color: #408080; font-style: italic"># * Una lista de etiquetas. Por ejemplo &quot;Comprar suministros&quot; puede</span>
+    <span style="color: #408080; font-style: italic"># ser etiquetado como &quot;Hogar&quot; e &quot;importante&quot;. Es del tipo &quot;ManyToMany&quot;</span>
+    <span style="color: #408080; font-style: italic"># porque una tarea puede tener varias etiquetas y una etiqueta puede</span>
+    <span style="color: #408080; font-style: italic"># tener varias tareas.</span>
+
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__repr__</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000; font-weight: bold">return</span> <span style="color: #BA2121">&quot;Task: &quot;</span><span style="color: #666666">+</span><span style="color: #008000">self</span><span style="color: #666666">.</span>text
+
+    <span style="color: #408080; font-style: italic"># Siempre es mejor que los objetos sepan como convertirse</span>
+    <span style="color: #408080; font-style: italic"># en &quot;strings&quot;. De esta manera te puede ayudar a debuguear tu</span>
+    <span style="color: #408080; font-style: italic"># programa usando print. Por ejemplo, nuestra tarea de comprar</span>
+    <span style="color: #408080; font-style: italic"># provisiones se imprimiría &quot;Tarea: comprar provisiones&quot;</span>
+
+<span style="color: #408080; font-style: italic"># Como mencioné antes los tags, hay que definirlos:</span>
+
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Tag</span>(Entity):
+    <span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;</span>
+<span style="color: #BA2121; font-style: italic">    Una etiqueta (tag) que podemos aplicar a la tarea.</span>
+<span style="color: #BA2121; font-style: italic">    &quot;&quot;&quot;</span>
+
+    <span style="color: #408080; font-style: italic"># Nuevamente, van a un base de datos, por lo que</span>
+    <span style="color: #408080; font-style: italic"># heredan Entity.</span>
+
+    using_options(tablename<span style="color: #666666">=</span><span style="color: #BA2121">&#39;tags&#39;</span>)
+    name <span style="color: #666666">=</span> Field(Unicode,required<span style="color: #666666">=</span><span style="color: #008000">True</span>)
+    tasks <span style="color: #666666">=</span> ManyToMany(<span style="color: #BA2121">&quot;Task&quot;</span>)
+
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__repr__</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000; font-weight: bold">return</span> <span style="color: #BA2121">&quot;Tag: &quot;</span><span style="color: #666666">+</span><span style="color: #008000">self</span><span style="color: #666666">.</span>name
+
+    <span style="color: #408080; font-style: italic"># Son objetos simples: Tienen un nombre, una lista de</span>
+    <span style="color: #408080; font-style: italic"># tareas etiquetadas, y pueden convertirse en strings.</span>
+
+<span style="color: #408080; font-style: italic"># Usar una DB involucra algunas tareas, las pondré en la</span>
+<span style="color: #408080; font-style: italic"># función initDB. Recordá llamarlo antes de intentar usar</span>
+<span style="color: #408080; font-style: italic"># Tareas o Etiquetas!</span>
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">initDB</span>():
+    <span style="color: #408080; font-style: italic"># Asegurarse que existe ~/.pyqtodo</span>
+
+    <span style="color: #008000; font-weight: bold">if</span> <span style="color: #AA22FF; font-weight: bold">not</span> os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>isdir(dbdir):
+        os<span style="color: #666666">.</span>mkdir(dbdir)
+
+    <span style="color: #408080; font-style: italic"># Acomodar cosas internas de Elixir</span>
+
+    metadata<span style="color: #666666">.</span>bind <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;sqlite:///</span><span style="color: #BB6688; font-weight: bold">%s</span><span style="color: #BA2121">&quot;</span><span style="color: #666666">%</span>dbfile
+    setup_all()
+
+    <span style="color: #408080; font-style: italic"># Si la base no existe, crearla.</span>
+
+    <span style="color: #008000; font-weight: bold">if</span> <span style="color: #AA22FF; font-weight: bold">not</span> os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>exists(dbfile):
+        create_all()
+
+<span style="color: #408080; font-style: italic"># Normalmente agrego a todos los modulos una función main()</span>
+<span style="color: #408080; font-style: italic"># que haga algo útil, como correr unit tests. En este</span>
+<span style="color: #408080; font-style: italic"># caso, demuestra la funcionalidad de nuestro backend.</span>
+<span style="color: #408080; font-style: italic"># Podés probarlo ejecutandolo asi::</span>
+<span style="color: #408080; font-style: italic">#</span>
+<span style="color: #408080; font-style: italic">#   python todo.py</span>
+
+<span style="color: #408080; font-style: italic"># Sin comentario detallados para esto: Estudialo por tu cuenta</span>
+<span style="color: #408080; font-style: italic"># no es complicado!</span>
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">main</span>():
+
+    <span style="color: #408080; font-style: italic"># Inicializar la DB</span>
+    initDB()
+
+    <span style="color: #408080; font-style: italic"># Crear 2 etiquetas</span>
+    verde<span style="color: #666666">=</span>Tag(name<span style="color: #666666">=</span><span style="color: #BA2121">u&quot;verde&quot;</span>)
+    rojo<span style="color: #666666">=</span>Tag(name<span style="color: #666666">=</span><span style="color: #BA2121">u&quot;rojo&quot;</span>)
+
+    <span style="color: #408080; font-style: italic">#Crear algunas tareas y etiquetarlas</span>
+    tarea1<span style="color: #666666">=</span>Task(text<span style="color: #666666">=</span><span style="color: #BA2121">u&quot;Comprar tomate&quot;</span>,tags<span style="color: #666666">=</span>[rojo])
+    tarea2<span style="color: #666666">=</span>Task(text<span style="color: #666666">=</span><span style="color: #BA2121">u&quot;Comprar pimiento&quot;</span>,tags<span style="color: #666666">=</span>[rojo])
+    tarea3<span style="color: #666666">=</span>Task(text<span style="color: #666666">=</span><span style="color: #BA2121">u&quot;Comprar lechuga&quot;</span>,tags<span style="color: #666666">=</span>[verde])
+    tarea4<span style="color: #666666">=</span>Task(text<span style="color: #666666">=</span><span style="color: #BA2121">u&quot;Comprar frutillas&quot;</span>,tags<span style="color: #666666">=</span>[roja,verde])
+    session<span style="color: #666666">.</span>commit()
+
+    <span style="color: #008000; font-weight: bold">print</span> <span style="color: #BA2121">&quot;Tareas verdes:&quot;</span>
+    <span style="color: #008000; font-weight: bold">print</span> green<span style="color: #666666">.</span>tasks
+    <span style="color: #008000; font-weight: bold">print</span>
+    <span style="color: #008000; font-weight: bold">print</span> <span style="color: #BA2121">&quot;Tareas rojas:&quot;</span>
+    <span style="color: #008000; font-weight: bold">print</span> red<span style="color: #666666">.</span>tasks
+    <span style="color: #008000; font-weight: bold">print</span>
+    <span style="color: #008000; font-weight: bold">print</span> <span style="color: #BA2121">&quot;Tareas con l:&quot;</span>
+    <span style="color: #008000; font-weight: bold">print</span> [(t<span style="color: #666666">.</span>id,t<span style="color: #666666">.</span>text,t<span style="color: #666666">.</span>done) <span style="color: #008000; font-weight: bold">for</span> t <span style="color: #AA22FF; font-weight: bold">in</span> Task<span style="color: #666666">.</span>query<span style="color: #666666">.</span>filter(Task<span style="color: #666666">.</span>text<span style="color: #666666">.</span>like(<span style="color: #BA2121">ur&#39;</span><span style="color: #BB6688; font-weight: bold">%l%</span><span style="color: #BA2121">&#39;</span>))<span style="color: #666666">.</span>all()]
+
+<span style="color: #008000; font-weight: bold">if</span> __name__ <span style="color: #666666">==</span> <span style="color: #BA2121">&quot;__main__&quot;</span>:
+    main()
+</pre></div>
+</div>
+<div class="section" id="la-ventana-principal">
+<h2>La ventana principal</h2>
+<p>Empecemos con la parte divertida: <a class="reference external" href="http://www.riverbankcomputing.co.uk/software/pyqt/intro">PyQt</a>!</p>
+<p>Recomiendo el uso de &quot;designer&quot; para crear las interfaces gráficas. Sí, algunas personas se quejan de los diseñadores de interfaces. Creo que es mejor usar tu tiempo escribiendo código para las partes donde no haya buenas herramientas.</p>
+<p>Aqui está el archivo de Qt Designer para esta ventana: <a class="reference external" href="http://github.com/ralsina/pyqt-by-example/blob/master/session1/window.ui">window.ui</a>. No te preocupes del XML, simplemente abrilo en tu &quot;designer&quot; ;-)</p>
+<p>Asi es como se ve en &quot;designer&quot;:</p>
+<div class="figure">
+<img alt="window2.png" src="window2.png" />
+<p class="caption">La ventana principal, en designer.</p>
+</div>
+<p>Lo que estas viendo es una &quot;Ventana principal&quot;. Este tipo de ventanas te permite tener un menú, barra de herramientas, barra de estado y es la típica ventana de una aplicación estándar.</p>
+<p>El mensaje de &quot;Escriba aquí&quot; en la parte superior se debe a que el menú está vacio y te está &quot;invitando&quot; a que le agregues algo.</p>
+<p>Ese cuadrado grande con &quot;Tarea&quot; &quot;Fecha&quot; y &quot;Etiquetas&quot; es un &quot;widget&quot; llamado QTreeView, que es útil para mostrar items con iconos, varias volumnas y hasta estructuras jerárquicas (árboles). Lo usaremos para mostrar nuestra lista de tareas.</p>
+<p>Puedes probar como se ve esta ventana usando &quot;Form&quot; -&gt; &quot;Preview&quot; en designer. Esto es lo que obtendrás:</p>
+<div class="figure">
+<img alt="window1.png" src="window1.png" />
+<p class="caption">Previsualización de la ventana principal, mostrando la lista de tareas.</p>
+</div>
+<p>Puedes probar redimensionar la ventana, y este &quot;widget&quot; usará todo el espacio disponible y se redimensionará con la ventana. Esto es importante: Las ventanas que no pueden redimensionarse no parecen profesionales y no son adecuadas.</p>
+<p>En Qt, esto se hace con &quot;layouts&quot;. En este caso particular, como tenemos un solo &quot;widget&quot;, lo que hacemos es cliquear en el fondo del formulario y seleccionar &quot;Layout&quot; -&gt; &quot;Layout Horizontally&quot; (&quot;Vertically&quot; tendría el mismo efecto en este caso).</p>
+<p>Cuando hagamos un diálogo de configuración, aprenderemos más sobre los layouts.</p>
+<p>Ahora puedes jugar con &quot;designer&quot; y este formulario. Prueba cambiar el &quot;layout&quot;, agrega nuevas cosas, cambia las propiedades de los &quot;widgets&quot;, experiment todo lo que quieras, el esfuerzo en aprender a usar &quot;designer&quot; vale la pena!</p>
+</div>
+<div class="section" id="usando-la-ventana-principal">
+<h2>Usando la ventana principal</h2>
+<p>Vamos a hacer que esta ventana que creamos sea parte de un programa real, asi podemos hacerla andar:</p>
+<p>Primero tenemos que compilar nuestro archivo .ui en código Python. Podés hacerlo con este comando:</p>
+<pre class="literal-block">
+pyuic4 window.ui -o windowUi.py
+</pre>
+<p>Veamos ahora <a class="reference external" href="http://github.com/ralsina/pyqt-by-example/blob/master/session1/main.py">main.py</a>, el archivo principal de nuestra aplicación:</p>
+<div class="highlight"><pre><span style="color: #408080; font-style: italic"># -*- coding: utf-8 -*-</span>
+
+<span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;The user interface for our app&quot;&quot;&quot;</span>
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">os</span><span style="color: #666666">,</span><span style="color: #0000FF; font-weight: bold">sys</span>
+
+<span style="color: #408080; font-style: italic"># Importar modulo Qt</span>
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">PyQt4</span> <span style="color: #008000; font-weight: bold">import</span> QtCore,QtGui
+
+<span style="color: #408080; font-style: italic"># Importar el código del modulo compilado UI</span>
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">windowUi</span> <span style="color: #008000; font-weight: bold">import</span> Ui_MainWindow
+
+<span style="color: #408080; font-style: italic"># Crear una clase para nuestra ventana principal</span>
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Main</span>(QtGui<span style="color: #666666">.</span>QMainWindow):
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>):
+        QtGui<span style="color: #666666">.</span>QMainWindow<span style="color: #666666">.</span>__init__(<span style="color: #008000">self</span>)
+
+        <span style="color: #408080; font-style: italic"># Esto es siempre igual.</span>
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>ui<span style="color: #666666">=</span>Ui_MainWindow()
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>ui<span style="color: #666666">.</span>setupUi(<span style="color: #008000">self</span>)
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">main</span>():
+    <span style="color: #408080; font-style: italic"># Nuevamente, esto es estándar, será igual en cada</span>
+    <span style="color: #408080; font-style: italic"># aplicación que escribas</span>
+    app <span style="color: #666666">=</span> QtGui<span style="color: #666666">.</span>QApplication(sys<span style="color: #666666">.</span>argv)
+    window<span style="color: #666666">=</span>Main()
+    window<span style="color: #666666">.</span>show()
+    <span style="color: #408080; font-style: italic"># Es exec_ porque exec es una palabra reservada en Python</span>
+    sys<span style="color: #666666">.</span>exit(app<span style="color: #666666">.</span>exec_())
+
+
+<span style="color: #008000; font-weight: bold">if</span> __name__ <span style="color: #666666">==</span> <span style="color: #BA2121">&quot;__main__&quot;</span>:
+    main()
+</pre></div>
+<p>Como puedes ver, esto no es para nada especifico de nuestra aplicación TODO. Cualquier cosa que hubiera habido en el archivo .ui funciona con esto!</p>
+<p>La única parte interesante es la clase Main (Principal). Esa clase usa el archivo ui compilado y es donde va la lógica de la interfaz del usuario. <strong>Nunca</strong> edites manualmente el archivo .ui o el generado por Python!</p>
+<p>Pongámoslo en estos términos: <strong>SI EDITAS EL ARCHIVO UI (SIN USAR EL DESIGNER) O EL ARCHIVO GENERADO POR PYTHON TE ESTAS EQUIVOCANDO MAL! MUY MAL! ESTREPITOSAMENTE MAL!</strong>. Espero haber sido claro, porque hay al menos un tutorial que te dice que lo hagas. <strong>NO LO HAGAS!!!</strong>,</p>
+<p>Solo pon tu código en esta clase y listo.</p>
+<p>Asi que si ejecutas main.py, ejecutarás la aplicación. No hará nada interesante, porque necesitamos conectar el &quot;backend&quot; a nuestra interface de usuario, pero eso es para la sesión 2.</p>
+</div>
+</div>
+</div>
+</body>
+</html>
