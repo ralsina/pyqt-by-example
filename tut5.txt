@@ -112,19 +112,19 @@ The good:
     
     * Rich UI like in a dialog
     
-    * Doesn't obscure the main window
-   
-    * Modern
+    * No popups (Modern?)
     
-    * Works for adding tasks as well
+    * Works for adding tasks as well.
     
 The bad:
     
     * Could be confusing?
 
     * Could not work great in small screens (needs testing!)
-
-I think I like this option better. It should also work well as a teaching aid, since we will need to learn to do many things to make it work correctly!
+    
+    * If the main window's form factor is small (as it is for this app), a large panel will obscure most or all the window.
+    
+I think I like this option best, but I am not exactly overcome with enthusiasm. It should also work well as a teaching aid, since we will need to learn to do many things to make it work correctly!
 
 Anyway: if you prefer another approach for this task, you can probably reuse some of the code, and I will be happy to present your alternative implementations here, so go ahead and code them!
 
@@ -195,7 +195,7 @@ Keyboard Handling
 Miscelaneous
 ~~~~~~~~~~~~
 
-Sme chores:
+Some chores:
 
 1. Change the object names for the important widgets (that is, not for the labels).
 
@@ -203,7 +203,10 @@ Sme chores:
 
 3. Test it in different styles, see if aything bad happens
 
-4. Add it to our build.sh_
+4. Add compiling editor.ui_ to our build.sh_
+
+
+.. _editor.ui: http://github.com/ralsina/pyqt-by-example/blob/master/session5/editor.ui
 
 .. _build.sh: http://github.com/ralsina/pyqt-by-example/blob/master/session5/build.sh
 
