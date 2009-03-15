@@ -480,7 +480,7 @@ This was our longest session yet, and what have we achieved? No longer is our ap
     
 .. _when it makes sense: http://dot.kde.org/2004/09/27/kcalc-modest-usability-improvement
 
-.. _Session 5 at GitHub: http://github.com/ralsina/pyqt-by-example/tree/master/session4 
+.. _Session 5 at GitHub: http://github.com/ralsina/pyqt-by-example/tree/master/session5 
 
 .. _Session 1: http://lateral.netmanagers.com.ar/stories/BBS47.html
 
