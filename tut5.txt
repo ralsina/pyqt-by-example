@@ -126,12 +126,80 @@ The bad:
 
 I think I like this option better. It should also work well as a teaching aid, since we will need to learn to do many things to make it work correctly!
 
+Anyway: if you prefer another approach for this task, you can probably reuse some of the code, and I will be happy to present your alternative implementations here, so go ahead and code them!
+
 Creating the Form
 -----------------
 
-As usual when we do UI work, we start with designer. This time, we will not create a Main Window, but a Widget.
+As usual when we do UI work, we start with designer. This time, we will not create a Main Window, but a Widget, and laying out the necessary widgetry. Just put them roughly where you think they should go, here is how I started:
+    
+.. figure:: editor1.png
 
-.. _digg: http://www.digg.com
+   Just a draft
+    
+What we are creating here is a classical two-column form: labels on the left, widgets on the right. Almost every program has one of these!
+
+The main goals are (in no particular order):
+    
+1. It should react nicely to resizing.
+
+2. It should not look weird. On any platform, if you can do it.
+
+3. The purpose of each thing in the screen should be obvious.
+
+4. It should be usable by keyboard and mouse.
+
+And here's some steps towards those goals:
+    
+Layouts
+~~~~~~~
+
+1. You can think of this form as a a 2x3 grid. 
+   Group things that go in a single cell using a layout. In our case, the calendar and the time editor should be in a vertical layout (Just click one, shift-click the other, and then click on "Lay Out Vertically" in the tool bar)
+    
+2. Select the contents of each "cell" and put them in a form layout. 
+
+   There are other ways to do this, like using a grid layout. Use a form layout instead, because it will look correct (or at least *more* correct) on other platforms which have rules like "align the labels left" or "align the labels right".
+   
+   .. figure:: editor6.png
+   
+      No form layout is **always** right...
+
+3. Right-click on the background and lay out the contents of the widget vertically.
+
+.. figure:: editor2.png
+
+   You can see the layouts outlined in red
+   
+Keyboard Handling
+~~~~~~~~~~~~~~~~~
+
+1. Configure buddies_. This associates a label to a widget. It's very important, because then you can do the next item ;-)
+
+   .. figure:: editor3.png
+   
+      Buddies.
+
+2. Add shortcuts to the labels. If you change "Due Date" for "&Due Date", the "D" will be underlined and Alt-D will jump to the date editor. If a label is not a buddy for a widget, this does not work!
+
+   .. figure:: editor4.png
+   
+      Shortcuts.
+
+3. `Tab order`_. Usually, you want the tab order to just be the top-to-bottom order of your widgets. That is usually the `least surprising`_ option.
+
+   .. figure:: editor5.png
+   
+      Tab order.
+      
+
+
+
+.. _least surprising: http://en.wikipedia.org/wiki/Principle_of_least_astonishment
+
+.. _tab order: http://doc.trolltech.com/4.4/designer-tab-order.html
+
+.. _buddies: http://doc.trolltech.com/4.4/designer-buddy-mode.html
     
 .. _when it makes sense: http://dot.kde.org/2004/09/27/kcalc-modest-usability-improvement
 

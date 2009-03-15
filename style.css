@@ -91,7 +91,10 @@ div.dedication p.topic-title {
 
 div.figure {
   margin-left: 2em ;
-  margin-right: 2em }
+  margin-right: 2em ;
+  text-align: center;
+  max-width: 90%;
+  }
 
 div.footer, div.header {
   clear: both;
