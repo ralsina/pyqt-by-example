@@ -127,6 +127,9 @@
    <property name="checked" >
     <bool>false</bool>
    </property>
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
    <property name="icon" >
     <iconset resource="icons.qrc" >
      <normaloff>:/edit.svg</normaloff>:/edit.svg</iconset>

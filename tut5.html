@@ -331,7 +331,7 @@ TD.normal { background-color: #FFFFE1; }
 <img alt="window6.png" src="window6.png" />
 <p class="caption">A very limited application</p>
 </div>
-<p>The obvious missing pieces are creating and modifying tasks, and that's what we will be implementing today.</p>
+<p>The obvious missing pieces are creating and modifying tasks, and that's what we will be implementing today. This is a longer session, because we will do <em>a lot of work</em>.</p>
 <p>But first, let's consider a course of action, because there are several different ways to do this, and trying to implement something you have not thought about sucks.</p>
 <div class="section" id="inline-editing">
 <h2>Inline Editing</h2>
@@ -453,7 +453,7 @@ Group things that go in a single cell using a layout. In our case, we don't have
 </ol>
 <div class="figure">
 <img alt="editor2.png" src="editor2.png" />
-<p class="caption">You can see the layouts outlined in red</p>
+<p class="caption">You can see the layouts outlined in red.</p>
 </div>
 </div>
 <div class="section" id="keyboard-handling">
@@ -509,7 +509,7 @@ Group things that go in a single cell using a layout. In our case, we don't have
 <p>We will use our editor widget as a &quot;promoted widget&quot; in the main window. That means we do all our designer work using a plain widget as a <a class="reference external" href="http://en.wikipedia.org/wiki/Stand-in">stand-in</a> and tell designer that it should &quot;promote&quot; it to the real thing later.</p>
 <p>If you create a widget that can be reused by others, it's probably a better idea to make it work as a <a class="reference external" href="http://doc.trolltech.com/qq/qq26-pyqtdesigner.html">custom widget</a> instead, but for us that will not be necessary.</p>
 <p>First, we need to create a class that inherits QWidget, which will be our task editor widget.</p>
-<p>The simplest version of such a class would look like this (suppose this is in a file called editor.py):</p>
+<p>The simplest version of such a class would look like this (suppose this is in a file called <a class="reference external" href="http://github.com/ralsina/pyqt-by-example/blob/master/session5/editor.py">editor.py</a>):</p>
 <table class="highlighttable"><tr><td class="linenos"><pre> 1
  2
  3
@@ -593,8 +593,1376 @@ Group things that go in a single cell using a layout. In our case, we don't have
 <p>Since we now have a task editing widget, we can start using it!
 First, let's use it to add new tasks.</p>
 <p>As seen in <a class="reference external" href="http://lateral.netmanagers.com.ar/stories/BBS48.html">session 2</a> in order to react to the &quot;actionAdd_Task&quot; we ned to implement Main.on_actionNew_Task_triggered:</p>
+<table class="highlighttable"><tr><td class="linenos"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17</pre></td><td class="code"><div class="highlight"><pre> <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">on_actionNew_Task_triggered</span>(<span style="color: #008000">self</span>,checked<span style="color: #666666">=</span><span style="color: #008000">None</span>):
+     <span style="color: #008000; font-weight: bold">if</span> checked <span style="color: #AA22FF; font-weight: bold">is</span> <span style="color: #008000">None</span>: <span style="color: #008000; font-weight: bold">return</span>
+     <span style="color: #408080; font-style: italic"># Create a dummy task</span>
+     task<span style="color: #666666">=</span>todo<span style="color: #666666">.</span>Task(text<span style="color: #666666">=</span><span style="color: #BA2121">&quot;New Task&quot;</span>)
+
+     <span style="color: #408080; font-style: italic"># Create an item reflecting the task</span>
+     item<span style="color: #666666">=</span>QtGui<span style="color: #666666">.</span>QTreeWidgetItem([task<span style="color: #666666">.</span>text,<span style="color: #008000">str</span>(task<span style="color: #666666">.</span>date),<span style="color: #BA2121">&quot;&quot;</span>])
+     item<span style="color: #666666">.</span>setCheckState(<span style="color: #666666">0</span>,QtCore<span style="color: #666666">.</span>Qt<span style="color: #666666">.</span>Unchecked)
+     item<span style="color: #666666">.</span>task<span style="color: #666666">=</span>task
+
+     <span style="color: #408080; font-style: italic"># Put the item in the task list</span>
+     <span style="color: #008000">self</span><span style="color: #666666">.</span>ui<span style="color: #666666">.</span>list<span style="color: #666666">.</span>addTopLevelItem(item)
+     <span style="color: #008000">self</span><span style="color: #666666">.</span>ui<span style="color: #666666">.</span>list<span style="color: #666666">.</span>setCurrentItem(item)
+     <span style="color: #408080; font-style: italic"># Save it in the DB</span>
+     todo<span style="color: #666666">.</span>saveData()
+     <span style="color: #408080; font-style: italic"># Open it with the editor</span>
+     <span style="color: #008000">self</span><span style="color: #666666">.</span>ui<span style="color: #666666">.</span>editor<span style="color: #666666">.</span>edit(item)
+</pre></div>
+</td></tr></table><p>What this code is doing should be almost obvious. If you don't get it, check the explanation of Main.__init__ and <a class="reference external" href="http://github.com/ralsina/pyqt-by-example/blob/master/session5/editor.py">todo.py</a> in <a class="reference external" href="http://lateral.netmanagers.com.ar/stories/BBS47.html">session 1</a>. The non-obvious is the call to editor.edit(item). What's that?</p>
+<p>Since the goal of the task editor widget is editing tasks, it needs to know what task to edit, and it needs to be able to save the modifications.</p>
+<p>I will implement this using &quot;instant apply&quot;, which means there is no save button, no apply button and no ok button. You changed the tags? Well, then the tags are changed ;-)</p>
+<p>Here's the full code for the editor widget:</p>
+<table class="highlighttable"><tr><td class="linenos"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62</pre></td><td class="code"><div class="highlight"><pre> <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">editor</span>(QtGui<span style="color: #666666">.</span>QWidget):
+     <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>,parent,task<span style="color: #666666">=</span><span style="color: #008000">None</span>):
+         QtGui<span style="color: #666666">.</span>QWidget<span style="color: #666666">.</span>__init__(<span style="color: #008000">self</span>,parent)
+
+         <span style="color: #008000">self</span><span style="color: #666666">.</span>ui<span style="color: #666666">=</span>Ui_Form()
+         <span style="color: #008000">self</span><span style="color: #666666">.</span>ui<span style="color: #666666">.</span>setupUi(<span style="color: #008000">self</span>)
+
+         <span style="color: #408080; font-style: italic"># Start with no task item to edit</span>
+         <span style="color: #008000">self</span><span style="color: #666666">.</span>item<span style="color: #666666">=</span><span style="color: #008000">None</span>
+
+     <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">edit</span>(<span style="color: #008000">self</span>,item):
+         <span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;Takes an item, loads the widget with the item&#39;s</span>
+<span style="color: #BA2121; font-style: italic">         task contents, shows the widget&quot;&quot;&quot;</span>
+         <span style="color: #008000">self</span><span style="color: #666666">.</span>item<span style="color: #666666">=</span>item
+         <span style="color: #008000">self</span><span style="color: #666666">.</span>ui<span style="color: #666666">.</span>task<span style="color: #666666">.</span>setText(<span style="color: #008000">self</span><span style="color: #666666">.</span>item<span style="color: #666666">.</span>task<span style="color: #666666">.</span>text)
+         <span style="color: #008000">self</span><span style="color: #666666">.</span>ui<span style="color: #666666">.</span>done<span style="color: #666666">.</span>setChecked(<span style="color: #008000">self</span><span style="color: #666666">.</span>item<span style="color: #666666">.</span>task<span style="color: #666666">.</span>done)
+         dt<span style="color: #666666">=</span><span style="color: #008000">self</span><span style="color: #666666">.</span>item<span style="color: #666666">.</span>task<span style="color: #666666">.</span>date
+         <span style="color: #008000; font-weight: bold">if</span> dt:
+             <span style="color: #008000">self</span><span style="color: #666666">.</span>ui<span style="color: #666666">.</span>dateTime<span style="color: #666666">.</span>setDate(QtCore<span style="color: #666666">.</span>QDate(dt<span style="color: #666666">.</span>year,dt<span style="color: #666666">.</span>month,dt<span style="color: #666666">.</span>day))
+             <span style="color: #008000">self</span><span style="color: #666666">.</span>ui<span style="color: #666666">.</span>dateTime<span style="color: #666666">.</span>setTime(QtCore<span style="color: #666666">.</span>QTime(dt<span style="color: #666666">.</span>hour,dt<span style="color: #666666">.</span>minute))
+         <span style="color: #008000; font-weight: bold">else</span>:
+             <span style="color: #008000">self</span><span style="color: #666666">.</span>ui<span style="color: #666666">.</span>dateTime<span style="color: #666666">.</span>setDateTime(QtCore<span style="color: #666666">.</span>QDateTime())
+         <span style="color: #008000">self</span><span style="color: #666666">.</span>ui<span style="color: #666666">.</span>tags<span style="color: #666666">.</span>setText(<span style="color: #BA2121">&#39;,&#39;</span><span style="color: #666666">.</span>join( t<span style="color: #666666">.</span>name <span style="color: #008000; font-weight: bold">for</span> t <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>item<span style="color: #666666">.</span>task<span style="color: #666666">.</span>tags))
+         <span style="color: #008000">self</span><span style="color: #666666">.</span>show()
+
+     <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">save</span>(<span style="color: #008000">self</span>):
+         <span style="color: #008000; font-weight: bold">if</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>item<span style="color: #666666">==</span><span style="color: #008000">None</span>: <span style="color: #008000; font-weight: bold">return</span>
+
+         <span style="color: #408080; font-style: italic"># Save date and time in the task</span>
+         d<span style="color: #666666">=</span><span style="color: #008000">self</span><span style="color: #666666">.</span>ui<span style="color: #666666">.</span>dateTime<span style="color: #666666">.</span>date()
+         t<span style="color: #666666">=</span><span style="color: #008000">self</span><span style="color: #666666">.</span>ui<span style="color: #666666">.</span>dateTime<span style="color: #666666">.</span>time()
+
+         <span style="color: #008000">self</span><span style="color: #666666">.</span>item<span style="color: #666666">.</span>task<span style="color: #666666">.</span>date<span style="color: #666666">=</span>datetime(
+             d<span style="color: #666666">.</span>year(),
+             d<span style="color: #666666">.</span>month(),
+             d<span style="color: #666666">.</span>day(),
+             t<span style="color: #666666">.</span>hour(),
+             t<span style="color: #666666">.</span>minute()
+         )
+
+         <span style="color: #408080; font-style: italic"># Save text in the task</span>
+         <span style="color: #008000">self</span><span style="color: #666666">.</span>item<span style="color: #666666">.</span>task<span style="color: #666666">.</span>text<span style="color: #666666">=</span><span style="color: #008000">unicode</span>(<span style="color: #008000">self</span><span style="color: #666666">.</span>ui<span style="color: #666666">.</span>task<span style="color: #666666">.</span>text())
+
+         <span style="color: #408080; font-style: italic"># Save tags.</span>
+         tags<span style="color: #666666">=</span>[s<span style="color: #666666">.</span>strip() <span style="color: #008000; font-weight: bold">for</span> s <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">unicode</span>(<span style="color: #008000">self</span><span style="color: #666666">.</span>ui<span style="color: #666666">.</span>tags<span style="color: #666666">.</span>text())<span style="color: #666666">.</span>split(<span style="color: #BA2121">&#39;,&#39;</span>)]
+         <span style="color: #408080; font-style: italic"># For each tag, see if it is in the DB. If it is not, create it. If you had</span>
+         <span style="color: #408080; font-style: italic"># a million tags, this would be very very wrong code</span>
+         <span style="color: #008000">self</span><span style="color: #666666">.</span>item<span style="color: #666666">.</span>task<span style="color: #666666">.</span>tags<span style="color: #666666">=</span>[]
+         <span style="color: #008000; font-weight: bold">for</span> tag <span style="color: #AA22FF; font-weight: bold">in</span> tags:
+             dbTag<span style="color: #666666">=</span>todo<span style="color: #666666">.</span>Tag<span style="color: #666666">.</span>get_by(name<span style="color: #666666">=</span>tag)
+             <span style="color: #008000; font-weight: bold">if</span> dbTag <span style="color: #AA22FF; font-weight: bold">is</span> <span style="color: #008000">None</span>: <span style="color: #408080; font-style: italic"># Tag is new, create it</span>
+                 <span style="color: #008000; font-weight: bold">print</span> <span style="color: #BA2121">&quot;Creating tag: &quot;</span>,tag
+                 <span style="color: #008000">self</span><span style="color: #666666">.</span>item<span style="color: #666666">.</span>task<span style="color: #666666">.</span>tags<span style="color: #666666">.</span>append(todo<span style="color: #666666">.</span>Tag(name<span style="color: #666666">=</span>tag))
+             <span style="color: #008000; font-weight: bold">else</span>:
+                 <span style="color: #008000">self</span><span style="color: #666666">.</span>item<span style="color: #666666">.</span>task<span style="color: #666666">.</span>tags<span style="color: #666666">.</span>append(dbTag)
+
+         <span style="color: #408080; font-style: italic"># Display the data in the item</span>
+         <span style="color: #008000">self</span><span style="color: #666666">.</span>item<span style="color: #666666">.</span>setText(<span style="color: #666666">0</span>,<span style="color: #008000">self</span><span style="color: #666666">.</span>item<span style="color: #666666">.</span>task<span style="color: #666666">.</span>text)
+         <span style="color: #008000">self</span><span style="color: #666666">.</span>item<span style="color: #666666">.</span>setText(<span style="color: #666666">1</span>,<span style="color: #008000">str</span>(<span style="color: #008000">self</span><span style="color: #666666">.</span>item<span style="color: #666666">.</span>task<span style="color: #666666">.</span>date))
+         <span style="color: #008000">self</span><span style="color: #666666">.</span>item<span style="color: #666666">.</span>setText(<span style="color: #666666">2</span>,<span style="color: #BA2121">u&#39;,&#39;</span><span style="color: #666666">.</span>join(t<span style="color: #666666">.</span>name <span style="color: #008000; font-weight: bold">for</span> t <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>item<span style="color: #666666">.</span>task<span style="color: #666666">.</span>tags))
+
+         todo<span style="color: #666666">.</span>saveData()
+</pre></div>
+</td></tr></table><p>As you can see, there is a save() method, but we are not calling it anywhere. That's because we will use signals and slots to invoke it.</p>
+<p>Open <a class="reference external" href="http://github.com/ralsina/pyqt-by-example/blob/master/session5/editor.ui">editor.ui</a> in designer and right-click on the Form QWidget. Then, select &quot;Change signals/slots...&quot;, you will see this dialog. I have added the &quot;save()&quot; slot.</p>
+<div class="figure">
+<img alt="editor7.png" src="editor7.png" />
+<p class="caption">The custom save() slot.</p>
+</div>
+<p>I did this so I can connect signals to my save() method using designer. So, let's connect every signal marking a change in the content of the dialog to this save() slot:</p>
+<div class="figure">
+<img alt="editor8.png" src="editor8.png" />
+<p class="caption">Signals connected to save()</p>
+</div>
+<p>And then, just like that, it works:</p>
+<div class="figure">
+<img alt="window9.png" src="window9.png" />
+<p class="caption">It's alive! ALIVE!!!!!</p>
 </div>
 </div>
+<div class="section" id="editing-tasks">
+<h3>Editing Tasks</h3>
+<p>This will be anticlimactic:</p>
+<table class="highlighttable"><tr><td class="linenos"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></td><td class="code"><div class="highlight"><pre> <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">on_actionEdit_Task_triggered</span>(<span style="color: #008000">self</span>,checked<span style="color: #666666">=</span><span style="color: #008000">None</span>):
+     <span style="color: #008000; font-weight: bold">if</span> checked <span style="color: #AA22FF; font-weight: bold">is</span> <span style="color: #008000">None</span>: <span style="color: #008000; font-weight: bold">return</span>
+
+     <span style="color: #408080; font-style: italic"># First see what task is &quot;current&quot;.</span>
+     item<span style="color: #666666">=</span><span style="color: #008000">self</span><span style="color: #666666">.</span>ui<span style="color: #666666">.</span>list<span style="color: #666666">.</span>currentItem()
+
+     <span style="color: #008000; font-weight: bold">if</span> <span style="color: #AA22FF; font-weight: bold">not</span> item: <span style="color: #408080; font-style: italic"># None selected, so we don&#39;t know what to edit!</span>
+         <span style="color: #008000; font-weight: bold">return</span>
+
+     <span style="color: #408080; font-style: italic"># Open it with the editor</span>
+     <span style="color: #008000">self</span><span style="color: #666666">.</span>ui<span style="color: #666666">.</span>editor<span style="color: #666666">.</span>edit(item)
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="coming-soon">
+<h1>Coming Soon</h1>
+<p>This was our longest session yet, and what have we achieved? No longer is our app useless. It does, in fact, kinda work. However, it is buggy as hell. In the next session I will walk you through some informal interface testing which will show where the defects live, and we will fix a lot of them.</p>
+<div class="figure">
+<img alt="window10.png" src="window10.png" />
+</div>
+<hr class="docutils" />
+<p>Here you can see what changed between the old and new versions:</p>
+<table>
+<tr><td width="50%">
+<table>
+    <tr>
+        <td class="modified">Modified lines:&nbsp;</td>
+        <td class="modified"><a href="#F1_60">60</a>, <a href="#F1_61">61</a>, <a href="#F1_62">62</a></td>
+    </tr>
+    <tr>
+        <td class="added">Added line:&nbsp;</td>
+        <td class="added"><a href="#F2_25">25</a>, <a href="#F2_26">26</a>, <a href="#F2_27">27</a>, <a href="#F2_62">62</a>, <a href="#F2_63">63</a>, <a href="#F2_68">68</a>, <a href="#F2_69">69</a>, <a href="#F2_70">70</a>, <a href="#F2_71">71</a>, <a href="#F2_72">72</a>, <a href="#F2_73">73</a>, <a href="#F2_74">74</a>, <a href="#F2_75">75</a>, <a href="#F2_76">76</a>, <a href="#F2_77">77</a>, <a href="#F2_78">78</a>, <a href="#F2_79">79</a>, <a href="#F2_80">80</a>, <a href="#F2_81">81</a>, <a href="#F2_82">82</a>, <a href="#F2_83">83</a>, <a href="#F2_84">84</a>, <a href="#F2_85">85</a>, <a href="#F2_86">86</a>, <a href="#F2_87">87</a>, <a href="#F2_88">88</a>, <a href="#F2_89">89</a>, <a href="#F2_90">90</a>, <a href="#F2_91">91</a>, <a href="#F2_92">92</a>, <a href="#F2_93">93</a>, <a href="#F2_94">94</a>, <a href="#F2_95">95</a>, <a href="#F2_96">96</a>, <a href="#F2_97">97</a>, <a href="#F2_98">98</a>, <a href="#F2_99">99</a>, <a href="#F2_100">100</a>, <a href="#F2_101">101</a>, <a href="#F2_102">102</a>, <a href="#F2_103">103</a>, <a href="#F2_104">104</a>, <a href="#F2_105">105</a></td>
+    </tr>
+    <tr>
+        <td class="removed">Removed line:&nbsp;</td>
+        <td class="removed">None</td>
+    </tr>
+</table>
+</td>
+<td width="50%">
+<i>Generated by <a href="http://diff2html.tuxfamily.org"><b>diff2html</b></a><br/>
+&copy; Yves Bailly, MandrakeSoft S.A. 2001<br/>
+<b>diff2html</b> is licensed under the <a 
+href="http://www.gnu.org/copyleft/gpl.html">GNU GPL</a>.</i>
+</td></tr>
+</table>
+<hr/>
+<table>
+    <tr>
+        <th>&nbsp;</th>
+        <th width="45%"><strong><big>session4/main.py</big></strong></th>
+        <th>&nbsp;</th>
+        <th>&nbsp;</th>
+        <th width="45%"><strong><big>session5/main.py</big></strong></th>
+    </tr>
+    <tr>
+        <td width="16">&nbsp;</td>
+        <td>
+        79 lines<br/>
+        2300 bytes<br/>
+        Last modified : Sat Mar  7 02:06:29 2009<br/>
+        <hr/>
+        </td>
+        <td width="16">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td>
+        122 lines<br/>
+        3788 bytes<br/>
+        Last modified : Sun Mar 15 22:01:04 2009<br/>
+        <hr/>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">1</td>
+        <td class="normal"># -*- coding: utf-8 -*-</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">1</td>
+        <td class="normal"># -*- coding: utf-8 -*-</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">2</td>
+        <td class="normal"></td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">2</td>
+        <td class="normal"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">3</td>
+        <td class="normal">"""The user interface for our app"""</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">3</td>
+        <td class="normal">"""The user interface for our app"""</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">4</td>
+        <td class="normal"></td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">4</td>
+        <td class="normal"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">5</td>
+        <td class="normal">import os,sys</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">5</td>
+        <td class="normal">import os,sys</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">6</td>
+        <td class="normal"></td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">6</td>
+        <td class="normal"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">7</td>
+        <td class="normal"># Import Qt modules</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">7</td>
+        <td class="normal"># Import Qt modules</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">8</td>
+        <td class="normal">from PyQt4 import QtCore,QtGui</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">8</td>
+        <td class="normal">from PyQt4 import QtCore,QtGui</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">9</td>
+        <td class="normal"></td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">9</td>
+        <td class="normal"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">10</td>
+        <td class="normal"># Import the compiled UI module</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">10</td>
+        <td class="normal"># Import the compiled UI module</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">11</td>
+        <td class="normal">from windowUi import Ui_MainWindow</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">11</td>
+        <td class="normal">from windowUi import Ui_MainWindow</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">12</td>
+        <td class="normal"></td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">12</td>
+        <td class="normal"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">13</td>
+        <td class="normal"># Import our backend</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">13</td>
+        <td class="normal"># Import our backend</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">14</td>
+        <td class="normal">import todo</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">14</td>
+        <td class="normal">import todo</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">15</td>
+        <td class="normal"></td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">15</td>
+        <td class="normal"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">16</td>
+        <td class="normal"># Create a class for our main window</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">16</td>
+        <td class="normal"># Create a class for our main window</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">17</td>
+        <td class="normal">class Main(QtGui.QMainWindow):</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">17</td>
+        <td class="normal">class Main(QtGui.QMainWindow):</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">18</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;def __init__(self):</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">18</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;def __init__(self):</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">19</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;QtGui.QMainWindow.__init__(self)</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">19</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;QtGui.QMainWindow.__init__(self)</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">20</td>
+        <td class="normal"></td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">20</td>
+        <td class="normal"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">21</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# This is always the same</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">21</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# This is always the same</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">22</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.ui=Ui_MainWindow()</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">22</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.ui=Ui_MainWindow()</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">23</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.ui.setupUi(self)</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">23</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.ui.setupUi(self)</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">24</td>
+        <td class="normal"></td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">24</td>
+        <td class="normal"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_25">25</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Start with the editor hidden</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_26">26</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.ui.editor.hide()</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_27">27</a></td>
+        <td class="added"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">25</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Let's do something interesting: load the database contents</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">28</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Let's do something interesting: load the database contents</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">26</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# into our task list widget</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">29</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# into our task list widget</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">27</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for task in todo.Task.query().all():</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">30</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for task in todo.Task.query().all():</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">28</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tags=','.join([t.name for t in task.tags])</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">31</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tags=','.join([t.name for t in task.tags])</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">29</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item=QtGui.QTreeWidgetItem([task.text,str(task.date),tags])</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">32</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item=QtGui.QTreeWidgetItem([task.text,str(task.date),tags])</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">30</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item.task=task</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">33</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item.task=task</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">31</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if task.done:</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">34</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if task.done:</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">32</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item.setCheckState(0,QtCore.Qt.Checked)</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">35</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item.setCheckState(0,QtCore.Qt.Checked)</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">33</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else:</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">36</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else:</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">34</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item.setCheckState(0,QtCore.Qt.Unchecked)</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">37</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item.setCheckState(0,QtCore.Qt.Unchecked)</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">35</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.ui.list.addTopLevelItem(item)</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">38</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.ui.list.addTopLevelItem(item)</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">36</td>
+        <td class="normal"></td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">39</td>
+        <td class="normal"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">37</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;def on_list_itemChanged(self,item,column):</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">40</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;def on_list_itemChanged(self,item,column):</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">38</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if item.checkState(0):</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">41</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if item.checkState(0):</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">39</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item.task.done=True</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">42</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item.task.done=True</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">40</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else:</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">43</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else:</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">41</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item.task.done=False</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">44</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item.task.done=False</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">42</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;todo.saveData()</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">45</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;todo.saveData()</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">43</td>
+        <td class="normal"></td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">46</td>
+        <td class="normal"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">44</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;def on_actionDelete_Task_triggered(self,checked=None):</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">47</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;def on_actionDelete_Task_triggered(self,checked=None):</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">45</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if checked is None: return</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">48</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if checked is None: return</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">46</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# First see what task is "current".</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">49</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# First see what task is "current".</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">47</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item=self.ui.list.currentItem()</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">50</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item=self.ui.list.currentItem()</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">48</td>
+        <td class="normal"></td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">51</td>
+        <td class="normal"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">49</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if not item: # None selected, so we don't know what to delete!</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">52</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if not item: # None selected, so we don't know what to delete!</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">50</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">53</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">51</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Actually delete the task</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">54</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Actually delete the task</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">52</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item.task.delete()</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">55</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item.task.delete()</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">53</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;todo.saveData()</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">56</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;todo.saveData()</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">54</td>
+        <td class="normal"></td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">57</td>
+        <td class="normal"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">55</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# And remove the item. I think that's not pretty. Is it the only way?</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">58</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# And remove the item. I think that's not pretty. Is it the only way?</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">56</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.ui.list.takeTopLevelItem(self.ui.list.indexOfTopLevelItem(item))</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">59</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.ui.list.takeTopLevelItem(self.ui.list.indexOfTopLevelItem(item))</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">57</td>
+        <td class="normal"></td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">60</td>
+        <td class="normal"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">58</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;def on_list_currentItemChanged(self,current=None,previous=None):</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">61</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;def on_list_currentItemChanged(self,current=None,previous=None):</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_62">62</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# In Session 5, fixes a bug where an item was current but had no visible</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_63">63</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# changes, so it could be deleted/edited surprisingly.</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">59</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if current:</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">64</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if current:</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum"><a name="F1_60">60</a></td>
+        <td class="modified">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.ui.actionDelete_Task.setEnabled(True)</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">65</td>
+        <td class="modified">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;current.setSelected(True)</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum"><a name="F1_61">61</a></td>
+        <td class="modified">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else:</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">66</td>
+        <td class="modified"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum"><a name="F1_62">62</a></td>
+        <td class="modified">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.ui.actionDelete_Task.setEnabled(False)</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">67</td>
+        <td class="modified">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Changed in session 5, because we have more than one action</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_68">68</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# that should only be enabled only if a task is selected</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_69">69</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for action in  [self.ui.actionDelete_Task,</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_70">70</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.ui.actionEdit_Task,</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_71">71</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]:</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_72">72</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if current:</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_73">73</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;action.setEnabled(True)</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_74">74</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else:</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_75">75</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;action.setEnabled(False)</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_76">76</a></td>
+        <td class="added"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_77">77</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;def on_actionNew_Task_triggered(self,checked=None):</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_78">78</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if checked is None: return</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_79">79</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Create a dummy task</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_80">80</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;task=todo.Task(text="New Task")</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_81">81</a></td>
+        <td class="added"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_82">82</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Create an item reflecting the task</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_83">83</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item=QtGui.QTreeWidgetItem([task.text,str(task.date),""])</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_84">84</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item.setCheckState(0,QtCore.Qt.Unchecked)</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_85">85</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item.task=task</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_86">86</a></td>
+        <td class="added"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_87">87</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Put the item in the task list</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_88">88</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.ui.list.addTopLevelItem(item)</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_89">89</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.ui.list.setCurrentItem(item)</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_90">90</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Save it in the DB</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_91">91</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;todo.saveData()</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_92">92</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Open it with the editor</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_93">93</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.ui.editor.edit(item)</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_94">94</a></td>
+        <td class="added"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_95">95</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;def on_actionEdit_Task_triggered(self,checked=None):</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_96">96</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if checked is None: return</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_97">97</a></td>
+        <td class="added"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_98">98</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# First see what task is "current".</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_99">99</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item=self.ui.list.currentItem()</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_100">100</a></td>
+        <td class="added"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_101">101</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if not item: # None selected, so we don't know what to edit!</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_102">102</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_103">103</a></td>
+        <td class="added"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_104">104</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Open it with the editor</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_105">105</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.ui.editor.edit(item)</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">63</td>
+        <td class="normal"></td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">106</td>
+        <td class="normal"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">64</td>
+        <td class="normal">def main():</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">107</td>
+        <td class="normal">def main():</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">65</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;# Init the database before doing anything else</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">108</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;# Init the database before doing anything else</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">66</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;todo.initDB()</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">109</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;todo.initDB()</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">67</td>
+        <td class="normal"></td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">110</td>
+        <td class="normal"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">68</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;# Again, this is boilerplate, it's going to be the same on</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">111</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;# Again, this is boilerplate, it's going to be the same on</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">69</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;# almost every app you write</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">112</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;# almost every app you write</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">70</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;app = QtGui.QApplication(sys.argv)</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">113</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;app = QtGui.QApplication(sys.argv)</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">71</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;window=Main()</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">114</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;window=Main()</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">72</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;window.show()</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">115</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;window.show()</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">73</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;# It's exec_ because exec is a reserved word in Python</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">116</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;# It's exec_ because exec is a reserved word in Python</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">74</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;sys.exit(app.exec_())</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">117</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;sys.exit(app.exec_())</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">75</td>
+        <td class="normal"></td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">118</td>
+        <td class="normal"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">76</td>
+        <td class="normal"></td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">119</td>
+        <td class="normal"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">77</td>
+        <td class="normal">if __name__ == "__main__":</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">120</td>
+        <td class="normal">if __name__ == "__main__":</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">78</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;main()</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">121</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;main()</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">79</td>
+        <td class="normal"></td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">122</td>
+        <td class="normal"></td>
+    </tr>
+
+
+</table>
+<hr/>
+<i>Generated by <b>diff2html</b> on Sun Mar 15 22:01:22 2009<br/>
+Command-line:</i> <tt>/home/ralsina/bin/diff2html session4/main.py session5/main.py</tt>
+
 </div>
 </div>
 </body>

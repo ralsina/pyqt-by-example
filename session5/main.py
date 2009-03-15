@@ -59,6 +59,11 @@ class Main(QtGui.QMainWindow):
         self.ui.list.takeTopLevelItem(self.ui.list.indexOfTopLevelItem(item))
 
     def on_list_currentItemChanged(self,current=None,previous=None):
+        # In Session 5, fixes a bug where an item was current but had no visible
+        # changes, so it could be deleted/edited surprisingly.
+        if current:
+            current.setSelected(True)
+            
         # Changed in session 5, because we have more than one action
         # that should only be enabled only if a task is selected
         for action in  [self.ui.actionDelete_Task,
@@ -71,8 +76,33 @@ class Main(QtGui.QMainWindow):
 
     def on_actionNew_Task_triggered(self,checked=None):
         if checked is None: return
+        # Create a dummy task
+        task=todo.Task(text="New Task")
         
-        self.ui.editor.show()
+        # Create an item reflecting the task
+        item=QtGui.QTreeWidgetItem([task.text,str(task.date),""])
+        item.setCheckState(0,QtCore.Qt.Unchecked)
+        item.task=task
+        
+        # Put the item in the task list
+        self.ui.list.addTopLevelItem(item)
+        self.ui.list.setCurrentItem(item)
+        # Save it in the DB
+        todo.saveData()
+        # Open it with the editor
+        self.ui.editor.edit(item)
+
+    def on_actionEdit_Task_triggered(self,checked=None):
+        if checked is None: return
+
+        # First see what task is "current".
+        item=self.ui.list.currentItem()
+        
+        if not item: # None selected, so we don't know what to edit!
+            return
+            
+        # Open it with the editor
+        self.ui.editor.edit(item)
 
 def main():
     # Init the database before doing anything else

@@ -30,7 +30,7 @@ When we finished `session 4`_ we had a TODO application that was able of display
 
    A very limited application
 
-The obvious missing pieces are creating and modifying tasks, and that's what we will be implementing today.
+The obvious missing pieces are creating and modifying tasks, and that's what we will be implementing today. This is a longer session, because we will do *a lot of work*.
 
 But first, let's consider a course of action, because there are several different ways to do this, and trying to implement something you have not thought about sucks.
 
@@ -171,7 +171,7 @@ Layouts
 
 .. figure:: editor2.png
 
-   You can see the layouts outlined in red
+   You can see the layouts outlined in red.
    
 Keyboard Handling
 ~~~~~~~~~~~~~~~~~
@@ -237,7 +237,7 @@ If you create a widget that can be reused by others, it's probably a better idea
 
 First, we need to create a class that inherits QWidget, which will be our task editor widget.
 
-The simplest version of such a class would look like this (suppose this is in a file called editor.py):
+The simplest version of such a class would look like this (suppose this is in a file called editor.py_):
     
 .. code-block:: python
    :linenos:
@@ -314,14 +314,161 @@ Since we now have a task editing widget, we can start using it!
 First, let's use it to add new tasks.
 
 As seen in `session 2`_ in order to react to the "actionAdd_Task" we ned to implement Main.on_actionNew_Task_triggered:
-    
 
+.. code-block:: python
+   :linenos:
+
+    def on_actionNew_Task_triggered(self,checked=None):
+        if checked is None: return
+        # Create a dummy task
+        task=todo.Task(text="New Task")
+        
+        # Create an item reflecting the task
+        item=QtGui.QTreeWidgetItem([task.text,str(task.date),""])
+        item.setCheckState(0,QtCore.Qt.Unchecked)
+        item.task=task
+        
+        # Put the item in the task list
+        self.ui.list.addTopLevelItem(item)
+        self.ui.list.setCurrentItem(item)
+        # Save it in the DB
+        todo.saveData()
+        # Open it with the editor
+        self.ui.editor.edit(item)
+
+What this code is doing should be almost obvious. If you don't get it, check the explanation of Main.__init__ and `todo.py`_ in `session 1`_. The non-obvious is the call to editor.edit(item). What's that?
+
+Since the goal of the task editor widget is editing tasks, it needs to know what task to edit, and it needs to be able to save the modifications.
+
+I will implement this using "instant apply", which means there is no save button, no apply button and no ok button. You changed the tags? Well, then the tags are changed ;-)
+
+Here's the full code for the editor widget:
+    
+.. code-block:: python
+   :linenos: 
+
+    class editor(QtGui.QWidget):
+        def __init__(self,parent,task=None):
+            QtGui.QWidget.__init__(self,parent)
+
+            self.ui=Ui_Form()
+            self.ui.setupUi(self)
+            
+            # Start with no task item to edit
+            self.item=None
+
+        def edit(self,item):
+            """Takes an item, loads the widget with the item's
+            task contents, shows the widget"""
+            self.item=item
+            self.ui.task.setText(self.item.task.text)
+            self.ui.done.setChecked(self.item.task.done)
+            dt=self.item.task.date
+            if dt:
+                self.ui.dateTime.setDate(QtCore.QDate(dt.year,dt.month,dt.day))
+                self.ui.dateTime.setTime(QtCore.QTime(dt.hour,dt.minute))
+            else:
+                self.ui.dateTime.setDateTime(QtCore.QDateTime())
+            self.ui.tags.setText(','.join( t.name for t in self.item.task.tags))
+            self.show()
+            
+        def save(self):
+            if self.item==None: return
+            
+            # Save date and time in the task
+            d=self.ui.dateTime.date()
+            t=self.ui.dateTime.time()
+            
+            self.item.task.date=datetime(
+                d.year(),
+                d.month(),
+                d.day(),
+                t.hour(),
+                t.minute()
+            )
+            
+            # Save text in the task
+            self.item.task.text=unicode(self.ui.task.text())
+
+            # Save tags.
+            tags=[s.strip() for s in unicode(self.ui.tags.text()).split(',')]
+            # For each tag, see if it is in the DB. If it is not, create it. If you had 
+            # a million tags, this would be very very wrong code
+            self.item.task.tags=[]
+            for tag in tags:
+                dbTag=todo.Tag.get_by(name=tag)
+                if dbTag is None: # Tag is new, create it
+                    print "Creating tag: ",tag
+                    self.item.task.tags.append(todo.Tag(name=tag))
+                else:
+                    self.item.task.tags.append(dbTag)
+                    
+            # Display the data in the item
+            self.item.setText(0,self.item.task.text)
+            self.item.setText(1,str(self.item.task.date))
+            self.item.setText(2,u','.join(t.name for t in self.item.task.tags))
+
+            todo.saveData()
+
+   
+As you can see, there is a save() method, but we are not calling it anywhere. That's because we will use signals and slots to invoke it.
+
+Open `editor.ui`_ in designer and right-click on the Form QWidget. Then, select "Change signals/slots...", you will see this dialog. I have added the "save()" slot.
+
+.. figure:: editor7.png
+
+   The custom save() slot.
+   
+I did this so I can connect signals to my save() method using designer. So, let's connect every signal marking a change in the content of the dialog to this save() slot:
+    
+.. figure:: editor8.png
+
+   Signals connected to save()
+    
+And then, just like that, it works:
+    
+.. figure:: window9.png
+
+   It's alive! ALIVE!!!!!
+
+Editing Tasks
+-------------
+
+This will be anticlimactic:
+    
+.. code-block:: python
+   :linenos:
+
+    def on_actionEdit_Task_triggered(self,checked=None):
+        if checked is None: return
+
+        # First see what task is "current".
+        item=self.ui.list.currentItem()
+        
+        if not item: # None selected, so we don't know what to edit!
+            return
+            
+        # Open it with the editor
+        self.ui.editor.edit(item)
+
+Coming Soon
+===========
+
+This was our longest session yet, and what have we achieved? No longer is our app useless. It does, in fact, kinda work. However, it is buggy as hell. In the next session I will walk you through some informal interface testing which will show where the defects live, and we will fix a lot of them.
+
+.. figure:: window10.png
+
+.. _instant apply: http://developer.gnome.org/projects/gup/hig/1.0/windows.html#instant-apply
 
 .. _custom widget: http://doc.trolltech.com/qq/qq26-pyqtdesigner.html
 
 .. _stand-in: http://en.wikipedia.org/wiki/Stand-in
 
 .. _editor.ui: http://github.com/ralsina/pyqt-by-example/blob/master/session5/editor.ui
+
+.. _editor.py: http://github.com/ralsina/pyqt-by-example/blob/master/session5/editor.py
+
+.. _todo.py: http://github.com/ralsina/pyqt-by-example/blob/master/session5/editor.py
 
 .. _build.sh: http://github.com/ralsina/pyqt-by-example/blob/master/session5/build.sh
 
@@ -342,3 +489,11 @@ As seen in `session 2`_ in order to react to the "actionAdd_Task" we ned to impl
 .. _Session 3: http://lateral.netmanagers.com.ar/stories/BBS49.html
 
 .. _Session 4: http://lateral.netmanagers.com.ar/stories/BBS50.html
+
+
+-----------------
+
+Here you can see what changed between the old and new versions:
+
+.. raw:: html
+   :file: session5/diff1.html

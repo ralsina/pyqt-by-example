@@ -46,7 +46,11 @@
       </widget>
      </item>
      <item row="2" column="1" >
-      <widget class="QDateTimeEdit" name="dateTime" />
+      <widget class="QDateTimeEdit" name="dateTime" >
+       <property name="calendarPopup" >
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item row="3" column="0" >
       <widget class="QLabel" name="label_3" >
@@ -70,5 +74,73 @@
   <tabstop>done</tabstop>
  </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>dateTime</sender>
+   <signal>dateTimeChanged(QDateTime)</signal>
+   <receiver>Form</receiver>
+   <slot>save()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>136</x>
+     <y>78</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>172</x>
+     <y>134</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>done</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>Form</receiver>
+   <slot>save()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>103</x>
+     <y>49</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>172</x>
+     <y>134</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>task</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>Form</receiver>
+   <slot>save()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>202</x>
+     <y>19</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>172</x>
+     <y>134</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tags</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>Form</receiver>
+   <slot>save()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>202</x>
+     <y>110</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>172</x>
+     <y>134</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>save()</slot>
+ </slots>
 </ui>
