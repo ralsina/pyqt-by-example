@@ -22,6 +22,9 @@ class Main(QtGui.QMainWindow):
         self.ui=Ui_MainWindow()
         self.ui.setupUi(self)
 
+        # Start with the editor hidden
+        self.ui.editor.hide()
+
         # Let's do something interesting: load the database contents 
         # into our task list widget
         for task in todo.Task.query().all():
@@ -56,10 +59,20 @@ class Main(QtGui.QMainWindow):
         self.ui.list.takeTopLevelItem(self.ui.list.indexOfTopLevelItem(item))
 
     def on_list_currentItemChanged(self,current=None,previous=None):
-        if current:
-            self.ui.actionDelete_Task.setEnabled(True)
-        else:
-            self.ui.actionDelete_Task.setEnabled(False)
+        # Changed in session 5, because we have more than one action
+        # that should only be enabled only if a task is selected
+        for action in  [self.ui.actionDelete_Task,
+                        self.ui.actionEdit_Task,
+                       ]:
+            if current:
+                action.setEnabled(True)
+            else:
+                action.setEnabled(False)
+
+    def on_actionNew_Task_triggered(self,checked=None):
+        if checked is None: return
+        print  "XXX"
+        self.ui.editor.show()
 
 def main():
     # Init the database before doing anything else

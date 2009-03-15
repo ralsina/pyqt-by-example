@@ -554,13 +554,50 @@ Group things that go in a single cell using a layout. In our case, the calendar 
 <li>Click &quot;Add&quot;</li>
 <li>Click &quot;Promote&quot;</li>
 </ul>
-</li>
-</ol>
 <p>You will not notice any changes. But if you recompile the window and try running <tt class="docutils literal"><span class="pre">python</span> <span class="pre">main.py</span></tt> you will see this:</p>
 <div class="figure">
 <img alt="window8.png" src="window8.png" />
 <p class="caption">Yes, the editor is there</p>
 </div>
+</li>
+</ol>
+<p>Cool, isn't it? It's not difficult to reuse these widget aggregates in other applications, or in different contexts in the same app, for example, if I later decide to create a editor <em>dialog</em> I can just reuse this widget for both places.</p>
+<p>However, this is not how we want our app to appear when first started! We only want the editor to be visible when the user is actually editing a task.</p>
+<p>There are several ways to achieve this, here is one, which requires almost no code:</p>
+<ol class="arabic">
+<li><p class="first">Set actionEdit_Task as checkable.</p>
+</li>
+<li><p class="first">Using the &quot;Signal/Slot Editor&quot; tool in designer, connect actionEdit_Task's toggled(bool) signal to editor's setShown(bool) slot.</p>
+</li>
+<li><p class="first">In Main.__init__ we make sure actionEdit_Task is unchecked. Since it is checked in designer, this causes a toggle(False) and the editor is hidden (not a pinnacle of elegance, but it works):</p>
+<table class="highlighttable"><tr><td class="linenos"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></td><td class="code"><div class="highlight"><pre><span style="color: #408080; font-style: italic"># Create a class for our main window</span>
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Main</span>(QtGui<span style="color: #666666">.</span>QMainWindow):
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>):
+        QtGui<span style="color: #666666">.</span>QMainWindow<span style="color: #666666">.</span>__init__(<span style="color: #008000">self</span>)
+
+        <span style="color: #408080; font-style: italic"># This is always the same</span>
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>ui<span style="color: #666666">=</span>Ui_MainWindow()
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>ui<span style="color: #666666">.</span>setupUi(<span style="color: #008000">self</span>)
+
+        <span style="color: #408080; font-style: italic"># Start with the editor hidden</span>
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>ui<span style="color: #666666">.</span>actionEdit_Task<span style="color: #666666">.</span>setChecked(<span style="color: #008000">False</span>)
+</pre></div>
+</td></tr></table></li>
+</ol>
+<p>We can also make other events trigger the editor. For example, we could connect list.itemDoubleClicked() to actionEdit_Task.toggle(), so when the user double clicks a task the editor appears.</p>
+<p>Some would be bad ideas. For example, connecting list.itemDoubleClicked() to editor.showNormal(). While it seems to work, actionEdit_Task will not be marked &quot;checked&quot; when the editor is shown, and things will be out of sync.</p>
+<p>Once you connect an action to a slot, think before connecting anything else there. It's usually a better idea to connect it to the action if it's possible.</p>
+<p>Try it out :-)</p>
 </div>
 </div>
 </div>

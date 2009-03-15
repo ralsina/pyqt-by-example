@@ -55,7 +55,11 @@
         </property>
        </column>
       </widget>
-      <widget class="editor" native="1" name="editor" />
+      <widget class="editor" native="1" name="editor" >
+       <property name="enabled" >
+        <bool>true</bool>
+       </property>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -120,6 +124,9 @@
    </property>
   </action>
   <action name="actionEdit_Task" >
+   <property name="checked" >
+    <bool>false</bool>
+   </property>
    <property name="icon" >
     <iconset resource="icons.qrc" >
      <normaloff>:/edit.svg</normaloff>:/edit.svg</iconset>
