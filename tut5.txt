@@ -192,8 +192,20 @@ Keyboard Handling
    
       Tab order.
       
+Miscelaneous
+~~~~~~~~~~~~
 
+Sme chores:
 
+1. Change the object names for the important widgets (that is, not for the labels).
+
+2. Tweak attributes (if you have a good reason!)
+
+3. Test it in different styles, see if aything bad happens
+
+4. Add it to our build.sh_
+
+.. _build.sh: http://github.com/ralsina/pyqt-by-example/blob/master/session5/build.sh
 
 .. _least surprising: http://en.wikipedia.org/wiki/Principle_of_least_astonishment
 
