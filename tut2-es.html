@@ -1,0 +1,1037 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.5: http://docutils.sourceforge.net/" />
+<title>PyQt by Example: Sesión 2</title>
+<style type="text/css">
+
+/*
+:Author: David Goodger
+:Contact: goodger@users.sourceforge.net
+:Date: $Date: 2008/01/29 22:14:02 $
+:Revision: $Revision: 1.1.1.1 $
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+
+See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em ;
+  text-align: center;
+  max-width: 90%;
+  }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin-left: 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left {
+  clear: left }
+
+img.align-right {
+  clear: right }
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font-family: serif ;
+  font-size: 100% }
+
+pre.literal-block, pre.doctest-block {
+  margin-left: 2em ;
+  margin-right: 2em ;
+  background-color: #eeeeee }
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+/*
+tt.docutils {
+  background-color: #eeeeee }
+*/
+
+ul.auto-toc {
+  list-style-type: none }
+
+
+/* diff2html style */
+TD.linenum { color: #909090; 
+             text-align: right;
+             vertical-align: top;
+             font-weight: bold;
+             border-right: 1px solid black;
+             border-left: 1px solid black; }
+TD.added { background-color: #DDDDFF; }
+TD.modified { background-color: #BBFFBB; }
+TD.removed { background-color: #FFCCCC; }
+TD.normal { background-color: #FFFFE1; }
+
+
+</style>
+</head>
+<body>
+<div class="document" id="pyqt-by-example-sesi-n-2">
+<h1 class="title">PyQt by Example: Sesión 2</h1>
+<table class="docinfo" frame="void" rules="none">
+<col class="docinfo-name" />
+<col class="docinfo-content" />
+<tbody valign="top">
+<tr class="field"><th class="docinfo-name">Traducción:</th><td class="field-body">Nicolás Pace / Roberto Alsina</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="conectando-todo">
+<h1>Conectando todo</h1>
+<div class="section" id="requerimientos">
+<h2>Requerimientos</h2>
+<p>Si no lo hiciste, lee primero la <a class="reference external" href="http://lateral.netmanagers.com.ar/stories/BBS47.html">Sesión 1</a>.</p>
+<p>Todos los archivos de esta sesion están aquí: <a class="reference external" href="http://github.com/ralsina/pyqt-by-example/tree/master/session2">Sesión 2 at GitHub</a></p>
+</div>
+<div class="section" id="sesi-n-2-conectando-todo">
+<h2>Sesión 2: Conectando todo</h2>
+<p>En la <a class="reference external" href="http://lateral.netmanagers.com.ar/stories/BBS47.html">Sesión 1</a> creamos la ventana principal de nuestra aplicación, el esqueleto que muestra esta ventana, y un simple backend basado en <a class="reference external" href="http://elixir.ematia.de">Elixir</a>.</p>
+<p>Lo que no hicimos fue vincularlos. Este es el gran paso que daremos en esta sesión.</p>
+<p>Primero trabajaremos con nuestro <a class="reference external" href="http://github.com/ralsina/pyqt-by-example/blob/master/session2/main.py">main.py</a>.</p>
+<div class="section" id="cargando-los-datos">
+<h3>Cargando los datos</h3>
+<p>Lo primero que haremos es usar el backend, asi que debemos importar todo.py.</p>
+<p>Hacemos esto en la <a class="reference external" href="#F2_13">línea 13</a></p>
+<p>Luego, en <a class="reference external" href="#F2_25">línea 25</a> hacemos la primera conección real: obtenemos las tareas y las insertamos en nuestra lista.</p>
+<p>Examinemos en mas detalle este bloque de código, entre las lineas <a class="reference external" href="#F2_25">25</a> y <a class="reference external" href="#F2_35">35</a>:</p>
+<table class="highlighttable"><tr><td class="linenos"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></td><td class="code"><div class="highlight"><pre><span style="color: #408080; font-style: italic"># Hagamos algo interesante: recuperar el contenido de la base de datos</span>
+<span style="color: #408080; font-style: italic"># y asociarlo a nuestro componente lista</span>
+<span style="color: #008000; font-weight: bold">for</span> task <span style="color: #AA22FF; font-weight: bold">in</span> todo<span style="color: #666666">.</span>Task<span style="color: #666666">.</span>query()<span style="color: #666666">.</span>all():
+    tags<span style="color: #666666">=</span><span style="color: #BA2121">&#39;,&#39;</span><span style="color: #666666">.</span>join([t<span style="color: #666666">.</span>name <span style="color: #008000; font-weight: bold">for</span> t <span style="color: #AA22FF; font-weight: bold">in</span> task<span style="color: #666666">.</span>tags])
+    item<span style="color: #666666">=</span>QtGui<span style="color: #666666">.</span>QTreeWidgetItem([task<span style="color: #666666">.</span>text,<span style="color: #008000">str</span>(task<span style="color: #666666">.</span>date),tags])
+    item<span style="color: #666666">.</span>task<span style="color: #666666">=</span>task
+    <span style="color: #008000; font-weight: bold">if</span> task<span style="color: #666666">.</span>done:
+        item<span style="color: #666666">.</span>setCheckState(<span style="color: #666666">0</span>,QtCore<span style="color: #666666">.</span>Qt<span style="color: #666666">.</span>Checked)
+    <span style="color: #008000; font-weight: bold">else</span>:
+        item<span style="color: #666666">.</span>setCheckState(<span style="color: #666666">0</span>,QtCore<span style="color: #666666">.</span>Qt<span style="color: #666666">.</span>Unchecked)
+    <span style="color: #008000">self</span><span style="color: #666666">.</span>ui<span style="color: #666666">.</span>list<span style="color: #666666">.</span>addTopLevelItem(item)
+</pre></div>
+</td></tr></table><p>Recuerdan nuestro backend, <a class="reference external" href="http://github.com/ralsina/pyqt-by-example/blob/master/session2/todo.py">todo.py</a>? En el definimos los objetos Task que almacenamos en la base de datos. Si no estas familiarizado con <a class="reference external" href="http://elixir.ematia.de">Elixir</a>, <tt class="docutils literal"><span class="pre">todo.Task.query().all()</span></tt> recupera una lista con todos los objetos Task de la base de datos.</p>
+<p>Luego asignamos los tags separados por comas a <tt class="docutils literal"><span class="pre">tags</span></tt>. Esto se verá más o menos como <tt class="docutils literal"><span class="pre">&quot;home,important&quot;</span></tt>.</p>
+<p>I ahora veremos nuestro primer código relacionado con Qt.</p>
+<p>Primero: self.ui.list es un widget. Todo lo que agreguemos a la ventana usando Designer es accesible usando self.ui.nombre_objeto donde nombre_objeto es el nombre asignado en Designer. Haciendo click derecho en el gran widget en nuestra pantalla verás que el nombre del objeto es <strong>list</strong>:</p>
+<div class="figure">
+<img alt="object_name.png" src="object_name.png" />
+<p class="caption">El nombre del objeto es <strong>list</strong>.</p>
+</div>
+<p>Podés verlo (y cambiarlo) en el Inspector de objetos y en el Editor de propiedades.</p>
+<p>Eso no es solo un widget. Es un QTreeWidget, útil para mostrar listas de varias columnas y árboles.</p>
+<p>Puedes leer un monton acerca de este widget en su <a class="reference external" href="http://doc.trolltech.com/4.4/qtreewidget.html#details">manual</a>, aquí un breve resumen:</p>
+<ul class="simple">
+<li>Nosotros creamos objetos <a class="reference external" href="http://doc.trolltech.com/4.4/qtreewidgetitem.html">QTreeWidgetItem</a>. Éstos toman una lista de Strings, que son mostradas en las columnas del widget. En este caso, estamos agregando el texto de la tarea (&quot;Comprar alimentos&quot;), la fecha de vencimiento, y los tags.</li>
+<li>Seteamos item.task con task. Esto es para que después sepamos cual tarea es descripta por un ítem específico. No es el modo más elegante, pero sí el más fácil.</li>
+<li>Agregamos cada item al widget usando <a class="reference external" href="http://doc.trolltech.com/4.4/qtreewidget.html#addTopLevelItem">addTopLevelItem</a> para que estén todos al mismo nivel (no jerarquizados, como padres e hijos)</li>
+<li>Funcionará como una lista</li>
+</ul>
+<p>Luego, si la tarea fue realizada (<tt class="docutils literal"><span class="pre">task.done==True</span></tt>) hacemos un tilde al lado de la tarea. En caso contrario, no.</p>
+<p>Para muchos programas simples, esto es todo lo que necesitas saber de QTreeWidget. Es un widget bastante complejo, y bastante poderoso, pero para este ejemplo con esto nos alcanza. Investiguen!</p>
+<p>Entonces, qué es lo que hace? Ejecutemos <tt class="docutils literal"><span class="pre">python</span> <span class="pre">main.py</span></tt> para descubrirlo!</p>
+<div class="figure">
+<img alt="window3.png" src="window3.png" />
+<p class="caption">La lista de tareas con nuestras tareas de ejemplo.</p>
+</div>
+<p>Si nuestra ventana esta vacía, intenten ejecutar <tt class="docutils literal"><span class="pre">python</span> <span class="pre">todo.py</span></tt> primero, quien creará algunas tareas de ejmplo.</p>
+<p>Puedes inclusive marcar una tarea como realizada! Esto sucede ya que hemos implementado (parcialmente) el guardado y modificación de tareas...</p>
+</div>
+<div class="section" id="guardando-datos">
+<h3>Guardando datos</h3>
+<p>Lo que queremos es que cuando el susuario hace click en el checkbox, la tarea debe ser modificada de manera acorde, y guardada en la base de datos.</p>
+<p>En la mayoría de los toolkits, estaríamos hablando de callbacks. Aquí las cosas son un poco distintas. Cuando un widget Qt quiere hacerte notar alfo, como &quot;El usuario presionó este botón&quot; o &quot;Se activó el menú de ayuda&quot;, o lo que sea, se <em>emiten señales</em> (síganme la corriente un minuto).</p>
+<p>En particular, nos interesa la señal itemChanged del QTreeWidget:</p>
+<blockquote>
+<p>QTreeWidget.itemChanged ( item, column )   [signal]</p>
+<p>Esta señal se emite cuando cambia el contenido de la columna en el item especificado.</p>
+</blockquote>
+<p>Y cada vez que se usa el checkbox, se emite esta señal. ¿Porqué es importante eso? Porque podemos conectar nuestro propio código a una señal de manera que cada vez que esa señal se emite nuestro código sea ejecutado. Ése código se llama un <em>slot</em> en la jerga de Qt.</p>
+<p>Es como un callback, excepto que:</p>
+<ol class="loweralpha simple">
+<li>La señal no sabe a qué está conectada (o si está conectada a algo)</li>
+<li>Se pueden conectar cuantos slots uno quiera a cada señal.</li>
+</ol>
+<p>Esto ayuda a mantener el código <a class="reference external" href="http://en.wikipedia.org/wiki/Loosely_coupled">loosely coupled</a>.</p>
+<p><em>Podríamos</em> definir un método en la clase Main, y conectarlo a la señal itemChanged, pero no es necesario porque podemos usar AutoConnect. Si se agrega a Main un método con un nombre específico, queda conectado a esa señal. El nombre es on_nombreobjeto_nombreseñal.</p>
+<p>Aquí está el código (líneas <a class="reference external" href="#F2_37">37</a> a <a class="reference external" href="#F2_42">42</a>):</p>
+<table class="highlighttable"><tr><td class="linenos"><pre>1
+2
+3
+4
+5
+6</pre></td><td class="code"><div class="highlight"><pre><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">on_list_itemChanged</span>(<span style="color: #008000">self</span>,item,column):
+    <span style="color: #008000; font-weight: bold">if</span> item<span style="color: #666666">.</span>checkState(<span style="color: #666666">0</span>):
+        item<span style="color: #666666">.</span>task<span style="color: #666666">.</span>done<span style="color: #666666">=</span><span style="color: #008000">True</span>
+    <span style="color: #008000; font-weight: bold">else</span>:
+        item<span style="color: #666666">.</span>task<span style="color: #666666">.</span>done<span style="color: #666666">=</span><span style="color: #008000">False</span>
+    todo<span style="color: #666666">.</span>saveData()
+</pre></div>
+</td></tr></table><p>Puede verse que usamos item.task para reflejar el checkState del item (o sea, si está marcado o no) en el estado de la tarea.</p>
+<p>La llamada a <tt class="docutils literal"><span class="pre">todo.saveData()</span></tt> al final se asegura que todos los datos se guarden en la base de datos vi Elixir. Esa función es un poco horrible porque quería que funcione con dos versiones distintas de Elixir.</p>
+<p>AutoConnect es lo que van a usar 90% del tiempo para agregar comportamiento a sus aplicaciones. La mayor parte del tiempo simplemente se crea la ventana, se añaden los widgets y se enganchan las señales via AutoConnect.</p>
+<p>En algunas ocasiones eso no será suficiente. Pero todavía no llegamos a eso.</p>
+<p>Ésta fue una sesión más bien corta, pero prepárense para la próxima, vamos a estar haciendo <strong>Cosas Importantes con Designer</strong> (MR)!</p>
+<p>Mientras tanto tal vez quieran ver estas páginas:</p>
+<ul class="simple">
+<li>Aprender sobre los <a class="reference external" href="http://doc.trolltech.com/4.4/gallery.html">widgets</a> de Qt</li>
+<li>Aprender sobre <a class="reference external" href="http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/pyqt4ref.html#signal-and-slot-support">signals and slots</a></li>
+<li><a class="reference external" href="http://lateral.netmanagers.com.ar/stories/BBS49.html">Sesión 3</a></li>
+</ul>
+<hr class="docutils" />
+<p>Aquí pueden ver los cambios entre la versión vieja y la nueva:</p>
+<table>
+<tr><td width="50%">
+<table>
+    <tr>
+        <td class="modified">Modified lines:&nbsp;</td>
+        <td class="modified"><a href="#F1_34">34</a></td>
+    </tr>
+    <tr>
+        <td class="added">Added line:&nbsp;</td>
+        <td class="added"><a href="#F2_13">13</a>, <a href="#F2_14">14</a>, <a href="#F2_15">15</a>, <a href="#F2_25">25</a>, <a href="#F2_26">26</a>, <a href="#F2_27">27</a>, <a href="#F2_28">28</a>, <a href="#F2_29">29</a>, <a href="#F2_30">30</a>, <a href="#F2_31">31</a>, <a href="#F2_32">32</a>, <a href="#F2_33">33</a>, <a href="#F2_34">34</a>, <a href="#F2_35">35</a>, <a href="#F2_36">36</a>, <a href="#F2_37">37</a>, <a href="#F2_38">38</a>, <a href="#F2_39">39</a>, <a href="#F2_40">40</a>, <a href="#F2_41">41</a>, <a href="#F2_42">42</a>, <a href="#F2_43">43</a>, <a href="#F2_44">44</a>, <a href="#F2_46">46</a>, <a href="#F2_47">47</a>, <a href="#F2_48">48</a></td>
+    </tr>
+    <tr>
+        <td class="removed">Removed line:&nbsp;</td>
+        <td class="removed">None</td>
+    </tr>
+</table>
+</td>
+<td width="50%">
+<i>Generated by <a href="http://diff2html.tuxfamily.org"><b>diff2html</b></a><br/>
+&copy; Yves Bailly, MandrakeSoft S.A. 2001<br/>
+<b>diff2html</b> is licensed under the <a 
+href="http://www.gnu.org/copyleft/gpl.html">GNU GPL</a>.</i>
+</td></tr>
+</table>
+<hr/>
+<table>
+    <tr>
+        <th>&nbsp;</th>
+        <th width="45%"><strong><big>session1/main.py</big></strong></th>
+        <th>&nbsp;</th>
+        <th>&nbsp;</th>
+        <th width="45%"><strong><big>session2/main.py</big></strong></th>
+    </tr>
+    <tr>
+        <td width="16">&nbsp;</td>
+        <td>
+        34 lines<br/>
+        754 bytes<br/>
+        Last modified : Mon Mar  2 01:29:24 2009<br/>
+        <hr/>
+        </td>
+        <td width="16">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td>
+        60 lines<br/>
+        1557 bytes<br/>
+        Last modified : Thu Mar  5 02:03:03 2009<br/>
+        <hr/>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">1</td>
+        <td class="normal"># -*- coding: utf-8 -*-</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">1</td>
+        <td class="normal"># -*- coding: utf-8 -*-</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">2</td>
+        <td class="normal"></td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">2</td>
+        <td class="normal"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">3</td>
+        <td class="normal">"""The user interface for our app"""</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">3</td>
+        <td class="normal">"""The user interface for our app"""</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">4</td>
+        <td class="normal"></td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">4</td>
+        <td class="normal"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">5</td>
+        <td class="normal">import os,sys</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">5</td>
+        <td class="normal">import os,sys</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">6</td>
+        <td class="normal"></td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">6</td>
+        <td class="normal"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">7</td>
+        <td class="normal"># Import Qt modules</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">7</td>
+        <td class="normal"># Import Qt modules</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">8</td>
+        <td class="normal">from PyQt4 import QtCore,QtGui</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">8</td>
+        <td class="normal">from PyQt4 import QtCore,QtGui</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">9</td>
+        <td class="normal"></td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">9</td>
+        <td class="normal"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">10</td>
+        <td class="normal"># Import the compiled UI module</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">10</td>
+        <td class="normal"># Import the compiled UI module</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">11</td>
+        <td class="normal">from windowUi import Ui_MainWindow</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">11</td>
+        <td class="normal">from windowUi import Ui_MainWindow</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">12</td>
+        <td class="normal"></td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">12</td>
+        <td class="normal"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_13">13</a></td>
+        <td class="added"># Import our backend</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_14">14</a></td>
+        <td class="added">import todo</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_15">15</a></td>
+        <td class="added"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">13</td>
+        <td class="normal"># Create a class for our main window</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">16</td>
+        <td class="normal"># Create a class for our main window</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">14</td>
+        <td class="normal">class Main(QtGui.QMainWindow):</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">17</td>
+        <td class="normal">class Main(QtGui.QMainWindow):</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">15</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;def __init__(self):</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">18</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;def __init__(self):</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">16</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;QtGui.QMainWindow.__init__(self)</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">19</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;QtGui.QMainWindow.__init__(self)</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">17</td>
+        <td class="normal"></td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">20</td>
+        <td class="normal"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">18</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# This is always the same</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">21</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# This is always the same</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">19</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.ui=Ui_MainWindow()</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">22</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.ui=Ui_MainWindow()</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">20</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.ui.setupUi(self)</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">23</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.ui.setupUi(self)</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">21</td>
+        <td class="normal"></td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">24</td>
+        <td class="normal"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_25">25</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Let's do something interesting: load the database contents</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_26">26</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# into our task list widget</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_27">27</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for task in todo.Task.query().all():</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_28">28</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tags=','.join([t.name for t in task.tags])</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_29">29</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item=QtGui.QTreeWidgetItem([task.text,str(task.date),tags])</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_30">30</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item.task=task</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_31">31</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if task.done:</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_32">32</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item.setCheckState(0,QtCore.Qt.Checked)</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_33">33</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else:</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_34">34</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item.setCheckState(0,QtCore.Qt.Unchecked)</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_35">35</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.ui.list.addTopLevelItem(item)</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_36">36</a></td>
+        <td class="added"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_37">37</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;def on_list_itemChanged(self,item,column):</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_38">38</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if item.checkState(0):</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_39">39</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item.task.done=True</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_40">40</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else:</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_41">41</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item.task.done=False</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_42">42</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;todo.saveData()</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_43">43</a></td>
+        <td class="added"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_44">44</a></td>
+        <td class="added"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">22</td>
+        <td class="normal">def main():</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">45</td>
+        <td class="normal">def main():</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_46">46</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;# Init the database before doing anything else</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_47">47</a></td>
+        <td class="added">&nbsp;&nbsp;&nbsp;&nbsp;todo.initDB()</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">&nbsp;</td>
+        <td class="added">&nbsp;</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum"><a name="F2_48">48</a></td>
+        <td class="added"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">23</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;# Again, this is boilerplate, it's going to be the same on</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">49</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;# Again, this is boilerplate, it's going to be the same on</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">24</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;# almost every app you write</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">50</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;# almost every app you write</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">25</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;app = QtGui.QApplication(sys.argv)</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">51</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;app = QtGui.QApplication(sys.argv)</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">26</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;window=Main()</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">52</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;window=Main()</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">27</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;window.show()</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">53</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;window.show()</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">28</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;# It's exec_ because exec is a reserved word in Python</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">54</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;# It's exec_ because exec is a reserved word in Python</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">29</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;sys.exit(app.exec_())</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">55</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;sys.exit(app.exec_())</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">30</td>
+        <td class="normal"></td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">56</td>
+        <td class="normal"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">31</td>
+        <td class="normal"></td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">57</td>
+        <td class="normal"></td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">32</td>
+        <td class="normal">if __name__ == "__main__":</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">58</td>
+        <td class="normal">if __name__ == "__main__":</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum">33</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;main()</td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">59</td>
+        <td class="normal">&nbsp;&nbsp;&nbsp;&nbsp;main()</td>
+    </tr>
+
+
+    <tr>
+        <td class="linenum"><a name="F1_34">34</a></td>
+        <td class="modified"></td>
+        <td width="16">&nbsp;</td>
+        <td class="linenum">60</td>
+        <td class="modified"></td>
+    </tr>
+
+
+</table>
+<hr/>
+<i>Generated by <b>diff2html</b> on Fri Mar  6 00:58:30 2009<br/>
+Command-line:</i> <tt>/home/ralsina/bin/diff2html session1/main.py session2/main.py</tt>
+
+</body>
+</html>
+
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

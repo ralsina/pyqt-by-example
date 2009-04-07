@@ -1,0 +1,209 @@
+==========================
+PyQt by Example: Sesión 2
+==========================
+
+:Traducción: Nicolás Pace / Roberto Alsina
+
+~~~~~~~~~~~~~~~
+Conectando todo
+~~~~~~~~~~~~~~~
+
+Requerimientos
+==============
+
+
+Si no lo hiciste, lee primero la `Sesión 1`_.
+
+.. _Sesión 1: http://lateral.netmanagers.com.ar/stories/BBS47.html
+
+Todos los archivos de esta sesion están aquí: `Sesión 2 at GitHub`_
+
+.. _Sesión 2 at GitHub: http://github.com/ralsina/pyqt-by-example/tree/master/session2 
+
+
+Sesión 2: Conectando todo
+==========================
+
+En la `Sesión 1`_ creamos la ventana principal de nuestra aplicación, el esqueleto que muestra esta ventana, y un simple backend basado en Elixir_.
+
+Lo que no hicimos fue vincularlos. Este es el gran paso que daremos en esta sesión.
+
+Primero trabajaremos con nuestro main.py_.
+
+
+Cargando los datos
+~~~~~~~~~~~~~~~~~~
+
+Lo primero que haremos es usar el backend, asi que debemos importar todo.py.
+
+Hacemos esto en la `línea 13`_
+
+.. _línea 13: #F2_13
+
+Luego, en `línea 25`_ hacemos la primera conección real: obtenemos las tareas y las insertamos en nuestra lista.
+
+Examinemos en mas detalle este bloque de código, entre las lineas 25_ y 35_:
+    
+.. code-block:: Python
+    :linenos:
+        
+    # Hagamos algo interesante: recuperar el contenido de la base de datos 
+    # y asociarlo a nuestro componente lista
+    for task in todo.Task.query().all():
+        tags=','.join([t.name for t in task.tags])
+        item=QtGui.QTreeWidgetItem([task.text,str(task.date),tags])
+        item.task=task
+        if task.done:
+            item.setCheckState(0,QtCore.Qt.Checked)
+        else:
+            item.setCheckState(0,QtCore.Qt.Unchecked)
+        self.ui.list.addTopLevelItem(item)
+
+Recuerdan nuestro backend, todo.py_? En el definimos los objetos Task que almacenamos en la base de datos. Si no estas familiarizado con Elixir_, ``todo.Task.query().all()`` recupera una lista con todos los objetos Task de la base de datos.
+
+Luego asignamos los tags separados por comas a ``tags``. Esto se verá más o menos como ``"home,important"``.
+
+I ahora veremos nuestro primer código relacionado con Qt.
+
+Primero: self.ui.list es un widget. Todo lo que agreguemos a la ventana usando Designer es accesible usando self.ui.nombre_objeto donde nombre_objeto es el nombre asignado en Designer. Haciendo click derecho en el gran widget en nuestra pantalla verás que el nombre del objeto es **list**:
+    
+.. figure:: object_name.png
+
+   El nombre del objeto es **list**.
+    
+Podés verlo (y cambiarlo) en el Inspector de objetos y en el Editor de propiedades.
+
+Eso no es solo un widget. Es un QTreeWidget, útil para mostrar listas de varias columnas y árboles.
+
+Puedes leer un monton acerca de este widget en su manual_, aquí un breve resumen:
+    
+* Nosotros creamos objetos QTreeWidgetItem_. Éstos toman una lista de Strings, que son mostradas en las columnas del widget. En este caso, estamos agregando el texto de la tarea ("Comprar alimentos"), la fecha de vencimiento, y los tags.
+
+* Seteamos item.task con task. Esto es para que después sepamos cual tarea es descripta por un ítem específico. No es el modo más elegante, pero sí el más fácil.
+
+* Agregamos cada item al widget usando addTopLevelItem_ para que estén todos al mismo nivel (no jerarquizados, como padres e hijos)
+
+* Funcionará como una lista
+
+Luego, si la tarea fue realizada (``task.done==True``) hacemos un tilde al lado de la tarea. En caso contrario, no.
+
+Para muchos programas simples, esto es todo lo que necesitas saber de QTreeWidget. Es un widget bastante complejo, y bastante poderoso, pero para este ejemplo con esto nos alcanza. Investiguen!
+
+Entonces, qué es lo que hace? Ejecutemos ``python main.py`` para descubrirlo!
+
+.. figure:: window3.png
+   
+   La lista de tareas con nuestras tareas de ejemplo.
+   
+Si nuestra ventana esta vacía, intenten ejecutar ``python todo.py`` primero, quien creará algunas tareas de ejmplo.
+
+Puedes inclusive marcar una tarea como realizada! Esto sucede ya que hemos implementado (parcialmente) el guardado y modificación de tareas...
+
+Guardando datos
+~~~~~~~~~~~~~~~
+
+Lo que queremos es que cuando el susuario hace click en el checkbox, la tarea debe ser modificada de manera acorde, y guardada en la base de datos.
+
+En la mayoría de los toolkits, estaríamos hablando de callbacks. Aquí las cosas son un poco distintas. Cuando un widget Qt quiere hacerte notar alfo, como "El usuario presionó este botón" o "Se activó el menú de ayuda", o lo que sea, se *emiten señales* (síganme la corriente un minuto).
+
+En particular, nos interesa la señal itemChanged del QTreeWidget:
+
+    QTreeWidget.itemChanged ( item, column )   [signal]
+
+    Esta señal se emite cuando cambia el contenido de la columna en el item especificado.
+
+Y cada vez que se usa el checkbox, se emite esta señal. ¿Porqué es importante eso? Porque podemos conectar nuestro propio código a una señal de manera que cada vez que esa señal se emite nuestro código sea ejecutado. Ése código se llama un *slot* en la jerga de Qt.
+
+Es como un callback, excepto que:
+
+a) La señal no sabe a qué está conectada (o si está conectada a algo)
+
+b) Se pueden conectar cuantos slots uno quiera a cada señal.
+
+Esto ayuda a mantener el código `loosely coupled`_.
+
+*Podríamos* definir un método en la clase Main, y conectarlo a la señal itemChanged, pero no es necesario porque podemos usar AutoConnect. Si se agrega a Main un método con un nombre específico, queda conectado a esa señal. El nombre es on_nombreobjeto_nombreseñal.
+
+Aquí está el código (líneas 37_ a 42_):
+    
+.. code-block:: python
+    :linenos:
+
+    def on_list_itemChanged(self,item,column):
+        if item.checkState(0):
+            item.task.done=True
+        else:
+            item.task.done=False
+        todo.saveData()
+
+
+Puede verse que usamos item.task para reflejar el checkState del item (o sea, si está marcado o no) en el estado de la tarea. 
+
+La llamada a ``todo.saveData()`` al final se asegura que todos los datos se guarden en la base de datos vi Elixir. Esa función es un poco horrible porque quería que funcione con dos versiones distintas de Elixir.
+
+AutoConnect es lo que van a usar 90% del tiempo para agregar comportamiento a sus aplicaciones. La mayor parte del tiempo simplemente se crea la ventana, se añaden los widgets y se enganchan las señales via AutoConnect.
+
+En algunas ocasiones eso no será suficiente. Pero todavía no llegamos a eso.
+
+Ésta fue una sesión más bien corta, pero prepárense para la próxima, vamos a estar haciendo **Cosas Importantes con Designer** (MR)!
+
+Mientras tanto tal vez quieran ver estas páginas:
+
+    
+* Aprender sobre los widgets_ de Qt
+
+* Aprender sobre `signals and slots`_
+
+* `Sesión 3`_
+
+.. _Sesión 3: http://lateral.netmanagers.com.ar/stories/BBS49.html
+
+.. _widgets: http://doc.trolltech.com/4.4/gallery.html 
+
+.. _signals and slots: http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/pyqt4ref.html#signal-and-slot-support
+
+
+-----------------
+
+Aquí pueden ver los cambios entre la versión vieja y la nueva:
+    
+.. raw:: html
+   :file: session2/diff1.html
+
+.. _loosely coupled: http://en.wikipedia.org/wiki/Loosely_coupled
+
+.. _QTreeWidgetItem: http://doc.trolltech.com/4.4/qtreewidgetitem.html
+
+.. _addTopLevelItem: http://doc.trolltech.com/4.4/qtreewidget.html#addTopLevelItem
+
+.. _manual: http://doc.trolltech.com/4.4/qtreewidget.html#details
+
+.. _línea 25: #F2_25
+
+.. _25: #F2_25
+
+.. _35: #F2_35
+
+.. _37: #F2_37
+
+.. _42: #F2_42
+
+.. _Elixir: http://elixir.ematia.de
+
+.. _python: http://www.python.org
+
+.. _session 1: http://lateral.netmanagers.com.ar/stories/BBS47.html
+
+.. _main.py: http://github.com/ralsina/pyqt-by-example/blob/master/session2/main.py
+
+.. _sqlalchemy: http://www.sqlalchemy.org
+
+.. _sqlite: http://www.sqlite.org
+
+.. _pyqt: http://www.riverbankcomputing.co.uk/software/pyqt/intro
+
+.. _sources: http://github.com/ralsina/pyqt-by-example/tree/master/session2
+
+.. _github: http://www.github.org
+
+.. _todo.py: http://github.com/ralsina/pyqt-by-example/blob/master/session2/todo.py
