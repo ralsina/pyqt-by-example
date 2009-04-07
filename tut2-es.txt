@@ -1,5 +1,5 @@
 ==========================
-PyQt by Example: Sesión 2
+PyQt en Ejemplos: Sesión 2
 ==========================
 
 :Traducción: Nicolás Pace / Roberto Alsina
