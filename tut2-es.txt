@@ -44,7 +44,7 @@ Luego, en `línea 25`_ hacemos la primera conección real: obtenemos las tareas 
 
 Examinemos en mas detalle este bloque de código, entre las lineas 25_ y 35_:
     
-.. code-block:: Python
+.. code-block:: python
     :linenos:
         
     # Hagamos algo interesante: recuperar el contenido de la base de datos 
