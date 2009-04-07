@@ -42,7 +42,7 @@ Then, in `line 25`_ we do the first real new work: we get the list of tasks and 
 
 Let's examine that in detail. Here is the code from lines 25_ to 35_:
     
-.. code-block:: Python
+.. code-block:: python
     :linenos:
         
     # Let's do something interesting: load the database contents 
