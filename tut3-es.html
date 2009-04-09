@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.5: http://docutils.sourceforge.net/" />
+<title>PyQt en ejemplos: Sesión 3</title>
+<style type="text/css">
+
+/*
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 5196 2007-06-03 20:25:28Z wiemann $
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+
+See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin: 0 0 0.5em 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left {
+  clear: left }
+
+img.align-right {
+  clear: right }
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font-family: serif ;
+  font-size: 100% }
+
+pre.literal-block, pre.doctest-block {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
+</head>
+<body>
+<div class="document" id="pyqt-en-ejemplos-sesi-n-3">
+<h1 class="title">PyQt en ejemplos: Sesión 3</h1>
+<h2 class="subtitle" id="el-designer-es-un-buen-recurso">El Designer es un buen recurso</h2>
+
+<div class="section" id="requerimientos">
+<h1>Requerimientos</h1>
+<p>Si todavía no lo has hecho, por favor lee las sesiones anteriores:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://lateral.netmanagers.com.ar/tr/es/stories/BBS47.html">Sesión 1</a></li>
+<li><a class="reference external" href="http://lateral.netmanagers.com.ar/tr/es/stories/BBS48.html">Sesión 2</a></li>
+</ul>
+<p>Todos los archivos para esta sesión se encuentran aquí: <a class="reference external" href="http://github.com/ralsina/pyqt-by-example/tree/master/session3">Sesión 3 en GitHub</a></p>
+</div>
+<div class="section" id="id1">
+<h1>El Designer es un buen recurso</h1>
+<p>Hoy vamos a hacer que nuestra aplicación luzca mejor, y vamos a introducir algunas nuevas cosas, como los archivos de recursos.</p>
+<p>CUando terminamos la Sesión 2, nuestra ventana principal lucía así:</p>
+<div class="figure">
+<img alt="window3.png" src="window3.png" />
+<p class="caption">No es una aplicación linda.</p>
+</div>
+<p>Hay muchas cosas malas en esa imagen. Vamos a encargarnos de ellos uno por uno, usando el Qt Designer.</p>
+<div class="section" id="el-t-tulo-de-la-ventana">
+<h2>El título de la ventana</h2>
+<div class="figure">
+<img alt="wrong1.png" src="wrong1.png" />
+<p class="caption">Es la MainWindow, pero no se llama MainWindow!</p>
+</div>
+<p>Eso está mal. Si bien no he elegido un nombre para este ejemplo, es tonto que el título de la ventana ( y el de barra de tareas!) sea &quot;VentanaPrincipal&quot; !</p>
+<p>Acá muestro como podés cambiar las propiedades del objeto con el Designer.</p>
+<p>Primero tenés que seleccionar el objeto que querés modificar. Podés hacerlo seleccionandoló desde el Inspector de objectos (Object Inspector) o simplemente haciendo click sobre él. Para algunos Widgets hacer uno u otro es fácil. Por ejemplo, a veces es dificil encontrar un espacio vacío en la ventana para hacer click y seleccionarla o tratar de seleccionar un widget realmente chico, como lo es un separador. En esos casos, lo mejor es usar el Inspector.</p>
+<p>Una vez seleccionado el objecto correcto, observar el Editor de propiedades.</p>
+<p>En él, hay una lista de (obviamente) propiedades separados por títulos como &quot;QObject&quot; o &quot;QWidget&quot;. No te preocupes por esos títulos, simplemente fijate lo que necesitás y listo (por lo general esto es bastante obvio!).</p>
+<p>En nuestro caso necesitamos la propiedad windowTitle.</p>
+<div class="figure">
+<img alt="windowtitle.png" src="windowtitle.png" />
+</div>
+<p>No voy a explicar como configurar cada uno de estas propiedades, yo confío en que los vas a encontrar si yo simplemente digo &quot;La propiedad windowTitle del objecto mainWindow&quot;.</p>
+<p>Cambiemosló por &quot;Todo&quot;.</p>
+</div>
+<div class="section" id="el-cono-de-la-aplicaci-n">
+<h2>El ícono de la aplicación</h2>
+<div class="figure">
+<img alt="wrong2.png" src="wrong2.png" />
+<p class="caption">Icono genérico.</p>
+</div>
+<p>El ícono de la ventana es el ícono generico por defecto. Esto es importante de saber, porque aparece en la barra de tareas junto al título de la ventana, y si lo estás usando en algunos sistemas operativos o configuraciones, el usuario puede <strong>solamente</strong> ver ese ícono!</p>
+<p>Encontrar íconos para nuestras aplicaciones es un gran problema. Hay muchas cosas que podés hacer:</p>
+<ol class="arabic">
+<li><p class="first">Contratar un diseñador gráfico y que diseñe los íconos para vos.</p>
+<p>Por supuesto esto es una tarea bastante cara, especialmente si hacés esto simplemente por hobby.</p>
+</li>
+<li><p class="first">Buscar en la internet y ver que encontrás.</p>
+<p>Por ejemplo, si busco &quot;todo icon&quot; en google, seguramente voy a encontrar bastantes, algunos realmente lindos. Sin embargo, muchos de ellos están sujetos a tener &quot;derechos de autor&quot;, así que una mejor idea es buscar en lugares como <a class="reference external" href="http://commons.wikimedia.org">wikimedia commons</a>:</p>
+<img alt="http://upload.wikimedia.org/wikipedia/commons/b/bb/ToDo.jpg" src="http://upload.wikimedia.org/wikipedia/commons/b/bb/ToDo.jpg" />
+<p>O tal vez en <a class="reference external" href="http://www.openclipart.org/">Open Clipart</a>:</p>
+<img alt="http://openclipart.org/people/CoD_fsfe/CoD_fsfe_calendar.png" src="http://openclipart.org/people/CoD_fsfe/CoD_fsfe_calendar.png" />
+<p>Pero mi punto es: esos dos íconos no son del todo maravillosos, y buscar un ícono realmente lindo te va a tomar un buen rato. Y si necesitás 10 o 15 íconos para tu aplicación, el problema es peor, ya que los mismos tienen que ser consistentes!.</p>
+</li>
+<li><p class="first">Encontrar un conjunto de íconos de KDE (o tal vez GNOME) y robar consistentemente. Esta es mi solución preferida.</p>
+<p>Yo prefiero los íconos de KDe porque uso el escritorio de KDE, pero no hay razón alguna para no elegir íconos de GNOME.
+Podés encontrar íconos de KDE en <a class="reference external" href="http://kde-look.org/index.php?xcontentmode=27">kde-look.org</a> e íconos de GNOME en <a class="reference external" href="http://gnome-look.org/index.php?xcontentmode=121">gnome-look.org</a></p>
+<p>Una perlita es que todos los íconos de KDE (y GNOME) tienen nombres internos consistentes, de manera que podés cambiar los íconos facilmente.</p>
+</li>
+</ol>
+<p>Luego hay que tener en cuenta el formato del archivo de los íconos. Si el esquema de íconos que te gusta se encuentra en un formato SVG, buenísimo. SVG es escalable, esto quiere decir que los íconos se verán bien en cualquier tamaño, sin la necesidad de incluir múltiples copias de los mismos en diferentes tamaños.</p>
+<p>En este tutorial voy a usar íconos de <a class="reference external" href="http://kde-look.org/content/show.php/The+Reinhardt+Icon+Set?content=6153">Reinhardt</a>. Porque?, simplemente me gustan, y el estilo es lo bastantemente simple como para yo abrir el <a class="reference external" href="http://www.inkscape.org/">Inkscape</a> y editarlos de ser necesario (como lo he hecho en este caso, ver abajo).</p>
+<p>Asi es como el ícono de una carpeta de <a class="reference external" href="http://kde-look.org/content/show.php/The+Reinhardt+Icon+Set?content=6153">Reinhardt</a> se ve en diferentes tamaños, en comparación a <a class="reference external" href="http://kde-look.org/content/show.php/SnowIsh?content=42905">Snowish</a>, un esquema de íconos PNG:</p>
+<div class="figure">
+<img alt="compsize.png" src="compsize.png" />
+<p class="caption">El ícono de una carpeta de Reinhardt en SVG: Se ve bien en todos los tamaños.
+El ícono de una carpeta de <a class="reference external" href="http://kde-look.org/content/show.php/SnowIsh?content=42905">Snowish</a> en PNG: Se ve bien, pero luego bastante mal.</p>
+</div>
+<p>Así que, resumiendo: elegí un esquema de íconos que te guste y de ser posible solamente usá esos íconos de ese esquema.</p>
+<p>Para el ícono de esta aplicación, me inventé esto de &quot;mark_as_ham.svg&quot; y un poco de color verde:</p>
+<div class="figure">
+<img alt="todo_icon.png" src="todo_icon.png" />
+<p class="caption">todo.svg: No es el ícono más lindo de la historia, pero va a alcanzar para el ejemplo del tutorial!</p>
+</div>
+<p>Entonces, luego de esta charla acerca de íconos, como los usamos? Bueno... eso requiere de un poco de mas charla, porque pueden haber dos formas: usar los archivos de los íconos y usar un archivo de recursos.</p>
+<ul>
+<li><p class="first">Archivos de íconos:</p>
+<p>En el Designer, andá a la propierdad windowIcon de MainWindow. Hacé click en la flecha para abajo. Seleccioná &quot;Choose File&quot;.
+Las malas noticias: Haciendo esto va a hacer que el empaquetamiento y la distribución de nuestra aplicación sea un poco mas costosa.
+Las muy malas noticias: Esto no va a funcionar con los íconos SVG. Así que olvidate...</p>
+</li>
+<li><p class="first">El archivo de recursos:</p>
+<p>En el Designer, andá a la propiedad windowIcon. Hacé click en la flecha que apunta para abajo. Seleccioná &quot;Choose Resource&quot;. Vas a ver una ventana un tanto vacía.</p>
+</li>
+</ul>
+<div class="figure">
+<img alt="resource1.png" src="resource1.png" />
+<p class="caption">La ventana de recursos vacía.</p>
+</div>
+<p>Un archivo de recursos es un archivo XML que contiene referencias a todos esos íconos que querés usar. Mas tarde, esto es compilado en un módulo python, el cual podés usar desde tu aplicación. Mientras que el modulo de python sea distribuído con los demás, vas a estar bien, así que si jamás tendremos el problema de no encontrar un ícono y tampoco nos vamos a preocupar por saber en donde se encuentran instalados nuestros íconos.
+Las cosas van a <em>simlemente funcionar</em>. Así que vale la pena hacer esto bien.</p>
+<p>Así que como se hace:</p>
+<ol class="arabic">
+<li><p class="first">Hacé click en el botón del lápiz, arriba a la derecha, para obtener la ventana &quot;Edit Resources&quot;.</p>
+<div class="figure">
+<img alt="resource2.png" src="resource2.png" />
+<p class="caption">La ventana de recursos vacía</p>
+</div>
+</li>
+<li><p class="first">Hacé click en el botón de &quot;New Resource File&quot; arriba a la izquierda. Llamemosló &quot;icons&quot; (o lo que vos quieras)</p>
+</li>
+<li><p class="first">Hacé click en el botón de &quot;Add prefix&quot; (el cuarto de la izquierda). Yo lo llamé &quot;/&quot;</p>
+</li>
+<li><p class="first">Hacé click en el botón &quot;Add files&quot; (el quinto de la izquierda). Agregá el todo.svg (finalmente!) y hacé click en OK.</p>
+</li>
+</ol>
+<p>Los pasos 1, 2 y 3 son solamente necesarios la primera vez que usás un ícono. Para agregar los demás íconos simplemente vamos a realizar el paso 4.</p>
+<p>Así que ahora tu ventana de recursos se tendría que ver así:</p>
+<div class="figure">
+<img alt="resource3.png" src="resource3.png" />
+<p class="caption">Hay un ícono aquí!</p>
+</div>
+<p>Elegilo y listo, la ventana tiene el ícono correcto!, Bueno, en realidad, no es así...</p>
+<p>Primero hay que compilar la interfaz del usuario (UI). Acordate que necesitamos hacer esto cuando cambiamos algo usando el designer!</p>
+<pre class="literal-block">
+$ pyuic4 window.ui -o windowUi.py
+</pre>
+<p>Luego corremos el programa:</p>
+<pre class="literal-block">
+$ python main.py
+Traceback (most recent call last):
+File &quot;main.py&quot;, line 11, in &lt;module&gt;
+    from windowUi import Ui_MainWindow
+File &quot;/home/ralsina/Desktop/proyectos/pytut/session3/windowUi.py&quot;, line 41, in &lt;module&gt;
+    import icons_rc
+ImportError: No module named icons_rc
+</pre>
+<p>Esto es porque también necesitás compilar el archivo <a class="reference external" href="http://github.com/ralsina/pyqt-by-example/tree/master/session3/icons.qrc">icons.qrc</a> que creamos. Esto se hace usando <tt class="docutils literal"><span class="pre">pyrcc4</span></tt>:</p>
+<pre class="literal-block">
+$ pyrcc4 icons.qrc -o icons_rc.py
+</pre>
+<p>Y ahora si, el ícono funciona :-)</p>
+<div class="figure">
+<img alt="window4.png" src="window4.png" />
+<p class="caption">La explicación más larga fue la de como cambiar un ícono, pero funcionó!</p>
+</div>
+<p>Ya que es realmente aburrido tener que recordar que tenemos que ejecutar <tt class="docutils literal"><span class="pre">pyuic4</span></tt> y <tt class="docutils literal"><span class="pre">pyrcc</span></tt>, escribí un script bastante básico que se encarga de hacerlo. Si estás en windows, es similar a un archivo BAT.</p>
+<p>Por suerte, los siguientes dos arreglos de la interfaz van a ser mucho más simples.</p>
+</div>
+<div class="section" id="decoraciones-de-los-rboles">
+<h2>Decoraciones de los árboles</h2>
+<p>A la izquierda de nuestra lista se encuentra una decoración de un árbol. Ya que esto no tiene como objectivo ser un árbol, simplemente es un desperdicio de espacio. Pueden ser removidos con la propiedad rootIsDecorated que se encuentra en la lista de los widget.</p>
+<div class="figure">
+<img alt="wrong3.png" src="wrong3.png" />
+<p class="caption">Esto en realidad es una lista, no es un árbol.</p>
+</div>
+</div>
+<div class="section" id="m-rgenes-anchos">
+<h2>Márgenes anchos</h2>
+<p>Creo que los márgenes por defecto (4 píxeles) se ven un poco anticuados, yo prefiero 0 pixels. YMMV</p>
+<div class="figure">
+<img alt="wrong4.png" src="wrong4.png" />
+<p class="caption">Gusto personal: muy ancho.</p>
+</div>
+<p>Podés cambiarlos en las propiedades del widget central (centralWidget) layout[algo]Margin.</p>
+</div>
+<div class="section" id="arreglos-extras">
+<h2>Arreglos extras</h2>
+<p>También prefiero configurar nuestro QTreeWidget:</p>
+<ul class="simple">
+<li>allColumnsShowFocus True</li>
+<li>uniformRowHeights True (better performance for long lists)</li>
+<li>sortingEnabled True</li>
+<li>alternatingRowColors True</li>
+</ul>
+<p>See the <a class="reference external" href="http://doc.trolltech.com/4.4/qtreewidget.html">docs</a> to see what they do!</p>
+</div>
+<div class="section" id="terminado">
+<h2>Terminado!</h2>
+<p>Así que, luego de ejecutar build.sh, así es como se ve nuestra aplicación:</p>
+<div class="figure">
+<img alt="window5.png" src="window5.png" />
+<p class="caption">Mucho más limpio.</p>
+</div>
+</div>
+</div>
+<div class="section" id="lo-que-viene">
+<h1>Lo que viene</h1>
+<p>En esta sesión, no codificamos absolutamente nada, simplemente trabajamos en el designer y ciertos detalles gráficos. Si sos un programador del tipo &quot;Hardcore&quot;, esto podría no ser importante para vos, pero creeme: lo es. Hacer que las aplicaciones sean lo más placenteras para usar y ver es muy importante si querés que la primer entrega de tu programa haga un impacto significativo. Yo lo aprendí de la peor manera, entregando aplicaciones horribles ;-)</p>
+<p>Pero bueno, no importa. Si tus conocimientos de diseño son limitados como lo son para mí, simplemente haz lo mejor que puedas.</p>
+<p>En la sesión 4 vamos a meternos de lleno en lo que es la codificación, y vamos a hacer que esta aplicación funcione por primera vez, introduciendo una de las cosas más linda de Qt: Actions.</p>
+</div>
+<div class="section" id="m-s-lectura">
+<h1>Más lectura</h1>
+<ul class="simple">
+<li><a class="reference external" href="http://www.asktog.com/basics/firstPrinciples.html">First Principles of Interaction Design</a></li>
+<li><a class="reference external" href="http://en.wikipedia.org/wiki/User_interface">User Interface</a> in Wikipedia</li>
+<li><a class="reference external" href="http://www.usabilitypost.com/2008/10/13/experience-vs-function-beautiful-ui-not-always-best-ui/">Beautiful versus functional</a></li>
+</ul>
+</div>
+</div>
+</body>
+</html>

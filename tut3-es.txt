@@ -1,0 +1,281 @@
+==========================
+PyQt en ejemplos: Sesión 3
+==========================
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+El Designer es un buen recurso
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Requerimientos
+==============
+
+Si todavía no lo has hecho, por favor lee las sesiones anteriores:
+    
+* `Sesión 1`_
+
+* `Sesión 2`_
+
+Todos los archivos para esta sesión se encuentran aquí: `Sesión 3 en GitHub`_
+
+.. _Sesión 3 en GitHub: http://github.com/ralsina/pyqt-by-example/tree/master/session3 
+
+El Designer es un buen recurso
+==============================
+
+Hoy vamos a hacer que nuestra aplicación luzca mejor, y vamos a introducir algunas nuevas cosas, como los archivos de recursos.
+
+CUando terminamos la Sesión 2, nuestra ventana principal lucía así:
+    
+.. figure:: window3.png
+
+   No es una aplicación linda.
+   
+Hay muchas cosas malas en esa imagen. Vamos a encargarnos de ellos uno por uno, usando el Qt Designer.
+
+El título de la ventana
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. figure:: wrong1.png
+
+   Es la MainWindow, pero no se llama MainWindow!
+   
+Eso está mal. Si bien no he elegido un nombre para este ejemplo, es tonto que el título de la ventana ( y el de barra de tareas!) sea "VentanaPrincipal" !
+
+Acá muestro como podés cambiar las propiedades del objeto con el Designer.
+
+Primero tenés que seleccionar el objeto que querés modificar. Podés hacerlo seleccionandoló desde el Inspector de objectos (Object Inspector) o simplemente haciendo click sobre él. Para algunos Widgets hacer uno u otro es fácil. Por ejemplo, a veces es dificil encontrar un espacio vacío en la ventana para hacer click y seleccionarla o tratar de seleccionar un widget realmente chico, como lo es un separador. En esos casos, lo mejor es usar el Inspector.
+
+Una vez seleccionado el objecto correcto, observar el Editor de propiedades.
+
+En él, hay una lista de (obviamente) propiedades separados por títulos como "QObject" o "QWidget". No te preocupes por esos títulos, simplemente fijate lo que necesitás y listo (por lo general esto es bastante obvio!).
+
+En nuestro caso necesitamos la propiedad windowTitle.
+
+.. figure:: windowtitle.png
+
+No voy a explicar como configurar cada uno de estas propiedades, yo confío en que los vas a encontrar si yo simplemente digo "La propiedad windowTitle del objecto mainWindow".
+
+Cambiemosló por "Todo".
+
+El ícono de la aplicación
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. figure:: wrong2.png
+
+   Icono genérico.
+   
+El ícono de la ventana es el ícono generico por defecto. Esto es importante de saber, porque aparece en la barra de tareas junto al título de la ventana, y si lo estás usando en algunos sistemas operativos o configuraciones, el usuario puede **solamente** ver ese ícono!
+
+Encontrar íconos para nuestras aplicaciones es un gran problema. Hay muchas cosas que podés hacer:
+    
+1. Contratar un diseñador gráfico y que diseñe los íconos para vos.
+
+   Por supuesto esto es una tarea bastante cara, especialmente si hacés esto simplemente por hobby.
+   
+2. Buscar en la internet y ver que encontrás.
+
+   
+   Por ejemplo, si busco "todo icon" en google, seguramente voy a encontrar bastantes, algunos realmente lindos. Sin embargo, muchos de ellos están sujetos a tener "derechos de autor", así que una mejor idea es buscar en lugares como `wikimedia commons`_:
+
+   .. image:: http://upload.wikimedia.org/wikipedia/commons/b/bb/ToDo.jpg
+   
+   O tal vez en `Open Clipart`_:
+       
+   .. image:: http://openclipart.org/people/CoD_fsfe/CoD_fsfe_calendar.png
+   
+   Pero mi punto es: esos dos íconos no son del todo maravillosos, y buscar un ícono realmente lindo te va a tomar un buen rato. Y si necesitás 10 o 15 íconos para tu aplicación, el problema es peor, ya que los mismos tienen que ser consistentes!.
+   
+3. Encontrar un conjunto de íconos de KDE (o tal vez GNOME) y robar consistentemente. Esta es mi solución preferida.
+
+   Yo prefiero los íconos de KDe porque uso el escritorio de KDE, pero no hay razón alguna para no elegir íconos de GNOME.
+   Podés encontrar íconos de KDE en kde-look.org_ e íconos de GNOME en gnome-look.org_
+   
+   Una perlita es que todos los íconos de KDE (y GNOME) tienen nombres internos consistentes, de manera que podés cambiar los íconos facilmente.
+   
+Luego hay que tener en cuenta el formato del archivo de los íconos. Si el esquema de íconos que te gusta se encuentra en un formato SVG, buenísimo. SVG es escalable, esto quiere decir que los íconos se verán bien en cualquier tamaño, sin la necesidad de incluir múltiples copias de los mismos en diferentes tamaños.
+
+En este tutorial voy a usar íconos de Reinhardt_. Porque?, simplemente me gustan, y el estilo es lo bastantemente simple como para yo abrir el Inkscape_ y editarlos de ser necesario (como lo he hecho en este caso, ver abajo).
+    
+Asi es como el ícono de una carpeta de Reinhardt_ se ve en diferentes tamaños, en comparación a Snowish_, un esquema de íconos PNG:
+
+.. figure:: compsize.png
+
+    El ícono de una carpeta de Reinhardt en SVG: Se ve bien en todos los tamaños.
+    El ícono de una carpeta de Snowish_ en PNG: Se ve bien, pero luego bastante mal.
+
+Así que, resumiendo: elegí un esquema de íconos que te guste y de ser posible solamente usá esos íconos de ese esquema.
+
+Para el ícono de esta aplicación, me inventé esto de "mark_as_ham.svg" y un poco de color verde:
+    
+.. figure:: todo_icon.png
+   
+   todo.svg: No es el ícono más lindo de la historia, pero va a alcanzar para el ejemplo del tutorial!
+   
+Entonces, luego de esta charla acerca de íconos, como los usamos? Bueno... eso requiere de un poco de mas charla, porque pueden haber dos formas: usar los archivos de los íconos y usar un archivo de recursos.
+
+* Archivos de íconos:
+    
+  En el Designer, andá a la propierdad windowIcon de MainWindow. Hacé click en la flecha para abajo. Seleccioná "Choose File".
+  Las malas noticias: Haciendo esto va a hacer que el empaquetamiento y la distribución de nuestra aplicación sea un poco mas costosa.
+  Las muy malas noticias: Esto no va a funcionar con los íconos SVG. Así que olvidate...
+  
+* El archivo de recursos:
+    
+  En el Designer, andá a la propiedad windowIcon. Hacé click en la flecha que apunta para abajo. Seleccioná "Choose Resource". Vas a ver una ventana un tanto vacía.
+  
+.. figure:: resource1.png
+
+   La ventana de recursos vacía.
+   
+Un archivo de recursos es un archivo XML que contiene referencias a todos esos íconos que querés usar. Mas tarde, esto es compilado en un módulo python, el cual podés usar desde tu aplicación. Mientras que el modulo de python sea distribuído con los demás, vas a estar bien, así que si jamás tendremos el problema de no encontrar un ícono y tampoco nos vamos a preocupar por saber en donde se encuentran instalados nuestros íconos.
+Las cosas van a *simlemente funcionar*. Así que vale la pena hacer esto bien.
+
+Así que como se hace:
+    
+1. Hacé click en el botón del lápiz, arriba a la derecha, para obtener la ventana "Edit Resources".
+
+   .. figure:: resource2.png
+
+      La ventana de recursos vacía
+
+2. Hacé click en el botón de "New Resource File" arriba a la izquierda. Llamemosló "icons" (o lo que vos quieras)
+
+3. Hacé click en el botón de "Add prefix" (el cuarto de la izquierda). Yo lo llamé "/"
+
+4. Hacé click en el botón "Add files" (el quinto de la izquierda). Agregá el todo.svg (finalmente!) y hacé click en OK.
+
+Los pasos 1, 2 y 3 son solamente necesarios la primera vez que usás un ícono. Para agregar los demás íconos simplemente vamos a realizar el paso 4.
+
+Así que ahora tu ventana de recursos se tendría que ver así:
+    
+.. figure:: resource3.png
+
+   Hay un ícono aquí!
+
+Elegilo y listo, la ventana tiene el ícono correcto!, Bueno, en realidad, no es así...
+
+Primero hay que compilar la interfaz del usuario (UI). Acordate que necesitamos hacer esto cuando cambiamos algo usando el designer!
+
+::
+    
+    $ pyuic4 window.ui -o windowUi.py
+    
+Luego corremos el programa::
+    
+    $ python main.py
+    Traceback (most recent call last):
+    File "main.py", line 11, in <module>
+        from windowUi import Ui_MainWindow
+    File "/home/ralsina/Desktop/proyectos/pytut/session3/windowUi.py", line 41, in <module>
+        import icons_rc
+    ImportError: No module named icons_rc
+   
+Esto es porque también necesitás compilar el archivo `icons.qrc`_ que creamos. Esto se hace usando ``pyrcc4``::
+    
+    $ pyrcc4 icons.qrc -o icons_rc.py
+    
+Y ahora si, el ícono funciona :-)
+
+.. figure:: window4.png
+
+   La explicación más larga fue la de como cambiar un ícono, pero funcionó!
+   
+Ya que es realmente aburrido tener que recordar que tenemos que ejecutar ``pyuic4`` y ``pyrcc``, escribí un script bastante básico que se encarga de hacerlo. Si estás en windows, es similar a un archivo BAT.
+
+Por suerte, los siguientes dos arreglos de la interfaz van a ser mucho más simples.
+
+Decoraciones de los árboles
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A la izquierda de nuestra lista se encuentra una decoración de un árbol. Ya que esto no tiene como objectivo ser un árbol, simplemente es un desperdicio de espacio. Pueden ser removidos con la propiedad rootIsDecorated que se encuentra en la lista de los widget.
+
+.. figure:: wrong3.png
+
+   Esto en realidad es una lista, no es un árbol.
+
+Márgenes anchos
+~~~~~~~~~~~~~~~
+
+Creo que los márgenes por defecto (4 píxeles) se ven un poco anticuados, yo prefiero 0 pixels. YMMV
+
+.. figure:: wrong4.png
+
+   Gusto personal: muy ancho.
+
+Podés cambiarlos en las propiedades del widget central (centralWidget) layout[algo]Margin.
+   
+Arreglos extras
+~~~~~~~~~~~~~~~
+
+También prefiero configurar nuestro QTreeWidget:
+    
+* allColumnsShowFocus True
+
+* uniformRowHeights True (better performance for long lists)
+   
+* sortingEnabled True
+
+* alternatingRowColors True
+
+See the docs_ to see what they do!
+
+.. _docs: http://doc.trolltech.com/4.4/qtreewidget.html
+
+Terminado!
+~~~~~~~~~~
+
+Así que, luego de ejecutar build.sh, así es como se ve nuestra aplicación:
+    
+.. figure:: window5.png
+
+   Mucho más limpio.
+
+
+Lo que viene
+============
+
+En esta sesión, no codificamos absolutamente nada, simplemente trabajamos en el designer y ciertos detalles gráficos. Si sos un programador del tipo "Hardcore", esto podría no ser importante para vos, pero creeme: lo es. Hacer que las aplicaciones sean lo más placenteras para usar y ver es muy importante si querés que la primer entrega de tu programa haga un impacto significativo. Yo lo aprendí de la peor manera, entregando aplicaciones horribles ;-)
+
+Pero bueno, no importa. Si tus conocimientos de diseño son limitados como lo son para mí, simplemente haz lo mejor que puedas.
+
+En la sesión 4 vamos a meternos de lleno en lo que es la codificación, y vamos a hacer que esta aplicación funcione por primera vez, introduciendo una de las cosas más linda de Qt: Actions.
+
+Más lectura
+===========
+
+* `First Principles of Interaction Design`_
+
+* `User Interface`_ in Wikipedia
+
+* `Beautiful versus functional`_
+
+.. _First Principles of Interaction Design: http://www.asktog.com/basics/firstPrinciples.html
+
+.. _User interface: http://en.wikipedia.org/wiki/User_interface
+
+.. _The Apple HIG: http://developer.apple.com/documentation/userexperience/Conceptual/AppleHIGuidelines/XHIGIntro/chapter_1_section_1.html
+
+.. _Beautiful versus functional: http://www.usabilitypost.com/2008/10/13/experience-vs-function-beautiful-ui-not-always-best-ui/
+
+
+.. _build.sh: http://github.com/ralsina/pyqt-by-example/tree/master/session3/build.sh
+   
+.. _icons.qrc: http://github.com/ralsina/pyqt-by-example/tree/master/session3/icons.qrc   
+   
+.. _Inkscape: http://www.inkscape.org/ 
+
+.. _Reinhardt: http://kde-look.org/content/show.php/The+Reinhardt+Icon+Set?content=6153
+   
+.. _kde-look.org: http://kde-look.org/index.php?xcontentmode=27
+
+.. _gnome-look.org: http://gnome-look.org/index.php?xcontentmode=121
+   
+.. _snowish: http://kde-look.org/content/show.php/SnowIsh?content=42905
+
+.. _Sesión 1: http://lateral.netmanagers.com.ar/tr/es/stories/BBS47.html
+
+.. _Sesión 2: http://lateral.netmanagers.com.ar/tr/es/stories/BBS48.html
+
+.. _wikimedia commons: http://commons.wikimedia.org
+
+.. _Open Clipart: http://www.openclipart.org/
