@@ -6,6 +6,8 @@ PyQt en ejemplos: Sesión 3
 El Designer es un buen recurso
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+:Traducción: Nicolás Miyasato
+
 Requerimientos
 ==============
 
