@@ -2,6 +2,8 @@
 PyQt en ejemplos: Sesión 4
 ==========================
 
+*Traducción:* Leonardo De Luca
+
 ~~~~~~~~
 ¡Acción!
 ~~~~~~~~
