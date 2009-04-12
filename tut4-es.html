@@ -311,10 +311,12 @@ TD.normal { background-color: #FFFFE1; }
 <body>
 <div class="document" id="pyqt-en-ejemplos-sesi-n-4">
 <h1 class="title">PyQt en ejemplos: Sesión 4</h1>
-<h2 class="subtitle" id="acci-n">¡Acción!</h2>
 
+<p><em>Traducción:</em> Leonardo De Luca</p>
+<div class="section" id="acci-n">
+<h1>¡Acción!</h1>
 <div class="section" id="requirimientos">
-<h1>Requirimientos</h1>
+<h2>Requirimientos</h2>
 <p>Si todavía no lo has hecho, lee las sesiones anteriores:</p>
 <ul class="simple">
 <li><a class="reference external" href="http://lateral.netmanagers.com.ar/stories/BBS47.html">Sesión 1</a></li>
@@ -324,9 +326,9 @@ TD.normal { background-color: #FFFFE1; }
 <p>Todos los archivos de esta sesión están aquí: <a class="reference external" href="http://github.com/ralsina/pyqt-by-example/tree/master/session4">Sesión 4 en GitHub</a>. Puedes usarlos o seguir las instrucciones comenzando con los archivos de la <a class="reference external" href="http://lateral.netmanagers.com.ar/stories/BBS49.html">Sesión 3</a> y ver qué tan bien has trabajado.</p>
 </div>
 <div class="section" id="id1">
-<h1>¡Acción!</h1>
+<h2>¡Acción!</h2>
 <div class="section" id="qu-es-una-acci-n">
-<h2>¿Qué es una acción?</h2>
+<h3>¿Qué es una acción?</h3>
 <p>Cuando terminamos la <a class="reference external" href="http://lateral.netmanagers.com.ar/stories/BBS49.html">sesión 3</a> teníamos una aplicación básica de tareas pendientes, con funcionalidad muy limitada: puedes marcar tareas como ya hechas, pero no puedes editarlas, no puedes crear tareas nuevas, tampoco borrarlas, ni mucho menos filtrarlas.</p>
 <div class="figure">
 <img alt="window5.png" src="window5.png" />
@@ -351,7 +353,7 @@ TD.normal { background-color: #FFFFE1; }
 <p>Empecemos con una acción sencilla: <strong>Borrar una tarea</strong>. Haremos la primera parte del trabajo, crear la acción y la IU, con Designer.</p>
 </div>
 <div class="section" id="crear-acciones-con-designer">
-<h2>Crear acciones con Designer</h2>
+<h3>Crear acciones con Designer</h3>
 <p>Primero iremos al <em>Action Editor</em> y obviamente haremos clic sobre el botón &quot;New Action&quot; y comenzaremos a crearla:</p>
 <div class="figure">
 <img alt="action1.png" src="action1.png" />
@@ -367,7 +369,7 @@ TD.normal { background-color: #FFFFE1; }
 <p>Hay dos lugares obvios para esta acción: una barra de herramientas y un menú.</p>
 </div>
 <div class="section" id="a-adir-acciones-a-una-barra-de-herramientas">
-<h2>Añadir acciones a una barra de herramientas</h2>
+<h3>Añadir acciones a una barra de herramientas</h3>
 <p>Para añadir una acción a una barra de herramientas, primero asegúrate de que haya una. Si no tienes una en tu &quot;Object Inspector&quot; entonces haz clic derecho sobre MainWindow (ya sea sobre la propia ventana o sobre su entrada en el inspector) y elige &quot;Add Tool Bar&quot;.</p>
 <p>Puedes añadir tantas barras de herramientas como quieras, pero intenta utilizar una sola, salvo que tengas una <strong>muy</strong> buena razón (tendremos una en la sesión 5 ;-)</p>
 <p>Luego de crear la barra de herramientas verás un espacio vacío entre el menú (que dice &quot;Type Here&quot;) y el widget de la lista de tareas. Ese espacio es la barra de herramientas.</p>
@@ -379,7 +381,7 @@ TD.normal { background-color: #FFFFE1; }
 </div>
 </div>
 <div class="section" id="a-adir-acciones-al-men">
-<h2>Añadir acciones al menú</h2>
+<h3>Añadir acciones al menú</h3>
 <p>Nuestro menú está vacío, sólo tiene un cartel que dice &quot;Type Here&quot;. A pesar de que podríamos arrastrar la acción al menú, eso pondría &quot;Borrar tarea&quot; primera en el nivel de menúes y eso es una elección poco común.</p>
 <p>Así que primero vamos a crear un menú &quot;Tareas&quot;:</p>
 <ul class="simple">
@@ -399,7 +401,7 @@ TD.normal { background-color: #FFFFE1; }
 <p>Ahora tenemos la acción en la barra de herramientas y en el menú. Pero, por supuesto, no hace nada. Así que a continuación vamos a trabajar sobre eso.</p>
 <p>Guárdalo, ejecuta <tt class="docutils literal"><span class="pre">build.sh</span></tt>, y sigamos adelante.</p>
 <div class="section" id="borrar-una-tarea">
-<h3>Borrar una tarea</h3>
+<h4>Borrar una tarea</h4>
 <p>Seguramente recuerdes AutoConnect de la <a class="reference external" href="http://lateral.netmanagers.com.ar/stories/BBS48.html">sesión 2</a>. Si no lo recuerdas repasa esa sesión, porque ahora vamos a utilizar eso. Queremos hacer algo cuando el objeto <tt class="docutils literal"><span class="pre">actionDelete_Task</span></tt> emita su señal <a class="reference external" href="http://doc.trolltech.com/4.4/qaction.html#triggered">triggered</a>.</p>
 <p>Por lo tanto, necesitamos implementar <tt class="docutils literal"><span class="pre">Main.on_actionDelete_Task_triggered</span></tt> (¿notas por qué los nombres de los objetos son importantes? Podría haberlo llamado <tt class="docutils literal"><span class="pre">delete</span></tt>).</p>
 <div class="admonition-una-cuesti-n-importante admonition">
@@ -452,7 +454,7 @@ void toggled ( bool checked )
 <p>Ahora puedes probar la funcionalidad. Recuerda que si te quedas sin tareas puedes ejecutar <tt class="docutils literal"><span class="pre">python</span> <span class="pre">todo.py</span></tt> y obtener nuevas.</p>
 </div>
 <div class="section" id="puesta-a-punto-de-las-acciones">
-<h3>Puesta a punto de las acciones</h3>
+<h4>Puesta a punto de las acciones</h4>
 <p>Hay algunos problemas de interfaz en nuestro trabajo hasta ahora:</p>
 <ol class="arabic">
 <li><p class="first">El menú Tareas y la acción Borrar tarea carecen de atajos de teclado.</p>
@@ -480,12 +482,12 @@ void toggled ( bool checked )
 </div>
 </div>
 <div class="section" id="pr-ximamente">
-<h1>Próximamente</h1>
+<h2>Próximamente</h2>
 <p>Bueno, esa fue una explicación bastante larga para una pequeña funcionalidad, ¿no es cierto? No te preocupes, será mucho más fácil añadir las próximas acciones, porque espero que cuando leas &quot;añadí una acción llamada <em>Nueva tarea</em>&quot; sepas de que se está hablando.</p>
 <p>Y en la próxima sesión haremos justamente eso: crearemos nuestro primer diálogo.</p>
 </div>
 <div class="section" id="lectura-adicional">
-<h1>Lectura adicional</h1>
+<h2>Lectura adicional</h2>
 <ul class="simple">
 <li>Acciones de PyQt: <a class="reference external" href="http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/html/qaction.html">1</a> <a class="reference external" href="http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/html/qactiongroup.html#details">2</a></li>
 <li><a class="reference external" href="http://msdn.microsoft.com/en-us/library/aa511500.aspx">Diseño de barras de herramientas</a></li>
@@ -1264,6 +1266,7 @@ Command-line:</i> <tt>/home/ralsina/bin/diff2html session3/main.py session4/main
 </body>
 </html>
 
+</div>
 </div>
 </div>
 </body>
