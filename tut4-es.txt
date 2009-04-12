@@ -1,0 +1,287 @@
+==========================
+PyQt en ejemplos: Sesión 4
+==========================
+
+~~~~~~~~
+¡Acción!
+~~~~~~~~
+
+Requirimientos
+==============
+
+Si todavía no lo has hecho, lee las sesiones anteriores:
+    
+* `Sesión 1`_
+
+* `Sesión 2`_
+
+* `Sesión 3`_
+
+
+Todos los archivos de esta sesión están aquí: `Sesión 4 en GitHub`_. Puedes usarlos o seguir las instrucciones comenzando con los archivos de la `Sesión 3`_ y ver qué tan bien has trabajado.
+
+¡Acción!
+========
+
+¿Qué es una acción?
+~~~~~~~~~~~~~~~~~~~
+
+Cuando terminamos la `sesión 3`_ teníamos una aplicación básica de tareas pendientes, con funcionalidad muy limitada: puedes marcar tareas como ya hechas, pero no puedes editarlas, no puedes crear tareas nuevas, tampoco borrarlas, ni mucho menos filtrarlas.
+
+.. figure:: window5.png
+
+   Una aplicación muy limitada
+
+
+Hoy vamos a comenzar a escribir código y a diseñar la IU para hacer esas cosas.
+
+El concepto clave aquí son las Acciones.
+
+* ¿Ayuda? Esa es una acción
+
+* ¿Abrir un archivo? Esa es una acción
+
+* ¿Cortar / Copiar / Pegar? Esas también son acciones.
+
+Citemos el manual:
+    
+    La clase QAction provee una acción abstracta de la interfaz de usuario que se puede insertar en los widgets.
+
+    En las aplicaciones se pueden invocar muchas ordenes comunes a través de menúes, botones de barras de herramientas y atajos de teclado. Dado que el usuario espera que cada orden se ejecute de la misma forma, sin importar la interfaz utilizada, es útil representar cada orden como una acción.
+
+    Las acciones se pueden agregar a los menúes y a las barras de herramientas y estarán sincronizadas automáticamente. Por ejemplo, en un procesador de texto, si el usuario presiona el botón Negrita de la barra de herramientas, el elemento Negrita del menú se activará automáticamente.
+
+    Una QAction puede contener un ícono, texto de menú, un atajo, texto de estado, texto "¿Qué es esto?", y texto emergente.
+
+La belleza de las acciones es que no tienes que escribir código dos veces. ¿Por qué agregar un botón "Copiar" a una barra de herramientas, luego una entrada de menú "Copiar" y luego escribir dos manejadores?
+
+Crea acciones para *todo lo que el usuario pueda hacer* y luego conéctalas a tu IU en los lugares correctos. Si colocas la acción en un menú, es una entrada de menú; si la colocas en una barra de herramientas, es un botón. Luego escribe un manejador *para la acción*, conéctalo a la señal apropiada y listo.
+
+Empecemos con una acción sencilla: **Borrar una tarea**. Haremos la primera parte del trabajo, crear la acción y la IU, con Designer.
+
+Crear acciones con Designer
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Primero iremos al *Action Editor* y obviamente haremos clic sobre el botón "New Action" y comenzaremos a crearla:
+    
+.. figure:: action1.png
+
+   Crear una nueva acción
+    
+Algunos comentarios: 
+
+* Si no sabes de dónde viene el ícono "X", no has leído la `sesión 3`_ ;-)
+   
+* El nombre de objeto ``actionDelete_Task`` es generado automáticamente desde el campo texto. En algunos casos eso provoca nombres muy feos. Si ese fuera el caso sencillamente puedes editar el nombre del objeto.
+
+* Se puede usar el mismo texto para las propiedades iconText y toolTip. De no ser correcto se puede cambiar más tarde.
+
+Una vez que creas la acción, no se marcará como "Used" en el editor de acciones. Esto se debe a que existe, pero no está disponible para el usuario en ningún lado de la ventana que estamos creando.
+
+Hay dos lugares obvios para esta acción: una barra de herramientas y un menú.
+
+Añadir acciones a una barra de herramientas
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Para añadir una acción a una barra de herramientas, primero asegúrate de que haya una. Si no tienes una en tu "Object Inspector" entonces haz clic derecho sobre MainWindow (ya sea sobre la propia ventana o sobre su entrada en el inspector) y elige "Add Tool Bar".
+
+Puedes añadir tantas barras de herramientas como quieras, pero intenta utilizar una sola, salvo que tengas una **muy** buena razón (tendremos una en la sesión 5 ;-)
+
+Luego de crear la barra de herramientas verás un espacio vacío entre el menú (que dice "Type Here") y el widget de la lista de tareas. Ese espacio es la barra de herramientas.
+
+Arrastra el ícono de la acción desde el editor de acciones hasta la barra de herramientas.
+
+¡Eso es todo!
+
+.. figure:: action2.png
+
+   La acción Borrar tarea ahora está en la barra de herramientas.
+   
+Añadir acciones al menú
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Nuestro menú está vacío, sólo tiene un cartel que dice "Type Here". A pesar de que podríamos arrastrar la acción al menú, eso pondría "Borrar tarea" primera en el nivel de menúes y eso es una elección poco común.
+
+Así que primero vamos a crear un menú "Tareas":
+    
+* Haz clic sobre "Type Here".
+
+* Escribe "Tareas" (sin las comillas)
+
+.. figure:: action3.png
+
+   Creación de un menú
+
+Si te fijas en la última imagen recién creamos un objeto QMenu llamado menuTask (como se dijo antes, el nombre del objeto se basa en lo que tipeamos).
+
+Queremos agregar la acción para borrar tareas a ese menú. Para hacerlo arrastramos la acción hasta "Tareas" en el menú y luego sobre el menú que aparece al hacerlo.
+
+.. figure:: action4.png
+
+   La acción Borrar tarea ahora está en el menú
+   
+   
+Ahora tenemos la acción en la barra de herramientas y en el menú. Pero, por supuesto, no hace nada. Así que a continuación vamos a trabajar sobre eso.
+
+Guárdalo, ejecuta ``build.sh``, y sigamos adelante.
+
+Borrar una tarea
+----------------
+
+Seguramente recuerdes AutoConnect de la `sesión 2`_. Si no lo recuerdas repasa esa sesión, porque ahora vamos a utilizar eso. Queremos hacer algo cuando el objeto ``actionDelete_Task`` emita su señal triggered_.
+
+Por lo tanto, necesitamos implementar ``Main.on_actionDelete_Task_triggered`` (¿notas por qué los nombres de los objetos son importantes? Podría haberlo llamado ``delete``).
+
+.. admonition:: Una cuestión importante
+
+    Aquí nos vamos a desviar un poco porque hay un prolbema con PyQt que es un poco molesto.
+
+    Considera esta versión trivial de nuestro método:
+        
+    .. code-block:: python
+
+        def on_actionDelete_Task_triggered(self,checked=None):
+            print "adtt",checked
+
+    ¿Qué pasa si hago clic sobre el botón de la barra de herramientas?
+
+    ::
+        
+        [ralsina@hp session4]$ python main.py
+        adtt False
+        adtt None
+        
+
+    Lo mismo sucede si seleccionas "Borrar tarea" desde el menú: se llama al slot **dos veces**.
+    El problema sucede cuando se utiliza AutoConnect para señales con argumentos que también pueden ser emitidas sin argumentos.
+    
+    ¿Cómo puedes saber que ese es el caso? En los manuales de Qt estarán listados con argumentos por omisión.
+    
+    Por ejemplo, esta señal tiene ese problema::
+        
+        void triggered ( bool checked = false )
+        
+    Esta no::
+        
+        void toggled ( bool checked )
+
+    La explicación técnica para esto es... rebuscada_ pero la solución *práctica* es trivial:
+        
+    Asegúrate de que "checked" no sea "None" en tu slot:
+        
+    .. code-block:: python
+
+        def on_actionDelete_Task_triggered(self,checked=None):
+            if checked is None: return
+
+    De esta forma ignorarás la llamada de slot sin argumentos y se ejecutará el código real sólo una vez.
+
+
+Y aquí está el código real, que es bastante corto:
+
+.. code-block:: python
+    
+    def on_actionDelete_Task_triggered(self,checked=None):
+        if checked is None: return
+        # Primero veamos que está seleccionado.
+        item=self.ui.list.currentItem()
+        
+        if not item: # Nada seleccionado, así que no sabemos que borrar
+            return
+        # Borrar la tarea
+        item.task.delete()
+        todo.saveData()
+        
+        # Y eliminar el elemento. Me parece que no queda lindo. ¿Es esta la única manera?
+        self.ui.list.takeTopLevelItem(self.ui.list.indexOfTopLevelItem(item))
+
+Excepto por la última línea este código debería ser obvio. ¿La última línea? Ni siquiera estoy seguro de que esté *bien*, pero funciona.
+
+Ahora puedes probar la funcionalidad. Recuerda que si te quedas sin tareas puedes ejecutar ``python todo.py`` y obtener nuevas.
+
+
+Puesta a punto de las acciones
+------------------------------
+
+Hay algunos problemas de interfaz en nuestro trabajo hasta ahora:
+    
+1) El menú Tareas y la acción Borrar tarea carecen de atajos de teclado.
+
+   Esto es muy importante; hace que la aplicación funcione mejor para los usuarios comunes. Además, en general los usuarios *esperan* que los atajos estén ahí y no hay razón para frustarlos.
+   
+   Por suerte es muy fácil arreglarlo. Sólo es necesario fijar la propiedad shortcut para action_Delete_Task y cambiar la propiedad text de menuTask a "&Tarea".
+   
+2) La acción Borrar tarea está habilitada incluso cuando no hay motivo. Si el usuario no tiene una tarea seleccionada puede intentar llamar a la acción pero no hace *nada*. Eso sorprende un poco y, en mi opinión, sorprender a los usuarios no está muy bien.
+
+   Hay otras opiniones sobre esto, en particular la de `Joel Spolsky`_, así que quizás soy anticuado.
+
+   Para habilitar o deshabilitar las acciones cuando un elemento de la lista de tareas esté o no seleccionado, necesitamos actuar en base a la señal ``currentItemChanged`` de nuestra lista de tareas. Aquí está el código:
+       
+   .. code-block:: python
+       
+        def on_list_currentItemChanged(self,current=None,previous=None):
+            if current:
+                self.ui.actionDelete_Task.setEnabled(True)
+            else:
+                self.ui.actionDelete_Task.setEnabled(False)
+
+   Además, necesitamos que Borrar tarea comience *desactivado* porque cuando iniciamos la aplicación no hay ninguna tarea seleccionada. Esto se hace desde Designer utilizando la propiedad "enabled".
+
+   Dado que hay una sola acción Borrar tarea, este código afecta a la barra de herramientas y también al menú. Esto ayuda a que tu IU sea consistente y se comporte como debe.
+
+.. figure:: window6.png
+
+   Una aplicación muy limitada
+
+
+
+Próximamente
+============
+
+Bueno, esa fue una explicación bastante larga para una pequeña funcionalidad, ¿no es cierto? No te preocupes, será mucho más fácil añadir las próximas acciones, porque espero que cuando leas "añadí una acción llamada *Nueva tarea*" sepas de que se está hablando.
+
+Y en la próxima sesión haremos justamente eso: crearemos nuestro primer diálogo.
+
+.. _Joel Spolsky: http://www.joelonsoftware.com/items/2008/07/01.html
+
+.. _checkable: http://doc.trolltech.com/4.4/qaction.html#checkable-prop
+
+.. _rebuscada: http://docs.huihoo.com/pyqt/pyqt4.html#the-qtcore-pyqtsignature-decorator
+
+.. _triggered: http://doc.trolltech.com/4.4/qaction.html#triggered
+
+
+Lectura adicional
+=================
+
+* Acciones de PyQt: 1_ 2_
+
+* `Diseño de barras de herramientas`_
+
+* `Más diseño de barras de herramientas`_
+
+
+
+.. _Más diseño de barras de herramientas: http://developer.apple.com/documentation/userexperience/conceptual/applehiguidelines/XHIGIcons/chapter_15_section_9.html
+
+.. _Diseño de barras de herramientas: http://msdn.microsoft.com/en-us/library/aa511500.aspx
+
+.. _1: http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/html/qaction.html
+    
+.. _2: http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/html/qactiongroup.html#details
+    
+.. _Sesión 4 en GitHub: http://github.com/ralsina/pyqt-by-example/tree/master/session4
+
+.. _Sesión 1: http://lateral.netmanagers.com.ar/stories/BBS47.html
+
+.. _Sesión 2: http://lateral.netmanagers.com.ar/stories/BBS48.html
+
+.. _Sesión 3: http://lateral.netmanagers.com.ar/stories/BBS49.html
+
+-----------------
+
+Aquí puedes ver qué cambió entre la versión vieja y la nueva:
+
+.. raw:: html
+   :file: session4/diff1.html
+

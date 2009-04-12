@@ -57,6 +57,7 @@ class Main(QtGui.QMainWindow):
 
     def on_list_currentItemChanged(self,current=None,previous=None):
         if current:
+            print "enabling", current
             self.ui.actionDelete_Task.setEnabled(True)
         else:
             self.ui.actionDelete_Task.setEnabled(False)
